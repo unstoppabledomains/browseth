@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        "downlevelIteration": true,
+        "preserveConstEnums": true,
+        "diagnostics": true,
+        "strict": true,
+        "noErrorTruncation": true,
+        "noImplicitReturns": true,
+        "noFallthroughCasesInSwitch": true,
+        "removeComments": true,
+        "forceConsistentCasingInFileNames": true,
+        "module": "commonjs",
+        "target": "es2015",
+        "jsx": "react"
+    },
+    "include": ["packages/node_modules/**/*"]
+}

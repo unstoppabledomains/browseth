@@ -1,0 +1,27 @@
+{
+    "extends": [
+        "tslint:latest",
+        "tslint-eslint-rules",
+        "tslint-immutable",
+        "tslint-react",
+        "tslint-config-prettier"
+    ],
+    "rules": {
+        "no-var-keyword": true,
+        "no-parameter-reassignment": true,
+        "no-implicit-dependencies": false,
+        // "typedef": [true, "call-signature"],
+        // "readonly-keyword": true,
+        // "readonly-array": true,
+        // "no-let": true,
+
+        // "no-object-mutation": true,
+        "no-delete": true,
+        // "no-method-signature": true,
+        "interface-name": false,
+        "max-classes-per-file": false,
+        //  "object-literal-sort-keys": true
+        "no-angle-bracket-type-assertion": false,
+        "no-submodule-imports": false
+    }
+}
