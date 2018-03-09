@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "downlevelIteration": true,
+    "preserveConstEnums": true,
+    "diagnostics": true,
+    "strict": true,
+    "noErrorTruncation": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "removeComments": true,
+    "forceConsistentCasingInFileNames": true,
+    "module": "ESNext",
+    "target": "es2015",
+    "outDir": "out",
+    "declaration": true
+  },
+  "include": ["src"],
+  "exclude": ["**/node_modules", "**/__tests__", "**/*.test.ts"]
+}
