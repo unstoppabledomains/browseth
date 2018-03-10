@@ -43,7 +43,7 @@ This is where all the browseth packages live.
 
 #### `packages/node_modules/`
 
-We are exploiting the node resolution algorithm to avoid using a linking tool
+We *were* exploiting the node resolution algorithm to avoid using a linking tool
 like `lerna`. This project structure allows us to install dependacies at the
 workspace level but specify versions per package, resolve local dependacnies –
 circumventing the need for `lerna bootstrap`, and directly import typescript
@@ -52,6 +52,8 @@ files before module bundling. There are a few caviats to this system:
 * It doesn't automate publishing like `lerna` does.
 * All packages must be named thier package.json "name" and versioned exactly.
 * Every local package resolves the other directly not from the built version.
+
+*Currently exploring a more standardized built process.  
 
 #### `packages/node_modules/@browseth/...`
 
