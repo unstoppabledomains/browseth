@@ -2,12 +2,14 @@
 
 #### A library for interacting with ethereum, well suited for the browser.
 
+https://medium.com/buyethdomains/introducing-browseth-a-new-library-for-interacting-with-ethereum-795d18e7b87d
+
 ## Want to use `browseth`?
 
 For now just `git submodule add https://github.com/buyethdomains/browseth`. And
 `yarn install` the project.
 
-There will be an npm release soon.
+There will be an npm release soon: https://www.npmjs.com/package/browseth
 
 ## Structure
 
