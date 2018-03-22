@@ -1,3 +1,7 @@
 {
-  "extends": ["typestrict", "tslint-config-prettier"]
+  "defaultSeverity": "error",
+  "extends": ["typestrict", "tslint:recommended", "tslint-config-prettier"],
+  "jsRules": {},
+  "rules": {},
+  "rulesDirectory": []
 }

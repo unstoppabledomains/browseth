@@ -1,8 +1,8 @@
-import { Contract } from '../contract/index';
 import { keccak256 } from 'js-sha3';
+import { Contract } from '../contract/index';
+import { Base } from '../wallet/index';
 import * as DeedConfig from './config/deed';
 import * as RegistrarConfig from './config/simple-hash-registrar';
-import { Base } from '../wallet/index';
 
 export class EthRegistrar {
   private static assertIsValidLabel(label: string) {

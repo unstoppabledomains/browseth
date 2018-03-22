@@ -1,10 +1,10 @@
-import {
-  JsonInterface,
-  FunctionElement,
-  EventElement,
-  ConstructorElement,
-} from './types';
 import * as web3EthABI from 'web3-eth-abi';
+import {
+  ConstructorElement,
+  EventElement,
+  FunctionElement,
+  JsonInterface,
+} from './types';
 
 export interface AbiFunction extends FunctionElement {
   sig: string;
@@ -39,7 +39,7 @@ export class Abi {
           dec: (raw: ArrayBuffer | string) => {
             if (raw instanceof ArrayBuffer) {
               return web3EthABI.decodeParameters(
-                v.outputs!,
+                v.outputs,
                 /* 'TextDecoder' in window
                   ? new TextDecoder('utf8').decode(new DataView(raw)) // this is better maybe polyfill if really buggy
                   : */ String.fromCharCode.apply(

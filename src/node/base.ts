@@ -5,7 +5,7 @@ import {
   IEstimateTransaction,
   ITag,
 } from '../rpc/methods';
-import {ApiAbstract} from '../rpc/types';
+import { ApiAbstract } from '../rpc/types';
 
 export class Base<Api extends ApiAbstract = All> {
   public send<Method extends keyof Api>(

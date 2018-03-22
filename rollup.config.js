@@ -1,6 +1,7 @@
-import builtins from 'rollup-plugin-node-builtins';
+// import analyze from 'rollup-analyzer-plugin';
+// import builtins from 'rollup-plugin-node-builtins';
 import commonJs from 'rollup-plugin-commonjs';
-import globals from 'rollup-plugin-node-globals';
+// import globals from 'rollup-plugin-node-globals';
 import json from 'rollup-plugin-json';
 import nodeResolve from 'rollup-plugin-node-resolve';
 import typescript from 'rollup-plugin-typescript2';
@@ -16,13 +17,21 @@ export default {
   },
   external: [...builtinModules],
   plugins: [
-    globals(),
-    builtins(),
+    // globals(),
+    // builtins(),
     json(),
     nodeResolve({ preferBuiltins: true }),
-    commonJs(),
+    commonJs({
+      namedExports: {
+        'node_modules/js-sha3/src/sha3.js': ['keccak256'],
+      },
+    }),
     typescript({
       typescript: tsc,
     }),
+    // analyze({
+    //   stdout: true,
+    //   limit: 100,
+    // }),
   ],
 };

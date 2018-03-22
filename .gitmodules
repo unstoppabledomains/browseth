@@ -1,6 +1,0 @@
-[submodule "packages/smart-ens-bidding-contract/contracts/ens"]
-	path = packages/smart-ens-bidding-contract/contracts/ens
-	url = https://github.com/ethereum/ens
-[submodule "packages/smart-ens-bidding-contract/ens"]
-	path = packages/smart-ens-bidding-contract/ens
-	url = https://github.com/ethereum/ens
