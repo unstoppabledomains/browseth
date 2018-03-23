@@ -1,4 +1,3 @@
-import * as crypto from 'crypto';
 import * as eccrypto from 'eccrypto';
 
 export async function encrypt(publicKey: Buffer, msg: Buffer | string) {

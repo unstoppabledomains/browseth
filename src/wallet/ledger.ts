@@ -1,15 +1,14 @@
-//import {encData} from '@browseth/utils';
-import * as AppEth from '@ledgerhq/hw-app-eth';
-import * as TransportNodeHID from '@ledgerhq/hw-transport-node-hid';
-import * as TransportU2F from '@ledgerhq/hw-transport-u2f';
-import EthereumJsTx, { EthereumJsTxObj } from 'ethereumjs-tx';
-import * as Node from '../node/index';
-import { ISendTransaction } from '../rpc/methods';
+// import {encData} from '@browseth/utils';
+import AppEth from '@ledgerhq/hw-app-eth';
+import TransportNodeHid = require('@ledgerhq/hw-transport-node-hid');
+import TransportU2F = require('@ledgerhq/hw-transport-u2f');
+import EthereumJsTx, {EthereumJsTxObj} from 'ethereumjs-tx';
+import {ISendTransaction} from '../rpc/methods';
+
+const Transport = __NODE__ ? TransportNodeHid : TransportU2F;
 
 function getTransport() {
-  return module && module.exports
-    ? TransportNodeHID.create()
-    : TransportU2F.create();
+  return Transport.create();
 }
 
 export namespace LedgerDPath {
@@ -29,7 +28,7 @@ export class Ledger {
   private static initialized = false;
   private static allowParallel = false;
 
-  public addressLookup: { [index: number]: string } = {};
+  public addressLookup: {[index: number]: string} = {};
 
   constructor(
     private dPath = LedgerDPath.mainNet,
@@ -58,7 +57,7 @@ export class Ledger {
   }
 
   public async getAccount(index = this.defaultIndex) {
-    const { app, close } = await this.initialize();
+    const {app, close} = await this.initialize();
     try {
       if (this.addressLookup[index]) {
         return this.addressLookup[index];
@@ -71,9 +70,9 @@ export class Ledger {
   }
 
   public async getAccounts(...indices: number[]) {
-    const { app, close } = await this.initialize();
+    const {app, close} = await this.initialize();
     try {
-      let addresses = [];
+      const addresses = [];
       for (const index of indices) {
         addresses.push(
           this.addressLookup[index]
@@ -92,9 +91,9 @@ export class Ledger {
     transaction: Partial<ISendTransaction>,
     index = this.defaultIndex,
   ) {
-    const { app, close } = await this.initialize();
+    const {app, close} = await this.initialize();
     try {
-      const tx = new EthereumJsTx(<EthereumJsTxObj>transaction);
+      const tx = new EthereumJsTx(transaction as EthereumJsTxObj);
 
       tx.from = this.addressLookup[index]
         ? this.addressLookup[index]
@@ -120,7 +119,7 @@ export class Ledger {
   }
 
   public async signMessage(msg: string, index = this.defaultIndex) {
-    const { app, close } = await this.initialize();
+    const {app, close} = await this.initialize();
     try {
       const result = await app.signPersonalMessage(this.dPath + index, msg);
 

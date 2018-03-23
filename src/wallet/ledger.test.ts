@@ -1,5 +1,5 @@
 import * as Node from '../node';
-import { Ledger, LedgerDPath } from './ledger';
+import {Ledger, LedgerDPath} from './ledger';
 
 const node = new Node.Web3({
   send() {

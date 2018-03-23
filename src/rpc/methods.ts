@@ -1,3 +1,5 @@
+import {ApiAbstract} from './types';
+
 export type IData = string;
 export type IQuantity = string | number;
 export type ITag = 'earliest' | 'latest' | 'pending' | IQuantity;
@@ -99,7 +101,7 @@ export interface OTransactionReceipt {
   status: OData;
 }
 
-export type All = {
+export interface All extends ApiAbstract {
   // web3_* methods
   web3_clientVersion: {
     params: never[];
@@ -368,9 +370,9 @@ export type All = {
     params: any[];
     result: any;
   };
-};
+}
 
-export type ApiMap<Keys extends keyof All> = { [K in Keys]: All[K] };
+export type ApiMap<Keys extends keyof All> = {[K in Keys]: All[K]};
 
 export type Base = ApiMap<
   | 'web3_clientVersion'

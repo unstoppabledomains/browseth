@@ -3,4 +3,4 @@ export * from './fetch';
 export * from './node-http';
 // export * from './websocket';
 // export * from './xhr';
-export { TransportTypes };
+export {TransportTypes};

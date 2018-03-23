@@ -1,14 +1,14 @@
 import * as http from 'http';
 import * as https from 'https';
 import * as url from 'url';
-import { Requester, RequestOptions, Response } from './types';
+import {Requester, RequestOptions, Response} from './types';
 
 function isSupported(): boolean {
   return typeof module !== 'undefined' && module.exports;
 }
 
 // tslint:disable-next-line:only-arrow-functions
-export const NodeHttp = <Requester>function(opts: any, cb?: any) {
+export const NodeHttp = function(opts: any, cb?: any) {
   if (cb) {
     nodeHttpRequest(opts, cb);
     return;
@@ -22,7 +22,7 @@ export const NodeHttp = <Requester>function(opts: any, cb?: any) {
       resolve(resp);
     }),
   );
-};
+} as Requester;
 
 NodeHttp.isSupported = isSupported;
 

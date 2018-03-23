@@ -5,17 +5,17 @@ import {
   IEstimateTransaction,
   ITag,
 } from '../rpc/methods';
-import { ApiAbstract } from '../rpc/types';
+import {ApiAbstract} from '../rpc/types';
 
 export class Base<Api extends ApiAbstract = All> {
+  public defaultTag: ITag = 'latest';
+
   public send<Method extends keyof Api>(
     method: Method,
     params: Api[Method]['params'],
   ): Promise<Api[Method]['result']> {
     return undefined!;
   }
-
-  public defaultTag: ITag = 'latest';
 
   public getBalance(address: IData, tag: ITag = this.defaultTag) {
     return this.send('eth_getBalance', []);

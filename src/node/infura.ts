@@ -1,7 +1,7 @@
-import { Rpc } from '../rpc/index';
-import { Infura as InfuraApiMethods } from '../rpc/methods';
+import {Rpc} from '../rpc/index';
+import {Infura as InfuraApiMethods} from '../rpc/methods';
 import * as Transport from '../transport/index';
-import { Base } from './base';
+import {Base} from './base';
 
 export enum InfuraNetEnum {
   mainnet = 'mainnet',
@@ -18,13 +18,6 @@ export interface InfuraConstructorParams {
 
 export class Infura extends Base<InfuraApiMethods> {
   private jsonrpc: Rpc<InfuraApiMethods>;
-  public async send<Method extends keyof InfuraApiMethods>(
-    method: Method,
-    params: InfuraApiMethods[Method]['params'],
-  ): Promise<InfuraApiMethods[Method]['result']> {
-    const resp = await this.jsonrpc.request(method, params);
-    return resp.result;
-  }
 
   constructor(params: InfuraConstructorParams) {
     super();
@@ -35,5 +28,13 @@ export class Infura extends Base<InfuraApiMethods> {
         params.apikey
       }`,
     );
+  }
+
+  public async send<Method extends keyof InfuraApiMethods>(
+    method: Method,
+    params: InfuraApiMethods[Method]['params'],
+  ): Promise<InfuraApiMethods[Method]['result']> {
+    const resp = await this.jsonrpc.request(method, params);
+    return resp.result;
   }
 }

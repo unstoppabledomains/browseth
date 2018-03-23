@@ -1,6 +1,6 @@
 import * as TransportTypes from '../transport/types';
-import { Requester } from '../transport/types';
-import { ApiAbstract, RequestOptions, Response } from './types';
+import {Requester} from '../transport/types';
+import {ApiAbstract, RequestOptions, Response} from './types';
 
 let id = 0;
 function toTransportRequestOptions<
@@ -8,7 +8,7 @@ function toTransportRequestOptions<
   Method extends keyof Api
 >(opts: RequestOptions): TransportTypes.RequestOptions {
   return {
-    headers: { ...opts.headers, 'Content-Type': 'application/json' },
+    headers: {...opts.headers, 'Content-Type': 'application/json'},
     msg: JSON.stringify({
       id: (id += 1),
       jsonrpc: '2.0',

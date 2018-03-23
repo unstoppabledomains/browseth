@@ -1,6 +1,6 @@
-import { Abi, AbiFunction } from '../abi/index';
-import { JsonInterface } from '../abi/types';
-import { OData, ITag, OQuantity } from '../rpc/methods';
+import {Abi} from '../abi/index';
+import {JsonInterface} from '../abi/types';
+import {ITag, OData, OQuantity} from '../rpc/methods';
 import * as Wallet from '../wallet/index';
 
 export interface MethodWrapper {
@@ -15,7 +15,7 @@ export interface MethodWrapper {
 }
 
 export class Contract {
-  public methods: { [key: string]: MethodWrapper } = {};
+  public methods: {[key: string]: MethodWrapper} = {};
   private abi: Abi;
   constructor(
     private wallet: Wallet.Base,
@@ -52,7 +52,7 @@ export class Contract {
           }
 
           return this.wallet.estimateGas(
-            { ...transaction, data: v.enc(params) },
+            {...transaction, data: v.enc(params)},
             tag,
           );
         },
@@ -64,7 +64,7 @@ export class Contract {
           }
 
           const resp = await this.wallet.ethCall(
-            { ...transaction, data: v.enc(params) },
+            {...transaction, data: v.enc(params)},
             tag,
           );
 

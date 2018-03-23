@@ -2,12 +2,12 @@ export interface RequestOptions {
   url: string;
   timeout?: number;
   msg?: string | ArrayBuffer;
-  headers?: { [key: string]: string | string[] };
+  headers?: {[key: string]: string | string[]};
   [key: string]: any;
 }
 
 export interface Response {
-  headers?: { [key: string]: string | string[] };
+  headers?: {[key: string]: string | string[]};
   msg: string;
   status?: number;
 }

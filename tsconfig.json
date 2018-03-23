@@ -7,13 +7,11 @@
     "noErrorTruncation": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
-    "removeComments": true,
+    "removeComments": true, // TODO(bp): FIND OUT MORE
     "forceConsistentCasingInFileNames": true,
-    "module": "ESNext",
-    "target": "es2015",
-    "outDir": "out",
-    "declaration": true
+    "target": "es5",
+    "declaration": true,
+    "lib": ["dom", "es7", "dom.iterable"]
   },
-  "include": ["src"],
-  "exclude": ["**/node_modules", "**/__tests__", "**/*.test.ts"]
+  "exclude": ["**/node_modules", "**/__tests__", "**/*.test.ts", "**/test.ts"]
 }

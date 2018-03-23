@@ -1,6 +1,6 @@
-import { keccak256 } from 'js-sha3';
-import { Contract } from '../contract/index';
-import { Base } from '../wallet/index';
+import {keccak256} from 'js-sha3';
+import {Contract} from '../contract/index';
+import {Base} from '../wallet/index';
 import * as DeedConfig from './config/deed';
 import * as RegistrarConfig from './config/simple-hash-registrar';
 
@@ -28,7 +28,7 @@ export class EthRegistrar {
     const shaLabel = keccak256(label);
 
     const entries = await this.registrar.methods.entries.call(
-      { to: RegistrarConfig.address },
+      {to: RegistrarConfig.address},
       'pending',
       shaLabel,
     );
@@ -38,7 +38,7 @@ export class EthRegistrar {
     }
 
     const deedOwner = await this.deed.methods.owner.call(
-      { to: entries[1] },
+      {to: entries[1]},
       'pending',
     );
 
@@ -164,7 +164,7 @@ export class EthRegistrar {
     }
 
     const labelState = await this.registrar.methods.state.call(
-      { to: RegistrarConfig.address },
+      {to: RegistrarConfig.address},
       'pending',
       shaLabel,
     );
@@ -174,7 +174,7 @@ export class EthRegistrar {
     }
 
     return this.registrar.methods.unsealBid.send(
-      { to: RegistrarConfig.address },
+      {to: RegistrarConfig.address},
       shaLabel,
       value,
       keccak256(salt),
@@ -193,7 +193,7 @@ export class EthRegistrar {
     const shaLabel = keccak256(label);
 
     return this.registrar.methods.finalizeAuction.send(
-      { to: RegistrarConfig.address },
+      {to: RegistrarConfig.address},
       shaLabel,
     );
   }
@@ -218,7 +218,7 @@ export class EthRegistrar {
     const shaLabel = keccak256(label);
 
     return this.registrar.methods.finalizeAuction.send(
-      { to: RegistrarConfig.address },
+      {to: RegistrarConfig.address},
       shaLabel,
       newOwner,
     );
@@ -238,7 +238,7 @@ export class EthRegistrar {
     const shaLabel = keccak256(label);
 
     const entries = await this.registrar.methods.entries.call(
-      { to: RegistrarConfig.address },
+      {to: RegistrarConfig.address},
       'pending',
       shaLabel,
     );
@@ -255,7 +255,7 @@ export class EthRegistrar {
     }
 
     return this.registrar.methods.releaseDeed.send(
-      { to: RegistrarConfig.address },
+      {to: RegistrarConfig.address},
       shaLabel,
     );
   }

@@ -1,7 +1,16 @@
 {
   "defaultSeverity": "error",
-  "extends": ["typestrict", "tslint:recommended", "tslint-config-prettier"],
+  "extends": [
+    "tslint:recommended",
+    "tslint-eslint-rules",
+    "tslint-config-prettier"
+  ],
   "jsRules": {},
-  "rules": {},
+  "rules": {
+    "interface-name": false,
+    "object-literal-sort-keys": false,
+    "no-namespace": false,
+    "no-var-requires": false
+  },
   "rulesDirectory": []
 }

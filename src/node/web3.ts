@@ -1,21 +1,6 @@
-import {
-  ApiAbstract,
-  RequestObject,
-  RequestOptions,
-  Response,
-  ResponseObject,
-} from '../rpc/types';
-import {
-  All,
-  IData,
-  IQuantity,
-  ITag,
-  ISendTransaction,
-  ICallTransaction,
-  IEstimateTransaction,
-  Base as BaseMethods,
-} from '../rpc/methods';
-import { Base as BaseNode } from './base';
+import {All, IData, ITag} from '../rpc/methods';
+import {ApiAbstract, RequestObject, ResponseObject} from '../rpc/types';
+import {Base as BaseNode} from './base';
 
 interface ProviderObject<Api extends ApiAbstract> {
   send(payload: RequestObject<keyof Api>): any;
@@ -40,7 +25,7 @@ function createSend<Api extends ApiAbstract>(
     throw new TypeError(`provider<${provider}> must have a send method`);
   }
 
-  const typedProvider = <ProviderObject<Api>>provider;
+  const typedProvider = provider as ProviderObject<Api>;
 
   if (typeof typedProvider.sendAsync !== 'function') {
     return typedProvider.send.bind(typedProvider);
@@ -49,6 +34,8 @@ function createSend<Api extends ApiAbstract>(
 }
 
 export class Web3 extends BaseNode<All> {
+  private id: number = 0;
+
   private providerSend: (
     payload: RequestObject,
     cb: (e?: Error, result?: ResponseObject) => void,
@@ -58,8 +45,6 @@ export class Web3 extends BaseNode<All> {
     super();
     this.providerSend = createSend<All>(provider);
   }
-
-  private id: number = 0;
 
   public send<Method extends keyof All>(
     method: Method,

@@ -1,20 +1,20 @@
-import { Noop as NoopNode } from '../node/noop';
-import { Base } from './base';
+import {Noop as NoopNode} from '../node/noop';
+import {Base} from './base';
 
 export class Noop extends NoopNode implements Base {
-  getAccount() {
+  public getAccount() {
     return undefined!;
   }
-  getAccounts() {
+  public getAccounts() {
     return undefined!;
   }
-  sendTransaction() {
+  public sendTransaction() {
     return undefined!;
   }
-  signMessage() {
+  public signMessage() {
     return undefined!;
   }
-  send() {
+  public send() {
     return undefined!;
   }
 }

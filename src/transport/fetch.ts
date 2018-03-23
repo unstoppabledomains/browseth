@@ -1,4 +1,8 @@
-import { Requester, RequestOptions, Response } from './types';
+import {
+  Requester,
+  RequestOptions,
+  Response as TransportResponse,
+} from './types';
 
 function isSupported(): boolean {
   return (
@@ -9,18 +13,18 @@ function isSupported(): boolean {
 }
 
 // tslint:disable-next-line:only-arrow-functions
-export const Fetch = <Requester>function(opts: any, cb?: any) {
+export const Fetch = function(opts: any, cb?: any) {
   if (cb) {
     fetchRequest(opts).then(resp => cb(undefined, resp), cb);
     return;
   }
 
   return fetchRequest(opts);
-};
+} as Requester;
 
 Fetch.isSupported = isSupported;
 
-async function fetchRequest(opts: RequestOptions): Promise<Response> {
+async function fetchRequest(opts: RequestOptions): Promise<TransportResponse> {
   const promises = [
     fetch(opts.url, {
       body: opts.msg,
@@ -44,7 +48,7 @@ async function fetchRequest(opts: RequestOptions): Promise<Response> {
       })
       .then(async resp => ({
         headers: [...resp.headers.entries()].reduce(
-          (a, [k, v]) => ({ ...a, [k]: v }),
+          (a, [k, v]) => ({...a, [k]: v}),
           {},
         ),
         msg: await resp.text(),

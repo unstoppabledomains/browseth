@@ -40,7 +40,7 @@ export interface RequestOptions<
   method: Method;
   params: Api[Method]['params'];
   url: string;
-  headers?: { [key: string]: string | string[] };
+  headers?: {[key: string]: string | string[]};
   timeout?: number;
   baseUrl?: string;
   credentials?: {
@@ -55,7 +55,7 @@ export interface Response<
 > {
   requestOptions: RequestOptions<Api, Method>;
   result: Api[Method]['result'];
-  headers?: { [key: string]: string | string[] };
+  headers?: {[key: string]: string | string[]};
   status?: number;
   statusText?: string;
 }

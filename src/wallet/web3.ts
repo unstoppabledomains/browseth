@@ -1,11 +1,5 @@
 import * as Node from '../node/index';
-import {
-  MetaMaskProviderEngine,
-  ISendTransaction,
-  All,
-  IData,
-} from '../rpc/methods';
-import { Base } from './base';
+import {IData, ISendTransaction} from '../rpc/methods';
 
 export class Web3 extends Node.Web3 {
   constructor(provider: any) {

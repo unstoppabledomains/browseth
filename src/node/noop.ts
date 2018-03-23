@@ -1,18 +1,17 @@
-import { Base } from './base';
 import {
-  IData,
-  ITag,
-  IEstimateTransaction,
-  ISendTransaction,
   ICallTransaction,
+  IData,
+  IEstimateTransaction,
+  ITag,
 } from '../rpc/methods';
+import {Base} from './base';
 
 export class Noop extends Base implements Base {
+  public defaultTag: ITag = 'latest';
+
   public send() {
     return undefined!;
   }
-
-  public defaultTag: ITag = 'latest';
 
   public getBalance(address: IData, tag: ITag = this.defaultTag) {
     return undefined!;

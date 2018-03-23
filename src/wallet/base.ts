@@ -1,6 +1,5 @@
-import { RequestObject, ResponseObject, ApiAbstract } from '../rpc/types';
-import { ISendTransaction, IData } from '../rpc/methods';
 import * as Node from '../node/index';
+import {IData, ISendTransaction} from '../rpc/methods';
 
 export class Base extends Node.Base implements Node.Base {
   public async getAccount() {
