@@ -1,7 +1,6 @@
 {
   "name": "browseth",
   "version": "0.0.2",
-  "private": true,
   "description":
     "A library for interacting with ethereum, well suited for the browser.",
   "author": "Braden Pezeshki <braden.pezeshki@gmail.com>",
