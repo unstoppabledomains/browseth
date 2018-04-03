@@ -1,9 +1,8 @@
-export interface RequestOptions {
+export interface Request {
   url: string;
   timeout?: number;
   msg?: string | ArrayBuffer;
   headers?: {[key: string]: string | string[]};
-  [key: string]: any;
 }
 
 export interface Response {
@@ -12,12 +11,9 @@ export interface Response {
   status?: number;
 }
 
-export interface Requester extends Function {
-  (opts: RequestOptions): Promise<Response>;
-  (opts: RequestOptions, cb: (e?: Error | null, resp?: Response) => void): void;
-  (
-    opts: RequestOptions,
-    cb?: (e?: Error | null, resp?: Response) => void,
-  ): Promise<Response> | void;
-  isSupported(): boolean;
+export interface Handler {
+  handle(
+    request: Request,
+    cb: (err: Error | void, response?: Response) => void,
+  ): void;
 }

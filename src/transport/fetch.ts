@@ -1,63 +1,55 @@
-import {
-  Requester,
-  RequestOptions,
-  Response as TransportResponse,
-} from './types';
+import {Handler, Request, Response as TransportResponse} from './types';
 
-function isSupported(): boolean {
-  return (
-    typeof Response !== 'undefined' &&
-    Response.prototype.hasOwnProperty('body') &&
-    typeof Headers === 'function'
-  );
-}
-
-// tslint:disable-next-line:only-arrow-functions
-export const Fetch = function(opts: any, cb?: any) {
-  if (cb) {
-    fetchRequest(opts).then(resp => cb(undefined, resp), cb);
-    return;
+export default class FetchRequestHandler implements Handler {
+  public static isSupported(): boolean {
+    return (
+      typeof Response !== 'undefined' &&
+      Response.prototype.hasOwnProperty('body') &&
+      typeof Headers === 'function'
+    );
   }
 
-  return fetchRequest(opts);
-} as Requester;
+  public handle(
+    request: Request,
+    cb: (err: Error | void, response?: TransportResponse) => void,
+  ) {
+    fetchRequest(request).then(resp => cb(undefined, resp), cb);
+  }
+}
 
-Fetch.isSupported = isSupported;
-
-async function fetchRequest(opts: RequestOptions): Promise<TransportResponse> {
+async function fetchRequest(request: Request): Promise<TransportResponse> {
   const promises = [
-    fetch(opts.url, {
-      body: opts.msg,
+    fetch(request.url, {
+      body: request.msg,
       credentials: 'same-origin',
       headers:
-        opts.headers &&
+        request.headers &&
         new Headers(
-          Object.keys(opts.headers).map(v => {
-            const value = opts.headers![v];
+          Object.keys(request.headers).map(v => {
+            const value = request.headers![v];
             return typeof value === 'string'
               ? [v, value]
               : [v, value.join(', ')];
           }),
         ),
-    })
-      .then(resp => {
-        if (resp.ok !== true) {
-          throw new Error(`Not ok resp.status<${resp.status}>`);
-        }
-        return resp;
-      })
-      .then(async resp => ({
+    }).then(async resp => {
+      if (resp.ok !== true) {
+        throw new Error(`Not ok resp.status<${resp.status}>`);
+      }
+
+      return {
         headers: [...resp.headers.entries()].reduce(
           (a, [k, v]) => ({...a, [k]: v}),
           {},
         ),
         msg: await resp.text(),
         status: resp.status,
-      })),
+      };
+    }),
   ];
 
-  if (opts.timeout) {
-    promises.push(new Promise((_, r) => setTimeout(r, opts.timeout)));
+  if (request.timeout) {
+    promises.push(new Promise((_, r) => setTimeout(r, request.timeout)));
   }
 
   return Promise.race(promises);

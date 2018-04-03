@@ -1,42 +1,31 @@
 import * as http from 'http';
 import * as https from 'https';
 import * as url from 'url';
-import {Requester, RequestOptions, Response} from './types';
+import {Handler, Request, Response} from './types';
 
-function isSupported(): boolean {
-  return typeof module !== 'undefined' && module.exports;
-}
-
-// tslint:disable-next-line:only-arrow-functions
-export const NodeHttp = function(opts: any, cb?: any) {
-  if (cb) {
-    nodeHttpRequest(opts, cb);
-    return;
+export default class NodeHttpHandler implements Handler {
+  public static isSupported(): boolean {
+    return typeof module !== 'undefined' && module.exports;
   }
 
-  return new Promise(resolve =>
-    nodeHttpRequest(opts, (err, resp) => {
-      if (err) {
-        throw err;
-      }
-      resolve(resp);
-    }),
-  );
-} as Requester;
-
-NodeHttp.isSupported = isSupported;
+  public handle(
+    request: Request,
+    cb: (err: Error | void, response?: Response) => void,
+  ) {
+    nodeHttpRequest(request, cb);
+  }
+}
 
 function nodeHttpRequest(
-  opts: RequestOptions,
-  cb: (e?: Error | null, resp?: Response) => void,
+  request: Request,
+  cb: (e?: Error | void, resp?: Response) => void,
 ): void {
-  const parsedUrl = url.parse(opts.url);
-
-  const requester = (parsedUrl.protocol === 'https:'
+  const parsedUrl = url.parse(request.url);
+  const httpRequest = (parsedUrl.protocol === 'https:'
     ? https.request
     : http.request)(
     {
-      headers: opts.headers,
+      headers: request.headers,
       host: parsedUrl.hostname,
       method: 'POST',
       path: parsedUrl.path,
@@ -47,7 +36,6 @@ function nodeHttpRequest(
       resp.on('data', chunk => {
         chunks.push(chunk as string);
       });
-
       resp.once('end', () => {
         cb(undefined, {
           msg: String.prototype.concat(...chunks),
@@ -56,21 +44,18 @@ function nodeHttpRequest(
       });
     },
   );
-
-  if (opts.timeout) {
-    requester.on('socket', socket => {
-      socket.setTimeout(opts.timeout);
+  if (request.timeout) {
+    httpRequest.on('socket', socket => {
+      socket.setTimeout(request.timeout);
       socket.on('timeout', () => {
-        cb(new Error(`timout after ${opts.timeout}`));
-        requester.abort();
+        cb(new Error(`timout after ${request.timeout}`));
+        httpRequest.abort();
       });
     });
   }
-
-  if (opts.msg) {
-    requester.write(opts.msg);
+  if (request.msg) {
+    httpRequest.write(request.msg);
   }
-  requester.end();
-
-  requester.once('error', cb);
+  httpRequest.end();
+  httpRequest.once('error', cb);
 }

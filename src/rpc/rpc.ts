@@ -1,93 +1,101 @@
-import * as TransportTypes from '../transport/types';
-import {Requester} from '../transport/types';
-import {ApiAbstract, RequestOptions, Response} from './types';
+import * as Transport from '../transport';
 
-let id = 0;
-function toTransportRequestOptions<
-  Api extends ApiAbstract,
-  Method extends keyof Api
->(opts: RequestOptions): TransportTypes.RequestOptions {
-  return {
-    headers: {...opts.headers, 'Content-Type': 'application/json'},
-    msg: JSON.stringify({
-      id: (id += 1),
-      jsonrpc: '2.0',
-      method: opts.method,
-      params: opts.params,
-    }),
-    timeout: opts.timeout || 30000,
-    url: opts.url,
+export interface Request<M extends string = string, P extends any[] = any[]> {
+  method: M;
+  params?: P;
+  jsonrpc?: '2.0';
+  id?: string | number | null;
+}
+
+export const enum ErrorCode {
+  ParseError = -32700,
+  InvalidRequest = -32600,
+  MethodNotFound = -32601,
+  InvalidParams = -32602,
+  InternalError = -32603,
+}
+
+export interface RpcError {
+  id: number | null;
+  jsonrpc: '2.0';
+  error: {
+    code: ErrorCode;
+    message: string;
+    data?: any;
   };
 }
 
-export class Rpc<Api extends ApiAbstract> {
-  public static staticOptions: Partial<RequestOptions<any, any>>;
-  public defaultOptions: Partial<RequestOptions<any, any>>;
-
-  constructor(
-    public transport: Requester,
-    public url: string,
-    public opts?: Partial<RequestOptions<Api, any>>,
-  ) {
-    this.defaultOptions = opts || {};
-  }
-
-  public async request<Method extends keyof Api>(
-    method: Method,
-    params: Api[Method]['params'],
-    opts?: Partial<RequestOptions<Api, Method>>,
-  ): Promise<Response<Api, Method>> {
-    const requestOptions = {
-      ...Rpc.staticOptions,
-      ...this.defaultOptions,
-      ...opts,
-      method,
-      params,
-      url: this.url,
-    };
-
-    const resp = await this.transport(
-      toTransportRequestOptions(requestOptions),
-    );
-    const parsed = JSON.parse(resp.msg);
-
-    if (parsed.error && !parsed.result) {
-      throw new Error(
-        `${parsed.error.code}:${parsed.error.message}${parsed.error.data &&
-          '\n' + parsed.error.data}`,
-      );
-    } else if (!parsed.result) {
-      throw new Error('invalid jsonrpc response');
-    }
-
-    return {
-      headers: resp.headers,
-      requestOptions,
-      result: parsed.result,
-      status: resp.status,
-    };
-  }
+export interface RpcResponse<R extends any = any> {
+  id: number | null;
+  jsonrpc: '2.0';
+  result: R;
 }
 
-// const a = {
-//   web3_sha3: {
-//     params: <[IData]>[''],
-//     ptypes: [{type: 'data'}],
-//     result: [{type: 'string'}],
-//   },
-// };
-// type a = typeof a;
+export function isRpcError(v: RpcResponse | RpcError): v is RpcError {
+  return Boolean((v as RpcError).error);
+}
 
-// type I = {
-//   web3_sha3: {
-//     params: [string];
-//     result: [string];
-//   };
-//   web3_clientVersion: {
-//     params: never[];
-//     result: [string];
-//   };
-// };
+let id = 0;
+export class Rpc {
+  constructor(
+    public transport: Transport.Handler,
+    public endpoint = 'http://localhost:8545',
+    public timeout = 30000,
+    public headers?: {[k: string]: string | string[]},
+  ) {}
 
-// const asdf = new Defaultjsonrpc<I>('asdf');
-// asdf.request('web3_sha3', ['string']);
+  public send(method: string, ...params: any[]): Promise<any> {
+    return new Promise((resolve, reject) =>
+      this.handle(
+        {
+          method,
+          params,
+        },
+        (err, result) => (err ? reject(err) : resolve(result)),
+      ),
+    );
+  }
+
+  public handle(
+    request: Request,
+    cb: (err: Error | void, response?: any) => void,
+  ) {
+    const payload = {
+      method: request.method,
+      params: request.params || [],
+      id: request.id || (id += 1),
+      jsonrpc: '2.0',
+    };
+
+    console.log(payload);
+
+    this.transport.handle(
+      {
+        url: this.endpoint,
+        msg: JSON.stringify(payload),
+        headers: {...this.headers, 'Content-Type': 'application/json'},
+        timeout: this.timeout,
+      },
+      (err: Error | void, response?: Transport.Response) => {
+        if (err) {
+          cb(err);
+          return;
+        }
+
+        if (response) {
+          const rpcResponse = JSON.parse(response!.msg);
+
+          if (rpcResponse && rpcResponse.id === payload.id) {
+            if (!isRpcError(rpcResponse)) {
+              cb(undefined, rpcResponse.result);
+              return;
+            }
+            cb(new Error(JSON.stringify(response!.msg)));
+            return;
+          }
+        }
+        cb(new Error('response is malformed'));
+      },
+    );
+  }
+}

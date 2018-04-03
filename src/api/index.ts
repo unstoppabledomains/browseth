@@ -1,2 +1,1 @@
-export * from './ens';
-export * from './eth-registrar';
+export * from './ens-registrar';

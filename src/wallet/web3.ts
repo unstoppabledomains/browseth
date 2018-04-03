@@ -1,30 +1,39 @@
-import * as Node from '../node/index';
-import {IData, ISendTransaction} from '../rpc/methods';
+import {Rpc} from '../rpc';
+import {Wallet} from './types';
 
-export class Web3 extends Node.Web3 {
-  constructor(provider: any) {
-    super(provider);
-  }
+export class Web3 implements Wallet {
+  constructor(public rpc: Rpc) {}
 
-  public getAccount() {
-    return this.send('eth_coinbase', []);
-  }
-
-  public getAccounts() {
-    return this.send('eth_accounts', []);
-  }
-
-  public async sendTransaction(transaction: ISendTransaction) {
-    return this.send('eth_sendTransaction', [
+  public account = () => this.rpc.send('eth_coinbase');
+  public accounts = () => this.rpc.send('eth_accounts');
+  public send = async (transaction: object) => {
+    const tx: any = {
+      ...transaction,
+      from: await this.account(),
+    };
+    return this.rpc.send('eth_sendTransaction', {
+      ...tx,
+      gas: tx.gas || (await this.gas(tx)),
+    });
+  };
+  public call = async (transaction: object, block?: string) =>
+    this.rpc.send(
+      'eth_call',
       {
         ...transaction,
-        from: transaction.from || (await this.getAccounts())[0],
-        gas: transaction.gas || (await this.estimateGas(transaction)),
+        from: await this.account(),
       },
-    ]);
-  }
-
-  public async signMessage(message: IData) {
-    return this.send('eth_sign', [await this.getAccount(), message]);
-  }
+      block,
+    );
+  public gas = async (transaction: object, block?: string) =>
+    this.rpc.send(
+      'eth_estimateGas',
+      {
+        ...transaction,
+        from: await this.account(),
+      },
+      // block,
+    );
+  public sign = async (message: string) =>
+    this.rpc.send('eth_sign', await this.account(), message);
 }

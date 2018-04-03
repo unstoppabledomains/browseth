@@ -1,17 +1,10 @@
-export interface SignerWallet {
-  signTransaction(): string;
-  signMessage(): string;
-  getAccounts(): string[];
-}
+import {Rpc} from '../rpc';
 
-export interface DWallet extends SignerWallet {
-  accountRange: number[];
+export abstract class Wallet {
+  public abstract rpc: Rpc;
+  public abstract account(): Promise<string>;
+  public abstract send(transaction: object): Promise<string>;
+  public abstract call(transaction: object, block?: string): Promise<string>;
+  public abstract gas(transaction: object, block?: string): Promise<string>;
+  public abstract sign(message: string): Promise<string>;
 }
-
-export interface Web3Wallet {
-  sendTransaction(): string;
-  sendMessage(): string;
-  getAccounts(): string[];
-}
-
-export type Wallet = SignerWallet | Web3Wallet;
