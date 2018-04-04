@@ -1,1 +1,1 @@
-export * from './ens-registrar';
+export * from './eth-registrar';

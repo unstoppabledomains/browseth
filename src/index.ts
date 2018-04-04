@@ -1,16 +1,17 @@
-import HWTransportNodeHid from '@ledgerhq/hw-transport-node-hid';
+import HWTransportU2F from '@ledgerhq/hw-transport-u2f';
 import {JsonInterface} from './abi';
-// import * as Apis from './api';
+import * as Apis from './api';
 import {Contract} from './contract';
-import {Rpc} from './rpc';
-import * as Transports from './transport';
+import * as Rpcs from './rpc';
+import * as Xhr from './transport/xhr';
 import * as Wallets from './wallet';
 
 export default class Browseth {
+  public static Rpcs = {...Rpcs};
   public static Wallets = {...Wallets};
-  // public static Apis = {...Apis};
+  public static Apis = {...Apis};
 
-  public static transport: Transports.Handler = new Transports.NodeHttpHandler();
+  public static transport = Xhr;
   public c: {
     [k: string]: Contract;
   } = {};
@@ -18,25 +19,25 @@ export default class Browseth {
     [k: string]: {wallet: Wallets.Wallet; [k: string]: any};
   } = {};
 
-  private _rpc: Rpc;
+  private _rpc: Rpcs.Rpc;
   private _wallet: Wallets.Wallet;
-  constructor(initializer?: string | Rpc | Wallets.Wallet) {
+  constructor(initializer?: string | Rpcs.Rpc | Wallets.Wallet) {
     if (typeof initializer === 'string') {
-      this._rpc = new Rpc(Browseth.transport, initializer);
+      this._rpc = new Rpcs.Rpc(Browseth.transport, initializer);
       this._wallet = new Wallets.ReadOnly(this._rpc);
-    } else if (initializer instanceof Rpc) {
+    } else if (initializer instanceof Rpcs.Rpc) {
       this._rpc = initializer;
       this._wallet = new Wallets.ReadOnly(this._rpc);
     } else if (initializer instanceof Wallets.Wallet) {
       this._rpc = initializer.rpc;
       this._wallet = initializer;
     } else {
-      this._rpc = new Rpc(Browseth.transport);
+      this._rpc = new Rpcs.Rpc(Browseth.transport);
       this._wallet = new Wallets.ReadOnly(this._rpc);
     }
   }
 
-  set rpc(newRpc: Rpc) {
+  set rpc(newRpc: Rpcs.Rpc) {
     this._rpc = newRpc;
     this.wallet.rpc = newRpc;
   }
@@ -78,10 +79,11 @@ export default class Browseth {
     return this;
   }
 
-  public addApi(name: string, api: any) {
+  public addApi(name: string, api: {wallet: Wallets.Wallet; [k: string]: any}) {
+    api.wallet = this._wallet;
     this.api[name] = api;
     return this;
   }
 }
 
-Browseth.Wallets.SignerWallet.Signers.Ledger.Transport = HWTransportNodeHid;
+Browseth.Wallets.SignerWallet.Signers.Ledger.Transport = HWTransportU2F;

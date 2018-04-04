@@ -1,4 +1,5 @@
-import FetchHandler from './fetch';
-import NodeHttpHandler from './node-http';
+import * as Fetch from './fetch';
+import * as NodeHttp from './node-http';
+import * as Xhr from './xhr';
 export * from './types';
-export {FetchHandler, NodeHttpHandler};
+export {Fetch, NodeHttp, Xhr};

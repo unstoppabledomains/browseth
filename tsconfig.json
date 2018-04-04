@@ -10,8 +10,14 @@
     "removeComments": true, // TODO(bp): FIND OUT MORE
     "forceConsistentCasingInFileNames": true,
     "target": "es5",
+    // "module": "commonjs",
     "declaration": true,
     "lib": ["dom", "es7", "dom.iterable"]
+    // "typeRoots": ["node_modules/@types/", "src/@types/"],
+    // "paths": {
+    //   "*": ["src/@types/", "node_modules/@types/"]
+    // }
   },
+  "include": ["src"],
   "exclude": ["**/node_modules", "**/__tests__", "**/*.test.ts", "**/test.ts"]
 }

@@ -40,7 +40,7 @@ export class Rpc {
   constructor(
     public transport: Transport.Handler,
     public endpoint = 'http://localhost:8545',
-    public timeout = 30000,
+    public timeout = 0,
     public headers?: {[k: string]: string | string[]},
   ) {}
 
@@ -66,8 +66,6 @@ export class Rpc {
       id: request.id || (id += 1),
       jsonrpc: '2.0',
     };
-
-    console.log(payload);
 
     this.transport.handle(
       {

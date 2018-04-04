@@ -3,20 +3,11 @@ import * as https from 'https';
 import * as url from 'url';
 import {Handler, Request, Response} from './types';
 
-export default class NodeHttpHandler implements Handler {
-  public static isSupported(): boolean {
-    return typeof module !== 'undefined' && module.exports;
-  }
-
-  public handle(
-    request: Request,
-    cb: (err: Error | void, response?: Response) => void,
-  ) {
-    nodeHttpRequest(request, cb);
-  }
+export function isSupported(): boolean {
+  return typeof module !== 'undefined' && module.exports;
 }
 
-function nodeHttpRequest(
+export function handle(
   request: Request,
   cb: (e?: Error | void, resp?: Response) => void,
 ): void {

@@ -1,5 +1,5 @@
 declare module 'ethereumjs-tx' {
-  import BN = require('bn.js');
+  import {BN} from 'bn.js';
   import {Buffer} from 'buffer';
 
   type TransactionObjectField = Buffer | BN | string | number;
@@ -26,7 +26,7 @@ declare module 'ethereumjs-tx' {
     value: TransactionObjectField;
   }>;
 
-  class Transaction {
+  export default class Transaction {
     _chainId: number;
 
     raw: Buffer | string;
@@ -79,6 +79,4 @@ declare module 'ethereumjs-tx' {
 
     serialize(): Buffer;
   }
-
-  export = Transaction;
 }

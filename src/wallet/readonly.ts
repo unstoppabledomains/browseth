@@ -8,8 +8,10 @@ export class ReadOnly implements Wallet {
   ) {}
 
   public account = () => Promise.resolve(this.address);
+
   public send = (transaction: object) =>
     Promise.reject(new Error('must use a wallet with sending abilities'));
+
   public call = async (transaction: object, block?: string) =>
     this.rpc.send(
       'eth_call',
@@ -19,15 +21,13 @@ export class ReadOnly implements Wallet {
       },
       block,
     );
-  public gas = async (transaction: object, block?: string) =>
-    this.rpc.send(
-      'eth_estimateGas',
-      {
-        ...transaction,
-        from: await this.account(),
-      },
-      // block,
-    );
+
+  public gas = async (transaction: object) =>
+    this.rpc.send('eth_estimateGas', {
+      ...transaction,
+      from: await this.account(),
+    });
+
   public sign = (message: string) =>
     Promise.reject(new Error('must use an actual wallet'));
 }

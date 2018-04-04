@@ -5,7 +5,7 @@ declare module 'bn.js' {
 
   type IPrimeName = 'k256' | 'p224' | 'p192' | 'p25519';
 
-  class BN {
+  export class BN {
     static isBN(b: object): boolean;
 
     constructor(
@@ -190,6 +190,4 @@ declare module 'bn.js' {
 
     invm(b: BN): BN;
   }
-
-  export = BN;
 }

@@ -1,4 +1,4 @@
-import Abi = require('ethereumjs-abi');
+import * as Abi from 'ethereumjs-abi';
 
 export interface Param {
   name: string;
@@ -109,7 +109,7 @@ export function createAbiCodec(jsonInterface: JsonInterface): AbiCodec {
                 if (Array.isArray(topics[i.name])) {
                   const encodedTopicArray: string[] = [];
 
-                  topics[i.name].forEach(t => {
+                  topics[i.name].forEach((t: any) => {
                     const ete = Abi.rawEncode([i.type], t).toString('hex');
 
                     encodedTopicArray.push(
@@ -143,8 +143,6 @@ export function createAbiCodec(jsonInterface: JsonInterface): AbiCodec {
             return encodedTopics;
           },
           decode(raw: string) {
-            console.log(raw);
-
             return Abi.rawDecode(
               types,
               Buffer.from(raw.replace('0x', ''), 'hex'),
@@ -173,7 +171,9 @@ export function createAbiCodec(jsonInterface: JsonInterface): AbiCodec {
             return Abi.rawDecode(
               oTypes,
               Buffer.from(raw.replace('0x', ''), 'hex'),
-            ).map((v, i) => (oTypes[i] === 'address' ? '0x' + v : v));
+            ).map(
+              (v: any, i: number) => (oTypes[i] === 'address' ? '0x' + v : v),
+            );
           },
         };
 

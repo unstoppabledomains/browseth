@@ -19,12 +19,13 @@ export class SignerWallet implements Wallet {
       await this.signer.signTransaction({
         ...tx,
         gas: tx.gas || (await this.rpc.send('eth_estimateGas', tx)),
-        // gasPrice: tx.gasPrice || 1000000000,
+        gasPrice: tx.gasPrice || 1000000000,
         nonce: await this.rpc.send(
           'eth_getTransactionCount',
           tx.from,
           'latest',
         ),
+        chainId: parseInt(await this.rpc.send('net_version'), 10),
       }),
     );
   };

@@ -1,6 +1,6 @@
-import EthereumJsTx = require('ethereumjs-tx');
+import EthereumJsTx from 'ethereumjs-tx';
 import {secp256k1} from 'ethereumjs-util';
-import createKeccak = require('keccak');
+import createKeccak from 'keccak';
 // import secp256k1 from 'secp256k1';
 import {Signer} from './types';
 

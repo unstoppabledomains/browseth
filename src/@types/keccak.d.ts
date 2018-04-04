@@ -11,8 +11,8 @@ declare module 'keccak' {
     | 'sha3-512'
     | 'shake128'
     | 'shake256';
-  const createKeccak: {
-    (algorithm: Algorithm, options?: any): Hash;
-  };
-  export = createKeccak;
+  export default function createKeccak(
+    algorithm: Algorithm,
+    options?: any,
+  ): Hash;
 }

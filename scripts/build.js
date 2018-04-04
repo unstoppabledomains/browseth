@@ -2,7 +2,7 @@
 
 const path = require('path');
 const rollup = require('rollup');
-const rollupAlias = require('rollup-plugin-alias');
+// const rollupAlias = require('rollup-plugin-alias');
 const rollupCommonJs = require('rollup-plugin-commonjs');
 const rollupFilesize = require('rollup-plugin-filesize');
 const rollupJson = require('rollup-plugin-json');
@@ -12,14 +12,15 @@ const rollupTypescript = require('rollup-plugin-typescript2');
 const typescript = require('typescript');
 
 const pkg = require('../package.json');
+
 const projectDir = `${__dirname}/..`;
 
-function createInputOptions(browser) {
+function createInputOptions(browser, input) {
   return {
-    input: path.resolve(projectDir, 'src/index.ts'),
+    input: path.resolve(projectDir, input),
     treeshake: true,
     external: [
-      ...module.builtinModules,
+      ...require('module').builtinModules,
       ...Object.keys(pkg.dependencies),
       ...Object.keys(pkg.devDependencies),
     ],
@@ -37,11 +38,11 @@ function createInputOptions(browser) {
         __NODE__: !browser,
       }),
       rollupJson(),
+      rollupTypescript({typescript}),
       rollupNodeResolve({preferBuiltins: true}),
       rollupCommonJs({
-        namedExports: {'node_modules/js-sha3/src/sha3.js': ['keccak256']},
+        // namedExports: {'node_modules/js-sha3/src/sha3.js': ['keccak256']},
       }),
-      rollupTypescript({typescript}),
     ],
   };
 }
@@ -54,24 +55,25 @@ function createOutput(format, output) {
     name: 'Browseth',
   };
 }
+const configs = [
+  [
+    createInputOptions(false, 'src/index.ts'),
+    [
+      createOutput('es', 'dist/index.js'),
+      // createOutput('cjs', 'dist/index.js'),
+    ],
+  ],
+  // [
+  //   createInputOptions(true, 'src/index.ts'),
+  //   [
+  //     // createOutput('es', 'dist/browser.es.js'),
+  //     createOutput('cjs', 'dist/browser.js'),
+  //   ],
+  // ],
+];
 
 async function build() {
-  for (const [inputConfig, outputConfigs] of [
-    [
-      createInputOptions(false),
-      [
-        createOutput('es', 'dist/index.es.js'),
-        createOutput('cjs', 'dist/index.js'),
-      ],
-    ],
-    [
-      createInputOptions(true),
-      [
-        createOutput('es', 'dist/browser.es.js'),
-        createOutput('cjs', 'dist/browser.js'),
-      ],
-    ],
-  ]) {
+  for (const [inputConfig, outputConfigs] of configs) {
     const bundle = await rollup.rollup(inputConfig);
 
     for (const outputConfig of outputConfigs) {

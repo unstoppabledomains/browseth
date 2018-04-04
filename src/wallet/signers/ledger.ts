@@ -1,6 +1,6 @@
 import AppEth from '@ledgerhq/hw-app-eth';
 import HWTransport from '@ledgerhq/hw-transport';
-import EthereumJsTx = require('ethereumjs-tx');
+import EthereumJsTx from 'ethereumjs-tx';
 import {rlp} from 'ethereumjs-util';
 import {Signer} from './types';
 
@@ -15,14 +15,14 @@ namespace LedgerDPath {
 
 export class Ledger implements Signer {
   public static Transport: {create(): Promise<HWTransport>};
-
+  public static dPath = {...LedgerDPath};
   private static initialized = false;
   private static allowParallel = false;
 
   public addressLookup: {[index: number]: string} = {};
 
   constructor(
-    private dPath = LedgerDPath.mainNet,
+    private dPath = Ledger.dPath.mainNet,
     private defaultIndex: number = 0,
   ) {
     if (!LedgerDPath.isValid(dPath)) {
@@ -30,7 +30,7 @@ export class Ledger implements Signer {
     }
   }
 
-  public async initialize() {
+  public async initialize(): Promise<{app: AppEth; close(): void}> {
     if (!Ledger.allowParallel && Ledger.initialized) {
       throw new Error('another ledger wallet call is already initialized');
     }
@@ -81,33 +81,28 @@ export class Ledger implements Signer {
   public async signTransaction(transaction: any, index = this.defaultIndex) {
     const {app, close} = await this.initialize();
     try {
-      console.log({
+      const eTx = new EthereumJsTx({
         ...transaction,
-        v: 1,
-        r: 0,
-        s: 0,
-      });
+        v: transaction.chainId || 1,
+      } as any);
 
       const result = await app.signTransaction(
         this.dPath + index,
-        rlp.encode(
-          new EthereumJsTx({
-            ...transaction,
-            v: 1,
-            r: 0,
-            s: 0,
-          } as any).raw,
-        ),
+        rlp.encode(eTx.raw),
       );
 
-      return `0x${new EthereumJsTx({
-        ...result,
+      // console.log(transaction, result);
+
+      const e = new EthereumJsTx({
+        ...transaction,
         v: '0x' + result.v,
         r: '0x' + result.r,
         s: '0x' + result.s,
-      })
-        .serialize()
-        .toString('hex')}`;
+      });
+
+      // console.log({...e});
+      // console.log(e.serialize().toString('hex'));
+      return `0x${e.serialize().toString('hex')}`;
     } finally {
       close();
     }

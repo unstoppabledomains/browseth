@@ -1,8 +1,9 @@
-import Browseth from './index';
+import {provider} from 'ganache-core';
+import Browseth from '.';
 import {SignerWallet, Web3} from './wallet';
 
 test('', async () => {
-  const beth = new Browseth()
+  const beth = new Browseth('https://mainnet.infura.io/mew')
     .addContract(
       'ens',
       '[{"constant":true,"inputs":[{"name":"node","type":"bytes32"}],"name":"resolver","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"node","type":"bytes32"}],"name":"owner","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"node","type":"bytes32"},{"name":"label","type":"bytes32"},{"name":"owner","type":"address"}],"name":"setSubnodeOwner","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"node","type":"bytes32"},{"name":"ttl","type":"uint64"}],"name":"setTTL","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"node","type":"bytes32"}],"name":"ttl","outputs":[{"name":"","type":"uint64"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"node","type":"bytes32"},{"name":"resolver","type":"address"}],"name":"setResolver","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"node","type":"bytes32"},{"name":"owner","type":"address"}],"name":"setOwner","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"anonymous":false,"inputs":[{"indexed":true,"name":"node","type":"bytes32"},{"indexed":true,"name":"label","type":"bytes32"},{"indexed":false,"name":"owner","type":"address"}],"name":"NewOwner","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"node","type":"bytes32"},{"indexed":false,"name":"owner","type":"address"}],"name":"Transfer","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"node","type":"bytes32"},{"indexed":false,"name":"resolver","type":"address"}],"name":"NewResolver","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"node","type":"bytes32"},{"indexed":false,"name":"ttl","type":"uint64"}],"name":"NewTTL","type":"event"}]',
@@ -26,8 +27,20 @@ test('', async () => {
       },
     );
 
-  beth.wallet = new Web3(beth.rpc);
-  const ledger = new SignerWallet(
+  beth.rpc = new Browseth.Rpcs.Web3(
+    provider({
+      network_id: 1,
+      accounts: [
+        {
+          balance: '0x12345678901234567890234534567234567',
+          secretKey:
+            '0x1234567890123456789012345678901234567890123456789012345678901234',
+        },
+      ],
+    }),
+  );
+
+  const signerWallet = new SignerWallet(
     beth.rpc,
     new SignerWallet.Signers.PrivateKey(
       Buffer.from(
@@ -36,27 +49,23 @@ test('', async () => {
       ),
     ),
   );
+  beth.wallet = signerWallet;
 
-  await beth.rpc.send('eth_getBalance', await ledger.account(), 'latest');
-
+  const ledger = new SignerWallet.Signers.Ledger();
+  const account = await ledger.account();
+  console.log(account);
   const txHash = await beth.wallet.send({
-    to: await ledger.account(),
+    to: account,
     value: '0x100000000000000000000000',
   });
 
-  console.log(
-    await beth.rpc.send('eth_getBalance', await ledger.account(), 'latest'),
-  );
-  beth.wallet = ledger;
+  signerWallet.signer = ledger;
+  beth.wallet = signerWallet;
 
-  console.log(
-    await beth.wallet.send({
-      to: '0x1234567890123456789012345678901234567890',
-      value: '0x1234',
-    }),
-  );
-
-  // const tx = await beth.c.deed.deploy(await beth.wallet.account()).send();
-
-  // console.log(await beth.rpc.send('eth_getTransactionReceipt', tx));
+  const tx = await beth.wallet.send({
+    to: '0x1234567890123456789012345678901234567890',
+    value: '0x1',
+  });
+  console.log(tx);
+  console.log(await beth.rpc.send('eth_getTransactionReceipt', tx));
 });

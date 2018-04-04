@@ -5,7 +5,9 @@ export class Web3 implements Wallet {
   constructor(public rpc: Rpc) {}
 
   public account = () => this.rpc.send('eth_coinbase');
+
   public accounts = () => this.rpc.send('eth_accounts');
+
   public send = async (transaction: object) => {
     const tx: any = {
       ...transaction,
@@ -16,6 +18,7 @@ export class Web3 implements Wallet {
       gas: tx.gas || (await this.gas(tx)),
     });
   };
+
   public call = async (transaction: object, block?: string) =>
     this.rpc.send(
       'eth_call',
@@ -25,6 +28,7 @@ export class Web3 implements Wallet {
       },
       block,
     );
+
   public gas = async (transaction: object, block?: string) =>
     this.rpc.send(
       'eth_estimateGas',
@@ -34,6 +38,7 @@ export class Web3 implements Wallet {
       },
       // block,
     );
+
   public sign = async (message: string) =>
     this.rpc.send('eth_sign', await this.account(), message);
 }

@@ -1,20 +1,20 @@
 import {Handler, Request, Response as TransportResponse} from './types';
 
-export default class FetchRequestHandler implements Handler {
-  public static isSupported(): boolean {
-    return (
-      typeof Response !== 'undefined' &&
-      Response.prototype.hasOwnProperty('body') &&
-      typeof Headers === 'function'
-    );
-  }
+export function isSupported(): boolean {
+  return (
+    typeof Response !== 'undefined' &&
+    Response.prototype.hasOwnProperty('body') &&
+    typeof Headers === 'function'
+  );
+}
 
-  public handle(
-    request: Request,
-    cb: (err: Error | void, response?: TransportResponse) => void,
-  ) {
-    fetchRequest(request).then(resp => cb(undefined, resp), cb);
-  }
+export function handle(
+  request: Request,
+  cb: (err: Error | void, response?: TransportResponse) => void,
+) {
+  fetchRequest(request)
+    .then(resp => cb(undefined, resp))
+    .catch(cb);
 }
 
 async function fetchRequest(request: Request): Promise<TransportResponse> {
@@ -49,7 +49,7 @@ async function fetchRequest(request: Request): Promise<TransportResponse> {
   ];
 
   if (request.timeout) {
-    promises.push(new Promise((_, r) => setTimeout(r, request.timeout)));
+    // promises.push(new Promise((_, r) => setTimeout(r, request.timeout)));
   }
 
   return Promise.race(promises);
