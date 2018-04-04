@@ -1,8 +1,7 @@
 {
   "name": "browseth",
-  "version": "0.0.5",
-  "description":
-    "A library for interacting with ethereum, well suited for the browser.",
+  "version": "0.0.6",
+  "description": "A library for interacting with ethereum, well suited for the browser.",
   "author": "Braden Pezeshki <braden.pezeshki@gmail.com>",
   "homepage": "https://github.com/buyethdomains/browseth",
   "repository": "git@github.com:buyethdomains/browseth.git",
@@ -10,7 +9,9 @@
   "main": "./dist/index.js",
   "module": "./dist/index.es.js",
   "types": "./dist/index.d.ts",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "dependencies": {
     "@ledgerhq/hw-app-eth": "^4.2.0",
     "@ledgerhq/hw-transport-node-hid": "^4.2.0",
@@ -25,7 +26,6 @@
   },
   "devDependencies": {
     "@types/fbemitter": "^2.0.32",
-    "fbemitter": "^2.1.1",
     "@types/jest": "^22.1.1",
     "@types/node": "^9.4.2",
     "chalk": "^2.3.2",
@@ -34,6 +34,7 @@
     "eslint-config-prettier": "^2.9.0",
     "eslint-plugin-import": "^2.9.0",
     "eslint-plugin-prettier": "^2.6.0",
+    "fbemitter": "^2.1.1",
     "ganache-core": "^2.1.0",
     "jest": "^22.4.3",
     "prettier": "^1.11.1",
@@ -65,7 +66,10 @@
     "test:once": "jest --silent"
   },
   "eslintConfig": {
-    "extends": ["airbnb-base", "plugin:prettier/recommended"],
+    "extends": [
+      "airbnb-base",
+      "plugin:prettier/recommended"
+    ],
     "env": {
       "node": true,
       "es6": true
@@ -85,11 +89,19 @@
       "__NODE__": true,
       "__BROWSER__": true
     },
-    "moduleFileExtensions": ["ts", "js", "node", "json"],
+    "moduleFileExtensions": [
+      "ts",
+      "js",
+      "node",
+      "json"
+    ],
     "transform": {
       "^.+\\.ts$": "ts-jest"
     },
-    "testMatch": ["<rootDir>/**/__tests__/**/*.ts", "<rootDir>/**/?(*.)test.ts"]
+    "testMatch": [
+      "<rootDir>/**/__tests__/**/*.ts",
+      "<rootDir>/**/?(*.)test.ts"
+    ]
   },
   "prettier": {
     "bracketSpacing": false,
