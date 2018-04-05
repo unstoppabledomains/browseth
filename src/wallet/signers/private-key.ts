@@ -1,6 +1,7 @@
 import EthereumJsTx from 'ethereumjs-tx';
 import {secp256k1} from 'ethereumjs-util';
 import createKeccak from 'keccak';
+import {pbkdf2Sync} from 'pbkdf2';
 // import secp256k1 from 'secp256k1';
 import {Signer} from './types';
 
@@ -14,6 +15,18 @@ export class PrivateKey implements Signer {
 
   public static fromHex(raw: string): PrivateKey {
     return new PrivateKey(Buffer.from(raw.replace('0x', ''), 'hex'));
+  }
+
+  public static fromMnemonic(phrase: string | string[]): PrivateKey {
+    return new PrivateKey(
+      pbkdf2Sync(
+        typeof phrase === 'string' ? phrase : phrase.join(' '),
+        'mnemonic',
+        2048,
+        64,
+        'SHA512',
+      ),
+    );
   }
 
   public static privateToAddress(privateKey: Buffer) {
@@ -32,6 +45,10 @@ export class PrivateKey implements Signer {
   }
 
   constructor(public privateKey: Buffer) {}
+
+  public toMnemonic() {
+    //
+  } // one string with spaces
 
   public account = () =>
     Promise.resolve(PrivateKey.privateToAddress(this.privateKey));
