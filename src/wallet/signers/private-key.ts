@@ -7,8 +7,8 @@ import {
 } from 'crypto';
 import EthereumJsTx from 'ethereumjs-tx';
 import {secp256k1} from 'ethereumjs-util';
-import {privateToAddress, sha3} from 'ethereumjs-util';
-import createKeccak from 'keccak';
+import {sha3} from 'ethereumjs-util';
+import * as createKeccak from 'keccak';
 import {pbkdf2Sync} from 'pbkdf2';
 import * as scryptsy from 'scryptsy';
 import * as uuidv4 from 'uuid/v4';
@@ -28,7 +28,13 @@ export class PrivateKey implements Signer {
   public static fromV1(json: any, passphrase: string): PrivateKey {
     return new PrivateKey(undefined!);
   }
-  public static fromV3(keyStore: any, pw: string) {
+  public static fromV3(keyStoreStr: any, pw: string) {
+    let keyStore;
+    if (typeof keyStoreStr !== 'string') {
+      keyStore = JSON.stringify(keyStoreStr);
+    } else {
+      keyStore = keyStoreStr;
+    }
     keyStore = JSON.parse(keyStore.toLowerCase());
     if (keyStore.version !== 3) {
       throw new Error('Not a V3 wallet');
@@ -94,8 +100,10 @@ export class PrivateKey implements Signer {
     return new PrivateKey(randomBytes(32));
   }
 
-  public static privateToAddress(privateKey: Buffer) {
-    const pubKey = secp256k1.publicKeyCreate(privateKey, false).slice(1);
+  constructor(public privateKey: Buffer) {}
+
+  public toAddress() {
+    const pubKey = secp256k1.publicKeyCreate(this.privateKey, false).slice(1);
     if (pubKey.length !== 64) {
       throw new Error(`invalid PublicKey<${pubKey}>`);
     }
@@ -109,10 +117,7 @@ export class PrivateKey implements Signer {
     );
   }
 
-  constructor(public privateKey: Buffer) {}
-
-  public account = () =>
-    Promise.resolve(PrivateKey.privateToAddress(this.privateKey));
+  public account = () => Promise.resolve(this.toAddress());
   public signTransaction = (transaction: object) => {
     const tx = new EthereumJsTx(transaction);
     tx.sign(this.privateKey);
@@ -199,7 +204,7 @@ export class PrivateKey implements Signer {
         JSON.stringify({
           version: 3,
           id: uuidv4({random: uuid}),
-          address: privateToAddress(this.privateKey).toString('hex'),
+          address: this.toAddress(),
           crypto: {
             ciphertext: ciphertext.toString('hex'),
             cipherparams: {
@@ -217,5 +222,11 @@ export class PrivateKey implements Signer {
 
   public toString() {
     return this.privateKey.toString('hex');
+  }
+
+  public getKeyStoreFileName(date = new Date()) {
+    return `UTC--${date.getUTCFullYear()}-${date.getUTCMonth()}-${date.getUTCDay()}T${date.getUTCHours()}-${date.getUTCMinutes()}-${date.getUTCSeconds()}.${date.getUTCMilliseconds()}Z--${this.toAddress().slice(
+      2,
+    )}`;
   }
 }

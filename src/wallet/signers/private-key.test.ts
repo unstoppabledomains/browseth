@@ -53,15 +53,20 @@ const obj1 = {
   },
 };
 
-// const pk = PrivateKey.fromV3(obj1, '111111111');
-// test('simple test for fromV3()', () => {
-//   expect(pk.privateKey.toString('hex')).toBe(
-//     'ed0137b4b079d340b28290ec11972cf9c6983e83f04fee2351e3709b464f1b2f',
-//   );
-// });
-test('generate new private key, make a keystore from it with toV3() then compare the private keys with toV3()', async () => {
+const pk = PrivateKey.fromV3(obj1, '111111111');
+test('simple test for fromV3()', () => {
+  expect(pk.privateKey.toString('hex')).toBe(
+    'ed0137b4b079d340b28290ec11972cf9c6983e83f04fee2351e3709b464f1b2f',
+  );
+});
+it('generate new private key, make a keystore from it with toV3() then compare the private keys with toV3()', async () => {
   const newPk = PrivateKey.fromRandomBytes();
   const keystore = await newPk.toV3('password', {});
   const check = PrivateKey.fromV3(keystore, 'password');
   expect(check.toString()).toBe(newPk.toString());
+});
+
+it('generates a proper filename using geth naming convention', () => {
+  const filename = pk.getKeyStoreFileName();
+  console.log(filename);
 });
