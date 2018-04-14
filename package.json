@@ -1,6 +1,6 @@
 {
   "name": "browseth",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "description": "A library for interacting with ethereum, well suited for the browser.",
   "author": "Braden Pezeshki <braden.pezeshki@gmail.com>",
   "homepage": "https://github.com/buyethdomains/browseth",
@@ -49,7 +49,7 @@
     "prebuild": "yarn format && yarn lint",
     "build": "yarn tsc --outDir dist",
     "clear": "rm -rf dist",
-    "format": "prettier {.,src/**,scripts/**}/*.{js,ts,json} -l",
+    "format": "prettier {src,scripts}/*.{js,ts,json} -l --write",
     "lint": "yarn lint-ts && yarn lint-js",
     "lint-ts": "tslint -p .",
     "lint-js": "eslint {src}",
