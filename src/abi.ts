@@ -56,7 +56,7 @@ export interface AbiCodec {
     [k: string]: EventElement & {
       signiture: string;
       encode(topics: {[k: string]: any}): string;
-      decode(raw: string): any;
+      decode(raw: string[]): any;
     };
   };
   function: {
@@ -105,48 +105,81 @@ export function createAbiCodec(jsonInterface: JsonInterface): AbiCodec {
             }
 
             element.inputs.forEach(i => {
+              // console.log(i.indexed, topics[i.name]);
               if (i.indexed && topics[i.name]) {
-                if (Array.isArray(topics[i.name])) {
-                  const encodedTopicArray: string[] = [];
+                /*
+                  if (Array.isArray(topics[i.name])) {
+                    const encodedTopicArray: string[] = [];
 
-                  topics[i.name].forEach((t: any) => {
-                    const ete = Abi.rawEncode([i.type], t).toString('hex');
+                    topics[i.name].forEach((t: any) => {
+                      const ete = Abi.rawEncode([i.type], t).toString('hex');
 
-                    encodedTopicArray.push(
-                      '0x' +
-                        (ete.length > 32
-                          ? Abi.soliditySHA3([i.type], topics[i.name]).toString(
-                              'hex',
-                            )
-                          : ete),
-                    );
-                  });
+                      encodedTopicArray.push(
+                        '0x' +
+                          (ete.length > 32
+                            ? Abi.soliditySHA3([i.type], topics[i.name]).toString(
+                                'hex',
+                              )
+                            : ete),
+                      );
+                    });
 
-                  encodedTopics.push(encodedTopicArray);
-                  return;
-                }
-
+                    encodedTopics.push(encodedTopicArray);
+                    return;
+                  }
+                */
+                // console.log([i.type], [topics[i.name]]);
                 const encodedTopic = Abi.rawEncode(
                   [i.type],
-                  topics[i.name],
+                  [topics[i.name]],
                 ).toString('hex');
-
+                // console.log(encodedTopic);
                 encodedTopics.push(
                   '0x' +
-                    (encodedTopic.length > 32
-                      ? Abi.soliditySHA3([i.type], topics[i.name])
+                    (encodedTopic.length > 64
+                      ? Abi.soliditySHA3([i.type], [topics[i.name]])
                       : encodedTopic),
                 );
+                // encodedTopics.push(topics[i.name]);
               }
             });
 
             return encodedTopics;
           },
-          decode(raw: string) {
-            return Abi.rawDecode(
-              types,
-              Buffer.from(raw.replace('0x', ''), 'hex'),
+          decode(log: any) {
+            // console.log(log);
+            if (!element.anonymous) {
+              log.topics.shift();
+            }
+
+            const unIndexedInputs = element.inputs.filter(i => !i.indexed);
+            // console.log(
+            //   unIndexedInputs.map(i => i.type),
+            //   Buffer.from(log.data.replace('0x', ''), 'hex'),
+            // );
+            const raw = Abi.rawDecode(
+              unIndexedInputs.map(i => i.type),
+              Buffer.from(log.data.replace('0x', '')),
             );
+
+            return {
+              ...element.inputs.filter(i => i.indexed).reduce(
+                (a, v, i) => ({
+                  ...a,
+                  // [i]: raw[i],
+                  [v.name]: log.topics[i],
+                }),
+                {},
+              ),
+              ...unIndexedInputs.reduce(
+                (a, v, i) => ({
+                  ...a,
+                  // [i]: raw[i],
+                  [v.name]: raw[i],
+                }),
+                {},
+              ),
+            };
           },
         };
 

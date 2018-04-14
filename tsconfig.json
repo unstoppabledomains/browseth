@@ -11,13 +11,14 @@
     "forceConsistentCasingInFileNames": true,
     "target": "es5",
     // "module": "commonjs",
+    "baseUrl": ".",
+    "rootDir": ".",
     "declaration": true,
-    "lib": ["dom", "es7", "dom.iterable"]
-    // "typeRoots": ["node_modules/@types/", "src/@types/"],
-    // "paths": {
-    //   "*": ["src/@types/", "node_modules/@types/"]
-    // }
+    "lib": ["dom", "es7", "dom.iterable"],
+    "paths": {
+      "*": ["node_modules/@types/*", "types/*", "src/*"]
+    }
   },
-  "include": ["src"],
-  "exclude": ["**/node_modules", "**/__tests__", "**/*.test.ts", "**/test.ts"]
+  "include": ["**/node_modules/@types", "types", "src"],
+  "exclude": ["**/__tests__", "**/*.test.ts", "**/test.ts"]
 }

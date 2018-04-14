@@ -1,3 +1,4 @@
-export * from './rpc';
-export * from './web3-provider';
+export {Default} from './default';
+export {Web3} from './web3';
+export {Rpc} from './base';
 // export * from './whitelist';

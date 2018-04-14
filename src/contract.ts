@@ -16,9 +16,24 @@ export class Contract {
   };
   public event: {
     [k: string]: (
-      topics: {[k: string]: any | any[]},
+      topics?: {[k: string]: any | any[]},
     ) => {
-      logs(logOpts: any): Promise<object[]>;
+      logs(
+        ...logOpts: any[]
+      ): Promise<
+        Array<{
+          address: string;
+          topics: Array<string | string[]>;
+          data: string;
+          blockNumber: string;
+          transactionHash: string;
+          transactionIndex: string;
+          blockHash: string;
+          logIndex: string;
+          removed: boolean;
+          decodedTopics: {[k: string]: string};
+        }>
+      >;
       // subscribe(logOpts: any): EventSubscription;
     };
   };
@@ -38,7 +53,7 @@ export class Contract {
       .reduce((a, v) => {
         const codec = (topics: {[k: string]: any | any[]} = {}) => {
           const encodedTopics = v.encode(topics);
-
+          // console.log(encodedTopics);
           return {
             logs: (
               fromBlock = 'latest',
@@ -46,11 +61,17 @@ export class Contract {
               address?: string,
             ) =>
               this.wallet.rpc.send('eth_getLogs', {
-                fromBlock: '0x1',
-                toBlock: '0x2',
+                fromBlock,
+                toBlock,
                 address: address ? address : this.options.address,
                 topics: encodedTopics,
               }),
+            /* .then(logs =>
+                  logs.map((log: any) => ({
+                    ...log,
+                    decodedTopics: v.decode(log),
+                  })),
+                ) */
             // sub(topics: {
             //   [k: string]: any | any[];
             // }): Promise<EventSubscription> {
@@ -144,5 +165,26 @@ export class Contract {
     throw new Error(
       'Must have bytecode and a constructor jsonInterface element to deploy',
     );
+  }
+
+  // aliases for the values
+  get e() {
+    return this.event;
+  }
+  // get events() {
+  //   return this.event;
+  // }
+  get f() {
+    return this.function;
+  }
+  // get functions() {
+  //   return this.function;
+  // }
+  // get method() {
+  //   return this.function;
+  // }
+
+  get methods() {
+    return this.function;
   }
 }

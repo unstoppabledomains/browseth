@@ -1,12 +1,7 @@
-import createKeccak from 'keccak';
+import {BN} from 'bn.js';
+import {keccak_256} from 'js-sha3';
 import {Contract} from '../contract';
 import {Wallet} from '../wallet';
-
-function keccak256(v: string) {
-  return createKeccak('keccak256')
-    .update(v)
-    .digest();
-}
 
 export class EthRegistrar {
   private static assertIsValidLabel(label: string) {
@@ -48,14 +43,15 @@ export class EthRegistrar {
   get wallet() {
     return this._wallet;
   }
+
   public async isOwner(label: string) {
     EthRegistrar.assertIsValidLabel(label);
 
-    const shaLabel = keccak256(label);
+    const shaLabel = keccak_256(label);
 
     const entries = await this.registrar.function.entries(shaLabel).call();
 
-    if (entries[0] !== '4') {
+    if (entries[0].toNumber() !== 4) {
       return false;
     }
 
@@ -67,12 +63,12 @@ export class EthRegistrar {
   public async isAuctionAvailable(label: string) {
     EthRegistrar.assertIsValidLabel(label);
 
-    const shaLabel = keccak256(label);
+    const shaLabel = keccak_256(label);
 
     const labelState = await this.registrar.function.state(shaLabel).call();
 
     const isOpen =
-      labelState === '0' && (this.strict === false || labelState === '1');
+      labelState === 0 && (this.strict === false || labelState === 1);
 
     return isOpen;
   }
@@ -96,7 +92,7 @@ export class EthRegistrar {
     const openLabels = await this.filterOpenAuctions(labels);
 
     return this.registrar.function
-      .startAuctions(openLabels.map(keccak256))
+      .startAuctions(openLabels.map(keccak_256))
       .send();
   }
 
@@ -109,27 +105,29 @@ export class EthRegistrar {
     EthRegistrar.assertIsValidLabel(label);
     chaff.forEach(EthRegistrar.assertIsValidLabel);
 
-    const shaLabel = keccak256(label);
+    const shaLabel = keccak_256(label);
 
     if (value < 10000000000000000) {
       throw new Error('value must be at least 10000000000000000 wei');
     }
 
-    const labelState = await this.registrar.function.state(shaLabel).call();
+    const labelState = (await this.registrar.function
+      .state(shaLabel)
+      .call()).toNumber();
 
-    if (labelState !== '0' && labelState !== '1') {
+    if (labelState !== 0 && labelState !== 1) {
       throw new Error(`'${label}' is unavailable for bidding`);
     }
 
     const shaBid = await this.registrar.function
-      .shaBid(shaLabel, await this.wallet.account(), value, keccak256(salt))
+      .shaBid(shaLabel, await this.wallet.account(), value, keccak_256(salt))
       .call();
 
-    if (labelState === '0') {
+    if (labelState === 0) {
       const openChaffLabels = await this.filterOpenAuctions(chaff);
 
       return this.registrar.function
-        .startAuctionsAndBid(openChaffLabels.map(keccak256), shaBid)
+        .startAuctionsAndBid(openChaffLabels.map(keccak_256), shaBid)
         .send({value});
     }
 
@@ -139,20 +137,22 @@ export class EthRegistrar {
   public async unseal(label: string, value = 10000000000000000, salt = '') {
     EthRegistrar.assertIsValidLabel(label);
 
-    const shaLabel = keccak256(label);
+    const shaLabel = keccak_256(label);
 
     if (value < 10000000000000000) {
       throw new Error('value must be at least 10000000000000000 wei');
     }
 
-    const labelState = await this.registrar.function.state(shaLabel).call();
+    const labelState = (await this.registrar.function
+      .state(shaLabel)
+      .call()).toNumber();
 
-    if (labelState !== '4') {
+    if (labelState !== 4) {
       throw new Error(`'${label}' is not in 'reveal' phase`);
     }
 
     return this.registrar.function
-      .unsealBid(shaLabel, value, keccak256(salt))
+      .unsealBid(shaLabel, value, keccak_256(salt))
       .send();
   }
 
@@ -165,7 +165,7 @@ export class EthRegistrar {
       throw new Error(`you don\'t own '${label}'`);
     }
 
-    const shaLabel = keccak256(label);
+    const shaLabel = keccak_256(label);
 
     return this.registrar.function.finalizeAuction(shaLabel).send();
   }
@@ -187,7 +187,7 @@ export class EthRegistrar {
       throw new Error(`you don\'t own '${label}'`);
     }
 
-    const shaLabel = keccak256(label);
+    const shaLabel = keccak_256(label);
 
     return this.registrar.function.finalizeAuction(shaLabel, newOwner).send();
   }
@@ -203,7 +203,7 @@ export class EthRegistrar {
       );
     }
 
-    const shaLabel = keccak256(label);
+    const shaLabel = keccak_256(label);
 
     const entries = await this.registrar.function.entries(shaLabel).call();
 

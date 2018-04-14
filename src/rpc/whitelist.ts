@@ -1,7 +1,7 @@
 import * as Transport from '../transport';
-import {Request, Rpc} from './rpc';
+import {Default} from './default';
 
-export class Whitelist extends Rpc {
+export class Whitelist extends Default {
   constructor(
     transport: Transport.Handler,
     public whitelist: string[],

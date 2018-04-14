@@ -1,18 +1,21 @@
 import HWTransportU2F from '@ledgerhq/hw-transport-u2f';
+import {BN} from 'bn.js';
 import {JsonInterface} from './abi';
 import * as Apis from './api';
 import {Contract} from './contract';
 import * as Rpcs from './rpc';
+import * as Signers from './signers';
 import * as Xhr from './transport/xhr';
+// import * as NodeHttp from './transport/node-http';
+
 import * as Wallets from './wallet';
 
-export default class Browseth {
-  public static Rpcs = {...Rpcs};
-  public static Wallets = {...Wallets};
-  public static Apis = {...Apis};
+export {Rpcs, Wallets, Signers, Apis};
+Signers.Ledger.Transport = HWTransportU2F;
 
+export class Browseth {
   public static transport = Xhr;
-  public c: {
+  public contract: {
     [k: string]: Contract;
   } = {};
   public api: {
@@ -21,9 +24,10 @@ export default class Browseth {
 
   private _rpc: Rpcs.Rpc;
   private _wallet: Wallets.Wallet;
+
   constructor(initializer?: string | Rpcs.Rpc | Wallets.Wallet) {
     if (typeof initializer === 'string') {
-      this._rpc = new Rpcs.Rpc(Browseth.transport, initializer);
+      this._rpc = new Rpcs.Default(Browseth.transport, initializer);
       this._wallet = new Wallets.ReadOnly(this._rpc);
     } else if (initializer instanceof Rpcs.Rpc) {
       this._rpc = initializer;
@@ -32,10 +36,17 @@ export default class Browseth {
       this._rpc = initializer.rpc;
       this._wallet = initializer;
     } else {
-      this._rpc = new Rpcs.Rpc(Browseth.transport);
+      this._rpc = new Rpcs.Default(Browseth.transport);
       this._wallet = new Wallets.ReadOnly(this._rpc);
     }
+    // this.poll().catch();
   }
+
+  // public options: {gasPrice: string | number | BN | (() => any)} = {
+  //   gasPrice() {
+  //     this._rpc.send('eth_gasPrice');
+  //   },
+  // };
 
   set rpc(newRpc: Rpcs.Rpc) {
     this._rpc = newRpc;
@@ -50,7 +61,7 @@ export default class Browseth {
     this._rpc = newWallet.rpc;
     this._wallet = newWallet;
     Object.keys(this.c).forEach(k => {
-      this.c[k].wallet = newWallet;
+      this.contract[k].wallet = newWallet;
     });
     Object.keys(this.api).forEach(k => {
       this.api[k].wallet = newWallet;
@@ -59,6 +70,14 @@ export default class Browseth {
 
   get wallet() {
     return this._wallet;
+  }
+
+  get c() {
+    return this.contract;
+  }
+
+  get w() {
+    return this.wallet;
   }
 
   public addContract(
@@ -84,6 +103,6 @@ export default class Browseth {
     this.api[name] = api;
     return this;
   }
-}
 
-Browseth.Wallets.SignerWallet.Signers.Ledger.Transport = HWTransportU2F;
+  // public monitorTransaction(transactionHash: string) {}
+}

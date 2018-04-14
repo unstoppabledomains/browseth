@@ -1,7 +1,7 @@
 import {Rpc} from '../rpc';
 import {Wallet} from './types';
 
-export class Web3 implements Wallet {
+export class Online implements Wallet {
   constructor(public rpc: Rpc) {}
 
   public account = () => this.rpc.send('eth_coinbase');

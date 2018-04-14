@@ -1,5 +1,5 @@
 export * from './readonly';
-export * from './signer-wallet';
+export * from './offline';
 export * from './throw';
 export * from './types';
-export * from './web3';
+export * from './online';

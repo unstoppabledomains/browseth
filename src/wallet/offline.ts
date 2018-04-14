@@ -1,11 +1,9 @@
 import {Rpc} from '../rpc';
-import * as Signers from './signers';
+import {Signer} from '../signers';
 import {Wallet} from './types';
 
-export class SignerWallet implements Wallet {
-  public static Signers = {...Signers};
-
-  constructor(public rpc: Rpc, public signer: Signers.Signer) {}
+export class Offline implements Wallet {
+  constructor(public rpc: Rpc, public signer: Signer) {}
 
   public account = () => this.signer.account();
   public send = async (transaction: any) => {

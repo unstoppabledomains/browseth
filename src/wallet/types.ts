@@ -1,3 +1,4 @@
+// import {BN} from 'bn.js';
 import {Rpc} from '../rpc';
 
 export abstract class Wallet {
