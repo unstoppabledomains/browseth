@@ -47,7 +47,7 @@ export class PrivateKey implements Signer {
       derivedKey = pbkdf2Sync(
         Buffer.from(pw),
         Buffer.from(kdfparams.salt, 'hex'), // salt
-        kdfparams.c || 262144, // iterations
+        kdfparams.c || 20000, // iterations
         kdfparams.dklen, // length
         'sha256',
       );
@@ -55,7 +55,7 @@ export class PrivateKey implements Signer {
       derivedKey = scryptsy(
         Buffer.from(pw),
         Buffer.from(kdfparams.salt, 'hex'),
-        kdfparams.n || 262144,
+        kdfparams.n || 20000,
         kdfparams.r, // memory factor
         kdfparams.p, // parallelization factor
         kdfparams.dklen,
@@ -192,8 +192,8 @@ export class PrivateKey implements Signer {
       kdf = 'scrypt',
       cipher = 'aes-128-ctr',
       dklen = 32,
-      c = 262144,
-      n = 262144,
+      c = 20000,
+      n = 20000,
       r = 8,
       p = 1,
     } = {},
@@ -268,10 +268,15 @@ export class PrivateKey implements Signer {
   }
 
   public getKeyStoreFileName(date = new Date()) {
-    return `UTC--${date
-      .toUTCString()
-      .split(/[ ,]+/)
-      .join('-')}Z--${this.toAddress().slice(2)}`;
+    return `UTC--${date.getUTCFullYear()}-${('0' + date.getUTCMonth()).slice(
+      -2,
+    )}-${('0' + date.getUTCDate()).slice(-2)}T${(
+      '0' + date.getUTCHours()
+    ).slice(-2)}-${('0' + date.getMinutes()).slice(-2)}-${(
+      '0' + date.getUTCSeconds()
+    ).slice(-2)}.${('00' + date.getUTCMilliseconds()).slice(
+      -3,
+    )}Z--${this.toAddress().slice(2)}`;
   }
 
   private toAddress() {

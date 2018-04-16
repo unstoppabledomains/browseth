@@ -60,7 +60,7 @@ xit('privateKeyInstance.toV3()', async () => {
 
 it('privateKeyInstance.getKeyStoreFileName()', () => {
   const filename = privateKeys[0].getKeyStoreFileName();
-  // console.log(filename);
+  console.log(filename);
 });
 
 const signTransactionTests: Array<[number, any, string]> = [
@@ -110,7 +110,7 @@ const signMessageTests: Array<[number, string]> = [
 ];
 
 describe('privateKeyInstance.signMessage()', () => {
-  signMessageTests.forEach(([privateKeyIndex, msg, result]) => {
+  signMessageTests.forEach(([privateKeyIndex, msg]) => {
     const pk = privateKeys[privateKeyIndex];
 
     it(`${pk} && ${msg}`, async () => {
