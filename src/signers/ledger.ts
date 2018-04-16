@@ -1,7 +1,9 @@
 import AppEth from '@ledgerhq/hw-app-eth';
 import HWTransport from '@ledgerhq/hw-transport';
-import EthereumJsTx from 'ethereumjs-tx';
-import {rlp} from 'ethereumjs-util';
+import ETx = require('ethereumjs-tx');
+import {stripZeros, toBuffer} from 'ethereumjs-util';
+import {encode as rlpEncode} from 'rlp';
+
 import {Signer} from './types';
 
 namespace LedgerDPath {
@@ -19,7 +21,12 @@ export class Ledger implements Signer {
   private static initialized = false;
   private static allowParallel = false;
 
-  public addressLookup: {[index: number]: string} = {};
+  public getAddressLookup: {
+    [index: number]: {
+      address: string;
+      publicKey: string;
+    };
+  } = {};
 
   constructor(
     private dPath = Ledger.dPath.mainNet,
@@ -38,6 +45,7 @@ export class Ledger implements Signer {
     Ledger.initialized = true;
     const transport = await Ledger.Transport.create();
 
+    // transport.setDebugMode(true);
     return {
       app: new AppEth(transport),
       close: () => {
@@ -47,62 +55,66 @@ export class Ledger implements Signer {
     };
   }
 
-  public async account(index = this.defaultIndex) {
-    const {app, close} = await this.initialize();
-    try {
-      if (this.addressLookup[index]) {
-        return this.addressLookup[index];
-      }
-
-      return (await app.getAddress(this.dPath + index)).address;
-    } finally {
-      close();
-    }
+  public account(index = this.defaultIndex) {
+    return this.getAddress(index).then(({address}) => address);
   }
 
-  public async accounts(...indices: number[]) {
-    const {app, close} = await this.initialize();
-    try {
-      const addresses = [];
-      for (const index of indices) {
-        addresses.push(
-          this.addressLookup[index]
-            ? this.addressLookup[index]
-            : (await app.getAddress(this.dPath + index)).address,
-        );
-      }
-
-      return addresses;
-    } finally {
-      close();
-    }
+  public publicKey(index = this.defaultIndex) {
+    return this.getAddress(index).then(({publicKey}) => publicKey);
   }
 
-  public async signTransaction(transaction: any, index = this.defaultIndex) {
+  public async signTransaction(
+    {
+      nonce = '0x',
+      gasPrice = '0x1',
+      gas = '0x5208', // ie 21000
+      to = '0x',
+      value = '0x',
+      data = '0x',
+    }: {
+      nonce: string | Buffer | number;
+      gasPrice: string | Buffer | number;
+      gas: string | Buffer | number;
+      to: string | Buffer;
+      value: string | Buffer | number;
+      data: string | Buffer;
+    },
+    index = this.defaultIndex,
+  ) {
     const {app, close} = await this.initialize();
     try {
-      const eTx = new EthereumJsTx({
-        ...transaction,
-        v: transaction.chainId || 1,
-      } as any);
+      const chainId = this.dPath === LedgerDPath.mainNet ? 1 : 3;
+      const raw = [
+        stripZeros(toBuffer(nonce)),
+        stripZeros(toBuffer(gasPrice)),
+        stripZeros(toBuffer(gas)),
+        toBuffer(to),
+        stripZeros(toBuffer(value)),
+        toBuffer(data),
+      ];
 
-      const result = await app.signTransaction(
+      const sig = await app.signTransaction(
         this.dPath + index,
-        rlp.encode(eTx.raw),
+        rlpEncode(
+          raw.concat(
+            chainId > 0
+              ? [Buffer.from([chainId]), Buffer.from([]), Buffer.from([])]
+              : [],
+          ),
+        ),
       );
+      /* tslint:disable-next-line no-bitwise */
+      if (Math.floor((+('0x' + sig.v) - 35) / 2) !== (chainId & 0xff)) {
+        throw new Error('invalid signed chainId');
+      }
 
-      // console.log(transaction, result);
-
-      const e = new EthereumJsTx({
-        ...transaction,
-        v: '0x' + result.v,
-        r: '0x' + result.r,
-        s: '0x' + result.s,
-      });
-
-      // console.log({...e});
-      // console.log(e.serialize().toString('hex'));
-      return `0x${e.serialize().toString('hex')}`;
+      return `0x${rlpEncode(
+        raw.concat(
+          Buffer.from(sig.v, 'hex'),
+          Buffer.from(sig.r, 'hex'),
+          Buffer.from(sig.s, 'hex'),
+        ),
+      ).toString('hex')}`;
     } finally {
       close();
     }
@@ -111,11 +123,28 @@ export class Ledger implements Signer {
   public async signMessage(msg: string, index = this.defaultIndex) {
     const {app, close} = await this.initialize();
     try {
-      const result = await app.signPersonalMessage(this.dPath + index, msg);
+      const sig = await app.signPersonalMessage(
+        this.dPath + index,
+        Buffer.from(msg).toString('hex'),
+      );
 
-      const v = result.v - 27;
-      const vHex = v.toString(16);
-      return `0x${result.r}${result.s}${vHex.length < 2 ? `0${v}` : vHex}`;
+      return `0x${sig.r}${sig.s}${Buffer.from([sig.v]).toString('hex')}`;
+    } finally {
+      close();
+    }
+  }
+
+  private async getAddress(index: number) {
+    const {app, close} = await this.initialize();
+    try {
+      if (this.getAddressLookup[index]) {
+        return this.getAddressLookup[index];
+      }
+      const resp = await app.getAddress(this.dPath + index);
+
+      this.getAddressLookup[index] = resp;
+
+      return resp;
     } finally {
       close();
     }

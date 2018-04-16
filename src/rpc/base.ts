@@ -133,6 +133,10 @@ export abstract class Rpc {
     return [
       payload,
       (err: Error | void, rpcResponse?: RpcResponse | RpcError) => {
+        if (err) {
+          cb(err);
+          return;
+        }
         if (rpcResponse && rpcResponse.id === payload.id) {
           if (!isRpcError(rpcResponse)) {
             cb(undefined, rpcResponse.result);
@@ -141,13 +145,7 @@ export abstract class Rpc {
           cb(new Error(JSON.stringify(rpcResponse)));
           return;
         }
-        cb(
-          new Error(
-            `response is malformed:\nresp: '${rpcResponse}'\npayload: ${JSON.stringify(
-              payload,
-            )}`,
-          ),
-        );
+        cb(new Error(`response is malformed: '${rpcResponse}'`));
       },
     ];
   }

@@ -26,7 +26,7 @@ declare module 'ethereumjs-tx' {
     value: TransactionObjectField;
   }>;
 
-  export default class Transaction {
+  class Transaction {
     _chainId: number;
 
     raw: Buffer | string;
@@ -79,4 +79,6 @@ declare module 'ethereumjs-tx' {
 
     serialize(): Buffer;
   }
+
+  export = Transaction;
 }

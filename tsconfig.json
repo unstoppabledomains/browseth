@@ -10,13 +10,12 @@
     "removeComments": true, // TODO(bp): FIND OUT MORE
     "forceConsistentCasingInFileNames": true,
     "target": "es5",
-    // "module": "commonjs",
     "baseUrl": ".",
-    "rootDir": ".",
+    "rootDir": "src",
     "declaration": true,
     "lib": ["dom", "es7", "dom.iterable"],
     "paths": {
-      "*": ["node_modules/@types/*", "types/*", "src/*"]
+      "*": ["node_modules/@types/*", "types/*"]
     }
   },
   "include": ["**/node_modules/@types", "types", "src"],

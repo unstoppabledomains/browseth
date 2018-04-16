@@ -1,3 +1,4 @@
+import {ETIME} from 'constants';
 import {
   createCipheriv,
   createDecipheriv,
@@ -5,13 +6,13 @@ import {
   Hash,
   randomBytes,
 } from 'crypto';
-import EthereumJsTx from 'ethereumjs-tx';
-import {secp256k1} from 'ethereumjs-util';
-import {sha3} from 'ethereumjs-util';
-import createKeccak = require('keccak');
+import {stripZeros, toBuffer} from 'ethereumjs-util';
 import {pbkdf2Sync} from 'pbkdf2';
+import {encode as rlpEncode} from 'rlp';
 import * as scryptsy from 'scryptsy';
+import {publicKeyCreate, sign} from 'secp256k1';
 import * as uuidv4 from 'uuid/v4';
+import {keccak256} from '../crypto';
 import {Signer} from './types';
 
 export interface KdfParams {
@@ -25,23 +26,24 @@ export interface KdfParams {
 }
 
 export class PrivateKey implements Signer {
-  public static fromV1(json: any, passphrase: string): PrivateKey {
-    return new PrivateKey(undefined!);
-  }
-  public static fromV3(keyStoreStr: any, pw: string) {
-    let keyStore;
-    if (typeof keyStoreStr !== 'string') {
-      keyStore = JSON.stringify(keyStoreStr);
-    } else {
-      keyStore = keyStoreStr;
-    }
-    keyStore = JSON.parse(keyStore.toLowerCase());
-    if (keyStore.version !== 3) {
+  // public static fromV1(json: any, passphrase: string): PrivateKey {}
+
+  public static fromV3(keystore: any, pw: string) {
+    const parsedKeystore = JSON.parse(
+      (typeof keystore === 'string'
+        ? keystore
+        : JSON.stringify(keystore)
+      ).toLowerCase(),
+    );
+
+    if (parsedKeystore.version !== 3) {
       throw new Error('Not a V3 wallet');
     }
+
     let derivedKey;
-    const kdfparams = keyStore.crypto.kdfparams;
-    if (keyStore.crypto.kdf === 'pbkdf2') {
+    const kdfparams = parsedKeystore.crypto.kdfparams;
+
+    if (parsedKeystore.crypto.kdf === 'pbkdf2') {
       derivedKey = pbkdf2Sync(
         Buffer.from(pw),
         Buffer.from(kdfparams.salt, 'hex'), // salt
@@ -49,7 +51,7 @@ export class PrivateKey implements Signer {
         kdfparams.dklen, // length
         'sha256',
       );
-    } else if (keyStore.crypto.kdf === 'scrypt') {
+    } else if (parsedKeystore.crypto.kdf === 'scrypt') {
       derivedKey = scryptsy(
         Buffer.from(pw),
         Buffer.from(kdfparams.salt, 'hex'),
@@ -61,18 +63,23 @@ export class PrivateKey implements Signer {
     } else {
       throw new Error('Unsupported kdf');
     }
-    const ciphertext = Buffer.from(keyStore.crypto.ciphertext, 'hex');
-    const mac = sha3(Buffer.concat([derivedKey.slice(16, 32), ciphertext]));
 
-    if (mac.toString('hex') !== keyStore.crypto.mac) {
+    const ciphertext = Buffer.from(parsedKeystore.crypto.ciphertext, 'hex');
+    const mac = keccak256(
+      Buffer.concat([derivedKey.slice(16, 32), ciphertext]),
+    );
+    if (mac.toString('hex') !== parsedKeystore.crypto.mac) {
       throw new Error('Macs do not match. Check password');
     }
+
     const decipher = createDecipheriv(
-      keyStore.crypto.cipher,
+      parsedKeystore.crypto.cipher,
       derivedKey.slice(0, 16),
-      Buffer.from(keyStore.crypto.cipherparams.iv, 'hex'),
+      Buffer.from(parsedKeystore.crypto.cipherparams.iv, 'hex'),
     );
+
     const seed = Buffer.concat([decipher.update(ciphertext), decipher.final()]);
+
     return new PrivateKey(seed);
   }
 
@@ -102,47 +109,80 @@ export class PrivateKey implements Signer {
 
   constructor(public privateKey: Buffer) {}
 
-  public toAddress() {
-    const pubKey = secp256k1.publicKeyCreate(this.privateKey, false).slice(1);
-    if (pubKey.length !== 64) {
-      throw new Error(`invalid PublicKey<${pubKey}>`);
-    }
-    return (
+  public account() {
+    return Promise.resolve(this.toAddress());
+  }
+
+  public signTransaction({
+    nonce = '0x',
+    gasPrice = '0x1',
+    gas = '0x5208', // ie 21000
+    to = '0x',
+    value = '0x',
+    data = '0x',
+    chainId = 0x1,
+  }: {
+    nonce: string | Buffer | number;
+    gasPrice: string | Buffer | number;
+    gas: string | Buffer | number;
+    to: string | Buffer;
+    value: string | Buffer | number;
+    data: string | Buffer;
+    chainId: number;
+  }) {
+    const raw = [
+      stripZeros(toBuffer(nonce)),
+      stripZeros(toBuffer(gasPrice)),
+      stripZeros(toBuffer(gas)),
+      toBuffer(to),
+      stripZeros(toBuffer(value)),
+      toBuffer(data),
+    ];
+
+    const sig = sign(
+      keccak256(
+        rlpEncode(
+          raw.concat(
+            chainId > 0
+              ? [Buffer.from([chainId]), Buffer.from([]), Buffer.from([])]
+              : [],
+          ),
+        ),
+      ),
+      this.privateKey,
+    );
+
+    return Promise.resolve(
       '0x' +
-      createKeccak('keccak256')
-        .update(pubKey)
-        .digest()
-        .slice(-20)
-        .toString('hex')
+        rlpEncode(
+          raw.concat(
+            Buffer.from([
+              sig.recovery + 27 + (chainId > 0 ? chainId * 2 + 8 : 0),
+            ]),
+            sig.signature.slice(0, 32),
+            sig.signature.slice(32, 64),
+          ),
+        ).toString('hex'),
     );
   }
 
-  public account = () => Promise.resolve(this.toAddress());
-  public signTransaction = (transaction: object) => {
-    const tx = new EthereumJsTx(transaction);
-    tx.sign(this.privateKey);
-    return Promise.resolve('0x' + tx.serialize().toString('hex'));
-  };
-  public signMessage = (message: string) => {
-    const sig = secp256k1.sign(
-      createKeccak('keccak256')
-        .update(
-          '\u0019Ethereum Signed Message:\n' +
-            message.length.toString() +
-            message,
-        )
-        .digest(),
-      this.privateKey,
+  public signMessage(message: string) {
+    const hash = keccak256(
+      '\u0019Ethereum Signed Message:\n' + message.length.toString() + message,
     );
+
+    const sig = sign(hash, this.privateKey);
+
     return Promise.resolve(
-      '0x' +
-        Buffer.concat([
-          sig.signature.slice(0, 64) /* TODO(bp): do we need the slice?? */,
-          sig.recovery,
-        ]).toString('hex'),
+      '0x' + Buffer.from([...sig.signature, sig.recovery + 27]).toString('hex'),
     );
-  };
+  }
   // returns keystore object and private key (randomly generated if not provided)
+
+  public toString() {
+    return this.privateKey.toString('hex');
+  }
+
   public toV3(
     pw: string,
     {
@@ -163,6 +203,7 @@ export class PrivateKey implements Signer {
         dklen,
         salt: salt.toString('hex'),
       };
+
       let derivedKey;
 
       if (kdf === 'pbkdf2') {
@@ -190,15 +231,21 @@ export class PrivateKey implements Signer {
       } else {
         throw new Error('Unsupported kdf');
       }
+
       const ciph = createCipheriv(cipher, derivedKey.slice(0, 16), iv);
+
       if (!ciph) {
         throw new Error('Unsupported cipher');
       }
+
       const ciphertext = Buffer.concat([
         ciph.update(this.privateKey),
         ciph.final(),
       ]);
-      const mac = sha3(Buffer.concat([derivedKey.slice(16, 32), ciphertext]));
+
+      const mac = keccak256(
+        Buffer.concat([derivedKey.slice(16, 32), ciphertext]),
+      );
 
       resolve(
         JSON.stringify({
@@ -220,14 +267,23 @@ export class PrivateKey implements Signer {
     });
   }
 
-  public toString() {
-    return this.privateKey.toString('hex');
-  }
-
   public getKeyStoreFileName(date = new Date()) {
     return `UTC--${date
       .toUTCString()
       .split(/[ ,]+/)
       .join('-')}Z--${this.toAddress().slice(2)}`;
+  }
+
+  private toAddress() {
+    const pubKey = publicKeyCreate(this.privateKey, false).slice(1);
+    if (pubKey.length !== 64) {
+      throw new Error(`invalid PublicKey<${pubKey}>`);
+    }
+    return (
+      '0x' +
+      keccak256(pubKey)
+        .slice(-20)
+        .toString('hex')
+    );
   }
 }
