@@ -49,7 +49,7 @@ async function fetchRequest(request: Request): Promise<TransportResponse> {
   ];
 
   if (request.timeout) {
-    // promises.push(new Promise((_, r) => setTimeout(r, request.timeout)));
+    promises.push(new Promise((_, r) => setTimeout(r, request.timeout)));
   }
 
   return Promise.race(promises);

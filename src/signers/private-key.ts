@@ -47,7 +47,7 @@ export class PrivateKey implements Signer {
       derivedKey = pbkdf2Sync(
         Buffer.from(pw),
         Buffer.from(kdfparams.salt, 'hex'), // salt
-        kdfparams.c || 20000, // iterations
+        kdfparams.c || 262144, // iterations
         kdfparams.dklen, // length
         'sha256',
       );
@@ -55,7 +55,7 @@ export class PrivateKey implements Signer {
       derivedKey = scryptsy(
         Buffer.from(pw),
         Buffer.from(kdfparams.salt, 'hex'),
-        kdfparams.n || 20000,
+        kdfparams.n || 262144,
         kdfparams.r, // memory factor
         kdfparams.p, // parallelization factor
         kdfparams.dklen,
@@ -139,6 +139,14 @@ export class PrivateKey implements Signer {
       toBuffer(data),
     ];
 
+    console.log(
+      raw.concat(
+        chainId > 0
+          ? [Buffer.from([chainId]), Buffer.from([]), Buffer.from([])]
+          : [],
+      ),
+    );
+
     const sig = sign(
       keccak256(
         rlpEncode(
@@ -192,8 +200,8 @@ export class PrivateKey implements Signer {
       kdf = 'scrypt',
       cipher = 'aes-128-ctr',
       dklen = 32,
-      c = 20000,
-      n = 20000,
+      c = 262144,
+      n = 262144,
       r = 8,
       p = 1,
     } = {},
