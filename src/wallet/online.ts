@@ -1,3 +1,5 @@
+import {toBuffer} from 'ethereumjs-util';
+import {toHex} from '../crypto';
 import {Rpc} from '../rpc';
 import {Wallet} from './types';
 
@@ -13,10 +15,16 @@ export class Online implements Wallet {
       ...transaction,
       from: await this.account(),
     };
-    return this.rpc.send('eth_sendTransaction', {
-      ...tx,
-      gas: tx.gas || (await this.gas(tx)),
-    });
+    return this.rpc.send(
+      'eth_sendTransaction',
+      toHex({
+        ...tx,
+        // gas: tx.gas || (await this.gas(tx)),
+        gas:
+          tx.gas.toBuffer().toString(16) ||
+          (await this.gas(tx)).toBuffer().toString(16),
+      }),
+    );
   };
 
   public call = async (transaction: object, block?: string) =>

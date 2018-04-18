@@ -201,12 +201,14 @@ export function createAbiCodec(jsonInterface: JsonInterface): AbiCodec {
             );
           },
           decode(raw: string) {
-            return Abi.rawDecode(
+            const decoded = Abi.rawDecode(
               oTypes,
               Buffer.from(raw.replace('0x', ''), 'hex'),
             ).map(
               (v: any, i: number) => (oTypes[i] === 'address' ? '0x' + v : v),
             );
+
+            return decoded.length === 1 ? decoded[0] : decoded;
           },
         };
 

@@ -1,3 +1,5 @@
+import {BN} from 'bn.js';
+import {toBuffer} from 'ethereumjs-util';
 import createKeccak = require('keccak');
 
 export function keccak256(message: string | Buffer | DataView) {
@@ -6,22 +8,22 @@ export function keccak256(message: string | Buffer | DataView) {
     .digest();
 }
 
-function toBuffer(v: any, quantity: boolean) {
-  //
-}
-
-function toHex(v: any, quantity: boolean) {
-  //
-}
-
-function toQuantity() {
-  //
-}
-
-function toData() {
-  //
-}
-
-function toTag() {
-  //
+export function toHex(v: any): string {
+  if (v == null) {
+    return '0x';
+  }
+  if (typeof v === 'number') {
+    return toHex(new BN(v));
+  } else if (v instanceof BN) {
+    return '0x' + v.toString(16);
+  } else if (typeof v === 'object' || Array.isArray(v)) {
+    const ret = {} as any;
+    for (const key in v) {
+      if (v.hasOwnProperty(key)) {
+        ret[key] = toHex(v[key]);
+      }
+    }
+    return ret;
+  }
+  return '0x' + toBuffer(v).toString('hex');
 }

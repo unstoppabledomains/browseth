@@ -48,16 +48,16 @@ test('', async () => {
       .state(
         '0x0aad943de3669df70ed8e294a0a7b46b8c1d01f62ad84b66154f75f0f67c47d6',
       )
-      .call({}),
+      .call(),
   );
 });
 
-browseth.listenForTransaction('0x12345678');
+// browseth.listenForTransaction('0x12345678');
 
-Browseth.privateTransactionEE.emit('0x21343453');
+// Browseth.privateTransactionEE.emit('0x21343453');
 
-browseth.onTransactionMined('0x1234456', receipt => {});
+// browseth.onTransactionMined('0x1234456', receipt => {});
 
-browseth.onTransactionFail('0x1234456', receipt => {});
+// browseth.onTransactionFail('0x1234456', receipt => {});
 
-Browseth.rpc.send('')
+// Browseth.rpc.send('')
