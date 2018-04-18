@@ -30,20 +30,20 @@ export class Online implements Wallet {
   public call = async (transaction: object, block?: string) =>
     this.rpc.send(
       'eth_call',
-      {
+      toHex({
         ...transaction,
         from: await this.account(),
-      },
+      }),
       block,
     );
 
   public gas = async (transaction: object, block?: string) =>
     this.rpc.send(
       'eth_estimateGas',
-      {
+      toHex({
         ...transaction,
         from: await this.account(),
-      },
+      }),
       // block,
     );
 

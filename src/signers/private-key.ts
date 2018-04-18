@@ -139,14 +139,6 @@ export class PrivateKey implements Signer {
       toBuffer(data),
     ];
 
-    console.log(
-      raw.concat(
-        chainId > 0
-          ? [Buffer.from([chainId]), Buffer.from([]), Buffer.from([])]
-          : [],
-      ),
-    );
-
     const sig = sign(
       keccak256(
         rlpEncode(

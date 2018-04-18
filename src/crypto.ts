@@ -8,7 +8,7 @@ export function keccak256(message: string | Buffer | DataView) {
     .digest();
 }
 
-export function toHex(v: any): string {
+export function toHex(v: any): any {
   if (v == null) {
     return '0x';
   }
