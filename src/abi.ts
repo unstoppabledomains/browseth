@@ -55,7 +55,7 @@ export interface AbiCodec {
   event: {
     [k: string]: EventElement & {
       signature: string;
-      encode(topics: {[k: string]: any}): string;
+      encode(topics: {[k: string]: any}): Array<string | string[]>;
       decode(raw: string[]): any;
     };
   };

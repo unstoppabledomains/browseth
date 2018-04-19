@@ -1,15 +1,312 @@
 import {Browseth} from '.';
+import {keccak256} from './crypto';
 import EventListener from './event-listener';
 import {Default} from './rpc';
 import TransactionListener from './transaction-listener';
 import {NodeHttp} from './transport';
 import {Online} from './wallet';
-import {keccak256} from './crypto';
 
-const SimpleBin =
-  '60606040523415600e57600080fd5b60dc8061001c6000396000f300606060405260043610603f576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff168063f3a8023e146044575b600080fd5b3415604e57600080fd5b60546056565b005b7fbd9a6b785f517d571b17c262f589c1a0d4caf23eac194f7006e3ba2d9eeb1a1c60405160405180910390a17f1146b77863d0b3f278e4e143393625e9a5ceb1712b14951167a4d222098aa8ae60405160405180910390a15600a165627a7a723058208af4e52c520b639aaf67fb9326d5a19975b2e80caf560de5d0faba653891126a0029';
-const RegistrarJson =
-  '[{"constant":false,"inputs":[],"name":"emitMyEvents","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[],"name":"FirstEvent","type":"event"},{"anonymous":false,"inputs":[],"name":"SecondEvent","type":"event"}]';
+const RegistrarJson = [
+  {
+    constant: false,
+    inputs: [{name: '_hash', type: 'bytes32'}],
+    name: 'releaseDeed',
+    outputs: [],
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    constant: true,
+    inputs: [{name: '_hash', type: 'bytes32'}],
+    name: 'getAllowedTime',
+    outputs: [{name: 'timestamp', type: 'uint256'}],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    constant: false,
+    inputs: [{name: 'unhashedName', type: 'string'}],
+    name: 'invalidateName',
+    outputs: [],
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    constant: false,
+    inputs: [
+      {name: 'bidder', type: 'address'},
+      {name: 'seal', type: 'bytes32'},
+    ],
+    name: 'cancelBid',
+    outputs: [],
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    constant: true,
+    inputs: [{name: '_hash', type: 'bytes32'}],
+    name: 'entries',
+    outputs: [
+      {name: '', type: 'uint8'},
+      {name: '', type: 'address'},
+      {name: '', type: 'uint256'},
+      {name: '', type: 'uint256'},
+      {name: '', type: 'uint256'},
+    ],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    constant: true,
+    inputs: [],
+    name: 'ens',
+    outputs: [{name: '', type: 'address'}],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    constant: false,
+    inputs: [
+      {name: '_hash', type: 'bytes32'},
+      {name: '_value', type: 'uint256'},
+      {name: '_salt', type: 'bytes32'},
+    ],
+    name: 'unsealBid',
+    outputs: [],
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    constant: true,
+    inputs: [
+      {name: 'hash', type: 'bytes32'},
+      {name: 'value', type: 'uint256'},
+      {name: 'salt', type: 'bytes32'},
+    ],
+    name: 'shaBid',
+    outputs: [{name: 'sealedBid', type: 'bytes32'}],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    constant: false,
+    inputs: [{name: '_hash', type: 'bytes32'}],
+    name: 'transferRegistrars',
+    outputs: [],
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    constant: true,
+    inputs: [{name: '', type: 'address'}, {name: '', type: 'bytes32'}],
+    name: 'sealedBids',
+    outputs: [{name: '', type: 'address'}],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    constant: true,
+    inputs: [{name: '_hash', type: 'bytes32'}],
+    name: 'state',
+    outputs: [{name: '', type: 'uint8'}],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    constant: false,
+    inputs: [
+      {name: '_hash', type: 'bytes32'},
+      {name: 'newOwner', type: 'address'},
+    ],
+    name: 'transfer',
+    outputs: [],
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    constant: true,
+    inputs: [
+      {name: '_hash', type: 'bytes32'},
+      {name: '_timestamp', type: 'uint256'},
+    ],
+    name: 'isAllowed',
+    outputs: [{name: 'allowed', type: 'bool'}],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    constant: false,
+    inputs: [{name: '_hash', type: 'bytes32'}],
+    name: 'finalizeAuction',
+    outputs: [],
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    constant: true,
+    inputs: [],
+    name: 'registryStarted',
+    outputs: [{name: '', type: 'uint256'}],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    constant: false,
+    inputs: [{name: 'sealedBid', type: 'bytes32'}],
+    name: 'newBid',
+    outputs: [],
+    payable: true,
+    stateMutability: 'payable',
+    type: 'function',
+  },
+  {
+    constant: false,
+    inputs: [{name: 'labels', type: 'bytes32[]'}],
+    name: 'eraseNode',
+    outputs: [],
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    constant: false,
+    inputs: [{name: '_hashes', type: 'bytes32[]'}],
+    name: 'startAuctions',
+    outputs: [],
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    constant: false,
+    inputs: [
+      {name: 'hash', type: 'bytes32'},
+      {name: 'deed', type: 'address'},
+      {name: 'registrationDate', type: 'uint256'},
+    ],
+    name: 'acceptRegistrarTransfer',
+    outputs: [],
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    constant: false,
+    inputs: [{name: '_hash', type: 'bytes32'}],
+    name: 'startAuction',
+    outputs: [],
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    constant: true,
+    inputs: [],
+    name: 'rootNode',
+    outputs: [{name: '', type: 'bytes32'}],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    constant: false,
+    inputs: [
+      {name: 'hashes', type: 'bytes32[]'},
+      {name: 'sealedBid', type: 'bytes32'},
+    ],
+    name: 'startAuctionsAndBid',
+    outputs: [],
+    payable: true,
+    stateMutability: 'payable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {name: '_ens', type: 'address'},
+      {name: '_rootNode', type: 'bytes32'},
+      {name: '_startDate', type: 'uint256'},
+    ],
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'constructor',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {indexed: true, name: 'hash', type: 'bytes32'},
+      {indexed: false, name: 'registrationDate', type: 'uint256'},
+    ],
+    name: 'AuctionStarted',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {indexed: true, name: 'hash', type: 'bytes32'},
+      {indexed: true, name: 'bidder', type: 'address'},
+      {indexed: false, name: 'deposit', type: 'uint256'},
+    ],
+    name: 'NewBid',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {indexed: true, name: 'hash', type: 'bytes32'},
+      {indexed: true, name: 'owner', type: 'address'},
+      {indexed: false, name: 'value', type: 'uint256'},
+      {indexed: false, name: 'status', type: 'uint8'},
+    ],
+    name: 'BidRevealed',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {indexed: true, name: 'hash', type: 'bytes32'},
+      {indexed: true, name: 'owner', type: 'address'},
+      {indexed: false, name: 'value', type: 'uint256'},
+      {indexed: false, name: 'registrationDate', type: 'uint256'},
+    ],
+    name: 'HashRegistered',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {indexed: true, name: 'hash', type: 'bytes32'},
+      {indexed: false, name: 'value', type: 'uint256'},
+    ],
+    name: 'HashReleased',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {indexed: true, name: 'hash', type: 'bytes32'},
+      {indexed: true, name: 'name', type: 'string'},
+      {indexed: false, name: 'value', type: 'uint256'},
+      {indexed: false, name: 'registrationDate', type: 'uint256'},
+    ],
+    name: 'HashInvalidated',
+    type: 'event',
+  },
+];
 
 it(
   'simple test',
@@ -32,13 +329,26 @@ it(
     // });
     // console.log(logs);
 
-    const e = new EventListener(b.rpc, '0x536400');
+    const e = new EventListener(b.rpc, RegistrarJson as any, false, '0x536400');
     e.startPolling();
+    e.abi.event.AuctionStarted.signature;
+
     const subscription = e.addEventListener(
       '0x6090a6e47849629b7245dfa1ca21d94cd15878ef',
+      'AuctionStarted',
       [],
-      (...args) => {
-        console.log(...args);
+      logs => {
+        console.log(
+          'its probs AuctionStarted',
+          logs.find(log => {
+            // console.log(e.abi.event.AuctionStarted.signature, log.topics[0]);
+            return (
+              '0x' + e.abi.event.AuctionStarted.signature === log.topics[0]
+            );
+          }),
+        );
+
+        // console.log(logs);
         done();
       },
     );

@@ -21,9 +21,9 @@ class EventListener {
 
   constructor(
     public rpc: Rpc,
+    jsonInterface: JsonInterface,
     private isPolling = false,
     startingBlock = 'latest',
-    jsonInterface: JsonInterface,
   ) {
     this.abi = createAbiCodec(jsonInterface);
     this.blockNumber = startingBlock;
@@ -81,13 +81,11 @@ class EventListener {
       throw new Error("event doesn't exist");
     }
 
-    ///////////////////////////////////////////////////////////////
     this.listeningFor.push({
       address,
       eventName,
       topics: this.abi.event[eventName].encode(topics),
     });
-    // assuming that encode returns an array rather than a string ////////////////////////////////
 
     const subscription = this.ee.once(address, cb);
     return subscription;
@@ -118,17 +116,18 @@ class EventListener {
             },
           ],
         },
-        (err: void | Error, receipt: any) => {
+        (err: void | Error, logs: any) => {
           if (!this.isPolling) {
             return;
           }
           if (err) {
             this.ee.emit('networkError', err);
           }
-          if (receipt) {
+          if (logs) {
             this.ee.emit(
               contract.address,
-              this.abi.event[contract.eventName].decode(receipt),
+              // this.abi.event[contract.eventName].decode(logs),
+              logs,
             );
             const index = this.listeningFor.findIndex(
               i => i.address === contract.address,
