@@ -10,7 +10,7 @@ export function keccak256(message: string | Buffer | DataView) {
 
 export function toHex(v: any): any {
   if (v == null) {
-    return '0x';
+    return undefined;
   }
   if (typeof v === 'number') {
     return toHex(new BN(v));

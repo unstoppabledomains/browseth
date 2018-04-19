@@ -82,7 +82,7 @@ export class Contract {
         return {
           ...a,
           [v.name]: codec,
-          [v.signiture]: codec,
+          [v.signature]: codec,
         };
       }, {});
 
@@ -124,7 +124,7 @@ export class Contract {
         return {
           ...a,
           [v.name]: codec,
-          [v.signiture]: codec,
+          [v.signature]: codec,
         };
       }, {});
   }

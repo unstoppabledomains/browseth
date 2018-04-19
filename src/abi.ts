@@ -54,14 +54,14 @@ export interface AbiCodec {
   };
   event: {
     [k: string]: EventElement & {
-      signiture: string;
+      signature: string;
       encode(topics: {[k: string]: any}): string;
       decode(raw: string[]): any;
     };
   };
   function: {
     [k: string]: FunctionElement & {
-      signiture: string;
+      signature: string;
       encode(...params: any[]): string;
       decode(raw: string): any;
     };
@@ -92,16 +92,16 @@ export function createAbiCodec(jsonInterface: JsonInterface): AbiCodec {
       }
       case 'event': {
         const types = element.inputs.map(i => i.type);
-        const signiture = Abi.eventID(element.name, types).toString('hex');
+        const signature = Abi.eventID(element.name, types).toString('hex');
 
         const codec = {
           ...element,
-          signiture,
+          signature,
           encode(topics: {[k: string]: any}) {
             const encodedTopics = [] as any[];
 
             if (!element.anonymous) {
-              encodedTopics.push('0x' + signiture);
+              encodedTopics.push('0x' + signature);
             }
 
             element.inputs.forEach(i => {
@@ -184,20 +184,20 @@ export function createAbiCodec(jsonInterface: JsonInterface): AbiCodec {
         };
 
         abi.event[element.name] = codec;
-        abi.event[signiture] = codec;
+        abi.event[signature] = codec;
         break;
       }
       case 'function': {
         const iTypes = element.inputs.map(i => i.type);
         const oTypes = element.outputs.map(i => i.type);
-        const signiture = Abi.methodID(element.name, iTypes).toString('hex');
+        const signature = Abi.methodID(element.name, iTypes).toString('hex');
 
         const codec = {
           ...element,
-          signiture,
+          signature,
           encode(...params: any[]) {
             return (
-              '0x' + signiture + Abi.rawEncode(iTypes, params).toString('hex')
+              '0x' + signature + Abi.rawEncode(iTypes, params).toString('hex')
             );
           },
           decode(raw: string) {
@@ -213,7 +213,7 @@ export function createAbiCodec(jsonInterface: JsonInterface): AbiCodec {
         };
 
         abi.function[element.name] = codec;
-        abi.function[signiture] = codec;
+        abi.function[signature] = codec;
         break;
       }
     }

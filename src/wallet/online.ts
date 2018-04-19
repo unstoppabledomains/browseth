@@ -20,9 +20,7 @@ export class Online implements Wallet {
       toHex({
         ...tx,
         // gas: tx.gas || (await this.gas(tx)),
-        gas:
-          tx.gas.toBuffer().toString(16) ||
-          (await this.gas(tx)).toBuffer().toString(16),
+        gas: tx.gas || (await this.gas(tx)),
       }),
     );
   };
