@@ -1,38 +1,23 @@
 ---
-title: Welcome
+title: Welcome to Browseth!
 ---
 
-This is the **Edition** template from [CloudCannon](http://cloudcannon.com/).
-**Edition** is perfect for documenting your product, application or service.
-It's populated with example content to give you some ideas.
+These docs are just getting started - first push on 4/23/2018.
 
-ChatApp is a fictional chat application for sending messages and media to others.
-Teams and friend groups would use ChatApp to stay up to date if it existed.
+We also blog about our development on Medium:
+https://medium.com/buyethdomains/introducing-browseth-a-new-library-for-interacting-with-ethereum-795d18e7b87d
 
-> [Sign up](http://example.com/signup) or learn more about ChatApp at [example.com](http://example.com/).
+### Easy download with npm
+
+Documentation may end up migrating over to NPM, and this site may be used mainly as an overview of the "Big Picture" for why you'd want to use Browseth in your ethereum app.
+
+https://www.npmjs.com/package/browseth
 
 ### Getting Started
 
-Getting a message sent is quick and easy with ChatApp:
+Coming Soon
 
-1. Sign up for an account
-2. Add your friends from their email addresses
-3. Type a message or send a photo
+### Browseth vs. Web3 and Ethersjs
 
-> Feel free to send us a message at [feedback@example.com](mailto:feedback@example.com) with your feedback.
 
-### Features
 
-Explore more of ChatApp by reading about our features:
-
-#### Media
-
-Send images, videos and other media to people. Sources include your computer, phone and Facebook.
-
-#### Contact Syncing
-
-Sync your contact list with your phone and/or Facebook contacts. Never lose your contacts between devices again!
-
-#### Devices
-
-ChatApp is available everywhere. Find out how to set it up on your all your devices.
