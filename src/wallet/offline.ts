@@ -6,7 +6,7 @@ import {Wallet} from './types';
 export class Offline implements Wallet {
   constructor(public rpc: Rpc, public signer: Signer) {}
 
-  public account = () => this.signer.account();
+  public account = (...args: any[]) => this.signer.account(...args);
   public send = async (transaction: any) => {
     const tx = {
       ...transaction,

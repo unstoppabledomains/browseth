@@ -12,7 +12,7 @@ export class Default extends Rpc {
   }
 
   public handle(payload: any, cb: (err: Error | void, json?: any) => void) {
-    console.log(payload);
+    // console.log(payload);
     this.transport.handle(
       {
         url: this.endpoint,

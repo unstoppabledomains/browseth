@@ -30,7 +30,7 @@ export class Ledger implements Signer {
 
   constructor(
     private dPath = Ledger.dPath.mainNet,
-    private defaultIndex: number = 0,
+    public defaultIndex: number = 0,
   ) {
     if (!LedgerDPath.isValid(dPath)) {
       throw new TypeError(`dPath<${dPath}> is invalid`);
