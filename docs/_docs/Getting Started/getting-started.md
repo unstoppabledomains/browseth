@@ -2,7 +2,6 @@
 title: Adding Browseth
 category: Getting Started
 order: 1
-sidebar: "docs"
 ---
 
 ###### A library for interacting with ethereum, well suited for the browser.
