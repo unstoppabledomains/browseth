@@ -1,7 +1,11 @@
 ---
-title: Getting Started
+title: Adding Browseth
 category: Getting Started
 order: 1
 ---
 
-# Getting Started
+askdasdasdadaskdask
+
+# Adding Browseth
+
+> beth = new Browseth();
