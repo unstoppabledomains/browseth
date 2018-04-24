@@ -2,17 +2,19 @@
 title: Welcome to Browseth!
 ---
 
-### A library for interacting with ethereum, well suited for the browser.
+> ## A library for interacting with ethereum, well suited for the browser.
 
-#### npm
+### Installation
+
+#### Node.js
 
 `npm install browseth`
 
-#### yarn
+#### Yarn
 
 `yarn add browseth`
 
-#### Instantiation
+### Usage
 
 `const beth = new Browseth('https://mainnet.infura.io/mew');`
 
