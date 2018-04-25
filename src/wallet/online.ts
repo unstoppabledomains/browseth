@@ -19,7 +19,6 @@ export class Online implements Wallet {
       'eth_sendTransaction',
       toHex({
         ...tx,
-        // gas: tx.gas || (await this.gas(tx)),
         gas: tx.gas || (await this.gas(tx)),
       }),
     );

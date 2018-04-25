@@ -2,6 +2,7 @@
 import {EventElement} from './abi';
 import {AbiCodec, createAbiCodec, JsonInterface} from './abi';
 import {Wallet} from './wallet';
+import TransactionListener from './transaction-listener';
 
 export class Contract {
   public abi: AbiCodec;
@@ -43,7 +44,7 @@ export class Contract {
     jsonInterface: JsonInterface,
     public options: {
       address?: string;
-      bytecode?: string;
+      bytecode?: string; // maybe bin
     } = {},
   ) {
     this.abi = createAbiCodec(jsonInterface);

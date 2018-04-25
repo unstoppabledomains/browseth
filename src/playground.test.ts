@@ -3,7 +3,7 @@ import {BN} from 'ethereumjs-util';
 import {provider} from 'ganache-core';
 import {Apis, Browseth, Rpcs, Signers, Wallets} from '.';
 import {keccak256} from './crypto';
-import {Default} from './rpc';
+import {Default, Rpc} from './rpc';
 
 import {randomBytes} from 'crypto';
 import * as NodeHttp from './transport/node-http';
@@ -64,4 +64,43 @@ test('', async () => {
   //       )
   //       .call(),
   //   );
-});
+
+//   beth.wallet = new Wallets.Online(beth.rpc);
+// });
+
+// b.addContract('myContract', json, {
+//   address: '0x12345678',
+//   bytecode: '00112233'
+// })
+
+// const txhash = await b.c.myContract.deploy('arg1', 'arg2').send();
+// b.c.myContract.options.address = (await b.api.tx.resolveTransaction(txhash)).contractAddress
+
+
+
+// b.c.myContract.function.myfunc('arg1').send()
+
+// function MyContract(string arg1, string arg2) {
+
+// }
+
+
+
+// b.c.myContract.event.MyEvent({
+//   indexedParam2: ['val', 'asdfas'],
+// }).logs('0x234', 'latest' ,'0x1234');
+
+// .logs() 'latest','lateset', '0x12324'
+
+// .logs({
+//   fromBlock: '',
+//   toBlock: '',
+//   address: ''
+// })
+
+
+// abiCodec.constructor.encode('adsf', 'args');
+// abiCodec.function.myFunc.decode('0x123456789'); // raw eth_call result
+// abiCodec.function.myFunc.decode('0x123456789');
+
+// b.c.myContract.abi.constructor.encode;

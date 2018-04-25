@@ -2,7 +2,9 @@
 title: Welcome to Browseth!
 ---
 
-> <h3><i>A library for interacting with ethereum, well suited for the browser.<i></h3>
+### A library for interacting with ethereum, well suited for the browser.
+
+<hr/>
 
 ## Installation
 

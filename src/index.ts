@@ -106,3 +106,5 @@ export class Browseth {
 
   // public monitorTransaction(transactionHash: string) {}
 }
+
+export default Browseth;
