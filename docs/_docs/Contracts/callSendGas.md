@@ -8,7 +8,7 @@ order: 2
 
 <hr>
 
-> **call(options?)**
+> **.call(options?)**
 
 Calls a method on a contract. This is a read-only operation used for retrieving
 data from the blockchain.
@@ -37,7 +37,7 @@ beth.contract.myContract.function.functionName(...fParams).call({to: '0x123...'}
 
 <hr>
 
-> **send(options?)**
+> **.send(options?)**
 
 Sends a transaction to be mined and published to the blockchain. This is used
 for modifying data on the blockchain.
@@ -48,17 +48,17 @@ for modifying data on the blockchain.
 
 ```
 { // options
-  to?: string,
-  from?: string,
-  data?: string,
-  gasPrice: string,
-  gas?: string,
+  to?: string, can be change
+  from?: string, cant
+  data?: string,cant
+  gasPrice: string,needed
+  gas?: string,can be changed takes number, this is gas limit
 }
 ```
 
 Takes an optional object that may contain a `to` or `from` address. The `from`
 adress is filled with the contract's address by default. `gasPrice` is required
-to be filled in. `gas` is filled by a default call to `gas()` (see below) to
+to be filled in. `gas` is filled by a default call to `.gas()` (see below) to
 estimate the cost in units of gas.
 
 ##### Returns
@@ -75,10 +75,10 @@ console.log(tx);
 
 <hr>
 
-> **gas()**
+> **.gas()**
 
-Estimates the gas price to send the given transaction.<br> **Note:** This is
-automatically called when using `send()`.
+Estimates the gas limit to send the given transaction.<br> **Note:** This is
+automatically called when using `.send()`.
 
 ##### Returns
 
