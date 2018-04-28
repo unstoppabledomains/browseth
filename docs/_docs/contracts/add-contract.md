@@ -19,4 +19,9 @@ order: 1
 
 #### Example:
 
-`beth.addContract('contractName', contractName.abi, {address: '0x1234567890123456789012345678901234567890'});`
+```javascript
+// Adds the 'contractName` contract to our beth instance
+beth.addContract('contractName', contractName.abi, {
+  address: '0x1234567890123456789012345678901234567890',
+});
+```

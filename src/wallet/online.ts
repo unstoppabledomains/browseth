@@ -11,7 +11,7 @@ export class Online implements Wallet {
   public accounts = () => this.rpc.send('eth_accounts');
 
   public send = async (transaction: object) => {
-    const tx: any = {
+    const tx: any = {1
       ...transaction,
       from: await this.account(),
     };

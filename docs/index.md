@@ -2,7 +2,7 @@
 title: Welcome to Browseth!
 ---
 
-### A library for interacting with ethereum, well suited for the browser.
+#### A library for interacting with ethereum, well suited for the browser.
 
 <hr/>
 
@@ -18,12 +18,20 @@ title: Welcome to Browseth!
 
 ## Usage
 
-`const beth = new Browseth('https://mainnet.infura.io/mew');`
+```
+const Browseth = require('browseth')
+// or
+// import * as Browseth from 'browseth'
 
-_We also blog about our development on
+const beth = new Browseth();
+```
+
+<hr>
+
+_Also check out our blog about our development on
 [Medium!](https://medium.com/buyethdomains/introducing-browseth-a-new-library-for-interacting-with-ethereum-795d18e7b87d)_
 
-<!-- 
+<!--
 Documentation may end up migrating over to NPM, and this site may be used mainly
 as an overview of the "Big Picture" for why you'd want to use Browseth in your
 ethereum app.

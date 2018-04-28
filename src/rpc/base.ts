@@ -89,8 +89,15 @@ export abstract class Rpc {
     });
   }
 
-  public async promiseBatch(...requests: Request[]): Promise<any[]> {
+  public async promiseBatch(resolveFun:(...promises: Array<Promise<any>>) => Promise<any[]> | Request, ...requests: Request[]): Promise<any[]> {
     const promises: Array<Promise<any>> = [];
+
+    let rF = Promise.all.bind(Promise);
+    if (typeof resolveFun === 'function') {
+      rF = resolveFun;
+    } else {
+      requests.unshift(resolveFun);
+    }
 
     await new Promise(r => {
       this.batch(
@@ -114,9 +121,9 @@ export abstract class Rpc {
             ] as [Request, (err: Error | void, response: any) => void],
         ),
       );
-    });
+    })
 
-    return Promise.all(promises);
+    return rF(promises);    
   }
 
   public prep(
