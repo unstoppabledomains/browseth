@@ -31,6 +31,14 @@ messages for each wallet (current support and planned support below).
 
 `Wallet`: Object
 
+<hr>
+
+## Methods
+
+- [A]
+
+### Account
+
 > .account()
 
 Makes a call to the Ethereum JSON-RPC method `eth_coinbase`.
@@ -39,9 +47,7 @@ Makes a call to the Ethereum JSON-RPC method `eth_coinbase`.
 
 `string`: The account address in hexidecimal.
 
-<hr>
-
-### Methods
+### Send
 
 > .send(options)
 
@@ -76,7 +82,7 @@ for modifying data on the blockchain.
 
 `string`: Transaction receipt in hexidecimal.
 
-<hr>
+### Call
 
 > .call(options, block?)
 
@@ -108,7 +114,7 @@ The address of a specific block, `'earliest'`, `'latest'`, or `'pending'`.
 * `data`: Filled with the function call's data by default. Cannot be
   overwritten.
 
-<hr>
+### Gas
 
 > .gas(options, block?)
 
@@ -122,7 +128,7 @@ See parameters for `.call()`.
 
 `string`: The gas limit of the transaction in hexidecimal.
 
-<hr>
+### Sign
 
 > .sign(message)
 
@@ -136,5 +142,3 @@ Message to sign.
 ##### Returns
 
 `string`: Signed message.
-
-

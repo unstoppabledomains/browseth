@@ -6,7 +6,14 @@ order: 2
 
 #### Once a contract has been added to a beth instance you can make calls to methods or send transactions to the block from that contract using:<br><b>call(), send(), gas()</b>
 
-<hr>
+### Jump
+
+- [Call](#call)
+- [Send](#send)
+- [Gas](#gas)
+- [Aliases](#aliases)
+
+### Call
 
 > **.call(options?)**
 
@@ -40,7 +47,7 @@ beth.contract.myContract.function
   .call({to: '0x123...'});
 ```
 
-<hr>
+### Send
 
 > **.send(options)**
 
@@ -86,7 +93,7 @@ console.log(tx);
 // Check your transaction hash on Etherscan for more info!
 ```
 
-<hr>
+### Gas
 
 > **.gas()**
 

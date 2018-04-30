@@ -15,7 +15,7 @@ const Web3 = require('web3'); // Needed for Sha3, will be removed on next update
 const {Browseth} = require('browseth'); // Browseth needs to be deconstructed when required
 const registrarJSON = require('./registrar.json'); // Ethereum Name Registrar
 
-const beth = new Browseth('https://mainnet.infura.io/your_key');
+const beth = new Browseth('https://mainnet.infura.io/YOUR_API_KEY');
 
 // Add a contract to our beth instance
 beth.addContract('registrar', registrarJSON, {
@@ -95,7 +95,7 @@ const cliInteract = require('cli-interact');
 const Web3 = require('web3');
 const registrarJSON = require('./registrar.json');
 
-const web3 = new Web3('https://mainnet.infura.io/your_key');
+const web3 = new Web3('https://mainnet.infura.io/YOUR_API_KEY');
 
 const registrar = new web3.eth.Contract(
   registrarJSON,

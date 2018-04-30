@@ -28,7 +28,7 @@ to use your own command line tools if you'd like.
 
 Now create your first script:
 
-```
+```javascript
 const cliInteract = require('cli-interact');
 const { Browseth } = require('browseth'); // Browseth needs to be deconstructed when required
 

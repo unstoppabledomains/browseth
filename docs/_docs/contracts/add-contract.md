@@ -7,7 +7,9 @@ order: 1
 #### In order to interact with Ethereum Contracts, you can add a contract to a beth instance using:<br><b>addContract()</b>
 
 <hr>
-> **addContract(contractName, jsonInterface, options?)**
+> **.addContract(contractName, jsonInterface, options?)**
+
+Adds given contract to an array of contracts stored on a beth instance.
 
 #### Parameters
 
