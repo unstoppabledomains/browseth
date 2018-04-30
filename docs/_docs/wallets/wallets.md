@@ -21,11 +21,13 @@ messages for each wallet (current support and planned support below).
   * [ ] Tezor
   * [x] Web3
 
-<hr>
+### Generate a new Wallet object
 
-#### Generate a new Wallet object
+> new Browseth.Wallets.Online(rpc)<br>or<br>new Browseth.Wallets.Offline(rpc, signer)
 
-> [new Browseth.Wallets.Online()]({{ site.baseurl }}{% link _docs/wallets/online.md %})<br>or<br>[new Browseth.Wallets.Offline()]({{ site.baseurl }}{% link _docs/wallets/offline.md %})
+##### Parameters
+
+See [Online Wallets]({{ site.baseurl }}{% link _docs/wallets/online.md %}) or [Offline Wallets]({{ site.baseurl }}{% link _docs/wallets/offline.md %})
 
 ##### Returns
 
@@ -35,7 +37,11 @@ messages for each wallet (current support and planned support below).
 
 ## Methods
 
-- [A]
+- [Account](#account)
+- [Send](#send)
+- [Call](#call)
+- [Gas](#gas)
+- [Sign](#sign)
 
 ### Account
 

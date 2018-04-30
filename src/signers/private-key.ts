@@ -268,11 +268,11 @@ export class PrivateKey implements Signer {
   }
 
   public getKeyStoreFileName(date = new Date()) {
-    return `UTC--${date.getUTCFullYear()}-${('0' + date.getUTCMonth()).slice(
+    return `UTC--${date.getUTCFullYear()}-${('0' + (date.getUTCMonth() + 1)).slice(
       -2,
     )}-${('0' + date.getUTCDate()).slice(-2)}T${(
       '0' + date.getUTCHours()
-    ).slice(-2)}-${('0' + date.getMinutes()).slice(-2)}-${(
+    ).slice(-2)}-${('0' + date.getUTCMinutes()).slice(-2)}-${(
       '0' + date.getUTCSeconds()
     ).slice(-2)}.${('00' + date.getUTCMilliseconds()).slice(
       -3,

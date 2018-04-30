@@ -54,5 +54,3 @@ async function fetchRequest(request: Request): Promise<TransportResponse> {
 
   return Promise.race(promises);
 }
-
-Promise<{asdf}[]>
