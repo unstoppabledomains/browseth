@@ -20,7 +20,7 @@ order: 2
 Calls a method on a contract. This is a read-only operation used for retrieving
 data from the blockchain.
 
-##### Parameters
+#### Parameters
 
 1.  `options?`: `object`<br>
 
@@ -38,7 +38,7 @@ data from the blockchain.
 * `data`: Filled with the function call's data by default. Cannot be
   overwritten.
 
-##### Example
+#### Example
 
 ```javascript
 // Calls "functionName" on the "myContract" contract
@@ -54,7 +54,7 @@ beth.contract.myContract.function
 Sends a transaction to be mined and published to the blockchain. This is used
 for modifying data on the blockchain.
 
-##### Parameters
+#### Parameters
 
 1.  `options`: `object`<br>
 
@@ -79,11 +79,11 @@ for modifying data on the blockchain.
 * `data`: Filled with the function call's data by default. Cannot be
   overwritten.
 
-##### Returns
+#### Returns
 
 `string`: The transaction hash of the transaction.
 
-##### Example
+#### Example
 
 ```javascript
 const tx = beth.contract.someContract.function
@@ -100,11 +100,11 @@ console.log(tx);
 Estimates the gas limit to send the given transaction.<br> _**Note:** This is
 automatically called when using_ `.send()`.
 
-##### Returns
+#### Returns
 
 `string`: The gas limit of the transaction in hexidecimal.
 
-##### Example
+#### Example
 
 ```javascript
 // Returns the gas limit to send "myFunction"
@@ -121,7 +121,7 @@ beth.contract.contractName.function.myFunction().gas();
 
 `f` or `methods`
 
-##### Examples
+#### Examples
 
 `beth.c.contractName.f.functionName().call();`<br>
 `beth.c.contractName.methods.functionName().send();`

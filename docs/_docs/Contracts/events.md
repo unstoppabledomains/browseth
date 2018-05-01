@@ -11,7 +11,7 @@ on the given contract. <br> The event name's parameter `filter?` contains an
 optional object with indexed parameters and values to search for. If no filter
 is given, all events found of the given name will be returned.
 
-##### Parameters
+#### Parameters
 
 1.  `data?`: `object`<br>
 
@@ -32,7 +32,7 @@ is given, all events found of the given name will be returned.
 
 <!-- ##### Returns -->
 
-##### Example
+#### Example
 
 ```javascript
 /*

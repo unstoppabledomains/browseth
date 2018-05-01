@@ -84,9 +84,9 @@ checkNameAvailability();
 
 <hr>
 
-**We've made sure that the Browseth development experience is close to that of
+_**We've made sure that the Browseth development experience is close to that of
 Web3 for developers with Web3 experience. Here is a Web3 equivalent of the same
-script from above:**
+script from above:**_
 
 #### Code using Web3
 

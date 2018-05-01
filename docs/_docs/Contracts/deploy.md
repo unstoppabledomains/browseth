@@ -10,12 +10,12 @@ Deploys a compiled contract to the Ethereum blockchain. `.send()` is required to
 send the deployed contract to the blockchain. `.gas()` is also available to
 check the cost of deployment.
 
-##### Parameters
+#### Parameters
 
 1.  `...contractParams`: variadic<br> Takes the parameters required to construct
     the given contract.
 
-##### Example
+#### Example
 
 ```javascript
 // contract Simple {

@@ -12,18 +12,18 @@ order: 2
 
 > **new Browseth.Wallets.Online(rpc)**
 
-##### Parameters
+#### Parameters
 
 1.  `rpc`: `object`<br> A remote procedure call object.
 
 _**Note:** Browseth instances have an rpc stored on them which can be used when
 generating a new Wallet. See example below._
 
-##### Returns
+#### Returns
 
 `Wallet`: A new `Wallet` object.
 
-##### Example
+#### Example
 
 ```javascript
 const Browseth = require('browseth');
@@ -43,7 +43,7 @@ See [Wallet methods]({{base.url}}{%link _docs/wallets/wallets.md%}) for all othe
 
 Makes a call to the Ethereum JSON-RPC method `eth_accounts`.
 
-##### Returns
+#### Returns
 
 `string[]`: An array of accounts owned by the client.
 

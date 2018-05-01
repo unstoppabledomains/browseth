@@ -18,16 +18,16 @@ order: 1
 
 (**Asynchronous**) Sends a request up to the blockchain and awaits a response.
 
-##### Parameters
+#### Parameters
 
 1. `method`: `string`<br>
 Which method to be called.
 2. `...params`: variadic<br>
 The parameters required for the given method.
 
-##### Example
+#### Example
 
-Browseth objects contain an rpc client. Here we use the rpc on our beth instance to get the balance of someone's account. The JSON-RPC [eth_getBalance](https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_getbalance) takes 2 parameters: an address, and a block number, 'latest', or 'earliest'. We use that information to fill the rest of our send function.
+Here we use the rpc on our beth instance to get the balance of someone's account. The JSON-RPC [eth_getBalance](https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_getbalance) takes 2 parameters: an address, and a block number, 'latest', or 'earliest'. We use that information to fill the rest of our send function.
 
 ```javascript
 const addr = // Public address of an Ethereum account containing Eth
@@ -42,7 +42,7 @@ const myBalance = await beth.wallet.rpc.send('eth_getBalance', addr, 'latest');
 
 (**Asynchronous**) Sends multiple requests up to the block chain as one request and awaits a response, then calls the given callback function `done`.
 
-##### Parameters
+#### Parameters
 
 1. `done`: `function`<br>
 A callback function that is called once a response is received.
@@ -63,9 +63,10 @@ Any number of requests as individual parameters containing an array that contain
   * `params`: An array containing the parameters required for the method.
   * `(err: Error | void, response: any) => void`: A callback that is called after a response is received which is passed through. If there was an error, an error is passed instead.
 
-##### Example
+#### Example
 
-Here we declare two requests and a callback and pass them into batch(). Because the callbacks don't return anything we assign the responses to their respective variables in the callbacks instead. See an example that maps over an array of addresses [here.]({{base.url}}{% link _docs/rpcs/map-example.md %})
+Here we declare two requests and a callback and pass them into batch(). Because the callbacks don't return anything we assign the responses to their respective variables in the callbacks instead. <br>
+Check out this example that maps over an array of addresses [here]({{base.url}}{% link _docs/rpcs/map-example.md %}) as well.
 
 ```javascript
 const request1 = [
@@ -116,7 +117,7 @@ beth.wallet.rpc.batch(doneCallback, request1, request2);
 
 (**Asynchronous**) Calls `.batch()` and wraps each request in a promise and returns a promise.
 
-##### Parameters
+#### Parameters
 
 1. `resolveFunction`: `function`<br>
 A callback function that will resolve an array of promises. Uses `Promise.all` by default if nothing is passed.
@@ -134,12 +135,12 @@ Any number of requests as individual parameters containing an object with the me
   * `method`: A string of the method to call.
   * `params`: An array containing the parameters required for the method.
  
-##### Returns
+#### Returns
 
 `any[]`: An array of responses.<br>
 _**Note**: This is the return value for the default_ `resolveFunction` _that calls_ `Promise.all`. _Keep in mind in_ `Promise.all`_, if one request rejects, then all of them will reject._
 
-##### Example
+#### Example
 
 ```javascript
 const addr1 = // Some address

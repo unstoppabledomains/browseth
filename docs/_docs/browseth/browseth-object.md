@@ -6,7 +6,7 @@ order: 1
 
 > **new Browseth(rpc?)**
 
-##### Parameters
+#### Parameters
 
 1.  `rpc?`: `string` | `Rpc` | `Wallet`<br> (optional) Takes a remote procedure
     call client in the form of a `string` http endpoint, an `Rpc` object, or a `Wallet`
@@ -15,7 +15,7 @@ order: 1
     passed in.<br><br> _**Note**: The built-in rpc is non-limiting which means
     anything can be sent with it. Use at your own risk!_
 
-##### Example
+#### Example
 
 Here we use [Infura](https://infura.io/) for our RPC Provider endpoint:
 
@@ -31,6 +31,6 @@ const beth = new Browseth('https://mainnet.infura.io/YOUR_API_KEY');
 #### The `Browseth` object also comes with 4 built in classes:
 
 * [**Rpcs**]({{ site.baseurl }}{% link _docs/rpcs/rpcs.md %})
-* [**Signers**]({{ site.baseurl }}{% link _docs/rpcs/rpcs.md %})
+* [**Signers**]({{ site.baseurl }}{% link _docs/signers/signers.md %})
 * [**Wallets**]({{ site.baseurl }}{% link _docs/wallets/wallets.md %})
 * [**Apis**]({{ site.baseurl }}{% link _docs/rpcs/rpcs.md %})

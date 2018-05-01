@@ -25,11 +25,11 @@ messages for each wallet (current support and planned support below).
 
 > new Browseth.Wallets.Online(rpc)<br>or<br>new Browseth.Wallets.Offline(rpc, signer)
 
-##### Parameters
+#### Parameters
 
 See [Online Wallets]({{ site.baseurl }}{% link _docs/wallets/online.md %}) or [Offline Wallets]({{ site.baseurl }}{% link _docs/wallets/offline.md %})
 
-##### Returns
+#### Returns
 
 `Wallet`: Object
 
@@ -49,7 +49,7 @@ See [Online Wallets]({{ site.baseurl }}{% link _docs/wallets/online.md %}) or [O
 
 Makes a call to the Ethereum JSON-RPC method `eth_coinbase`.
 
-##### Returns
+#### Returns
 
 `string`: The account address in hexidecimal.
 
@@ -60,7 +60,7 @@ Makes a call to the Ethereum JSON-RPC method `eth_coinbase`.
 Makes a call to the JSON-RPC method `eth_sendTransaction` and sends a transaction to be mined and published to the blockchain. This is used
 for modifying data on the blockchain. 
 
-##### Parameters
+#### Parameters
 
 1. `options`: `object`
 
@@ -84,7 +84,7 @@ for modifying data on the blockchain.
 * `data`: Filled with the function call's data by default. Cannot be
   overwritten.
 
-###### Returns
+##### Returns
 
 `string`: Transaction receipt in hexidecimal.
 
@@ -94,7 +94,7 @@ for modifying data on the blockchain.
 
 Makes a call to the Ethereum JSON-RPC method `eth_call`.
 
-##### Parameters
+#### Parameters
 
 1. `options`: `object`
 2. `block?`: `string`<br>
@@ -126,11 +126,11 @@ The address of a specific block, `'earliest'`, `'latest'`, or `'pending'`.
 
 Makes a call to the Ethereum JSON-RPC method `eth_estimateGas`.
 
-##### Parameters
+#### Parameters
 
 See parameters for `.call()`.
 
-##### Returns
+#### Returns
 
 `string`: The gas limit of the transaction in hexidecimal.
 
@@ -140,11 +140,11 @@ See parameters for `.call()`.
 
 Makes a call to the Ethereum JSON-RPC method `eth_sign`.
 
-##### Parameters
+#### Parameters
 
 `message`: `string`<br>
 Message to sign.
 
-##### Returns
+#### Returns
 
 `string`: Signed message.
