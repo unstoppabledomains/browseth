@@ -180,7 +180,7 @@ export class PrivateKey implements Signer {
   // returns keystore object and private key (randomly generated if not provided)
 
   public toString() {
-    return this.privateKey.toString('hex');
+    return `${this.privateKey.toString('hex')}`;
   }
 
   public toV3(

@@ -1,15 +1,29 @@
 ---
-title: Sending Requests
-category: RPCs
+title: Browseth.Rpcs
+category: RPCs - Sending Requests
 order: 1
 ---
 
-#### RPC = Remote Procedure Call. These allow users to interact with Ethereum nodes by sending requests. Reference the [Ethereum JSON-RPC](https://github.com/ethereum/wiki/wiki/JSON-RPC#json-rpc-methods) to see a list of all the methods.
+#### RPC = Remote Procedure Call. These allow users to interact with Ethereum nodes by sending requests. Reference the [Ethereum JSON-RPC](https://github.com/ethereum/wiki/wiki/JSON-RPC#json-rpc-methods) to see a list of all methods.
 
-### Jump
+> **new Browseth.Rpcs.Default(transport, endpoint, timeout, headers?)<br>or<br>new Browseth.Rpcs.Web3(provider)**
 
-- [Send one request](#send)
-- [Batch multiple requests](#batch)
+Creates a new Rpc client. Required to instantiate a new Browseth instance.
+
+#### Parameters
+
+See [Rpcs.Default]({{base.url}}{%link _docs/rpcs/default.md%}) or [Rpcs.Web3]({{base.url}}{%link _docs/rpcs/web3.md%})
+
+#### Returns
+
+`Rpc`: A new `Rpc` object.
+
+<hr>
+
+## Methods
+
+- [Send](#send)
+- [Batch](#batch)
 - [Promise Batch](#promise-batch)
 
 ### Send 
@@ -33,7 +47,7 @@ Here we use the rpc on our beth instance to get the balance of someone's account
 const addr = // Public address of an Ethereum account containing Eth
 
 // Returns the balance of 'addr' in wei in hexidecimal
-const myBalance = await beth.wallet.rpc.send('eth_getBalance', addr, 'latest');
+const myBalance = await beth.rpc.send('eth_getBalance', addr, 'latest');
 ```
 
 ### Batch
@@ -107,7 +121,7 @@ let myBalance;
 let myTxReceipt;
 
 // Sets myBalance and myTxReceipt in the callbacks of each request.
-beth.wallet.rpc.batch(doneCallback, request1, request2);
+beth.rpc.batch(doneCallback, request1, request2);
 
 ```
 

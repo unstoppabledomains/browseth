@@ -1,8 +1,10 @@
 ---
-title: Offline Wallets
-category: Wallet Interaction
+title: Wallets.Offline
+category: Wallets - Wallet Interaction
 order: 3
 ---
+
+## Offline Wallets
 
 > **new Browseth.Wallet.Offline(rpc, signer)**
 
@@ -20,7 +22,7 @@ order: 3
 
 #### Example (Private Key)
 
-See [Private Keys]({.{base.url}}{%link _docs/signers/privatekey.md%}).
+###### See [Private Keys]({.{base.url}}{%link _docs/signers/privatekey.md%}).
 
 ```javascript
 const Browseth = require('browseth');
@@ -35,7 +37,8 @@ beth.wallet = new Browseth.Wallets.Offline(beth.rpc, Browseth.Signers.PrivateKey
 
 #### Example (Ledger)
 
-See [Ledgers]({{base.url}}{%link _docs/signers/ledger.md%}).
+###### See [Ledgers]({{base.url}}{%link _docs/signers/ledger.md%}).
+
 ```javascript
 // Returns a new offline wallet with 
 beth.wallet = new Browseth.Wallets.Offline(beth.rpc, new Browseth.Signers.Ledger());
@@ -43,4 +46,4 @@ beth.wallet = new Browseth.Wallets.Offline(beth.rpc, new Browseth.Signers.Ledger
 
 ### Methods
 
-See [Wallet methods]({{base.url}}{%link _docs/wallets/wallets.md%}).
+###### See [Wallet methods]({{base.url}}{%link _docs/wallets/wallets.md%}).

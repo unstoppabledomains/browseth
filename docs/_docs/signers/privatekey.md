@@ -1,8 +1,9 @@
 ---
-title: Private Keys
-category: Signers
+title: Signers.PrivateKey
+category: Signers - Signing Transactions
 order: 2
 ---
+## Private Keys
 
 > **new Browseth.Signers.PrivateKey(prvKeyString)**
 
@@ -10,18 +11,18 @@ order: 2
 
 `prvKeyString`: `Buffer`<br>
 A 32-bit private key in buffer form.<br>
-_**Note**: If you have a private key in string form you can use_ `Buffer.from()`.
+_**Note**: If you have a private key in string form you can use_ `Buffer.from()`_, but the leading_ `'0x'` _must be removed._
 
 #### Returns
 
-`Signer`: `object`
+`Signer`: A new Signer object with Private Key functionality.
 
 #### Example
 
 ```javascript
 /* 
- * Takes a private key, removes the '0x', and converts it to a buffer.
- * Then converts it to a private key.
+ * Takes a private key, finds the first occurrence of '0x' and removes it.
+ * Then converts it to a buffer, and converts it to a private key.
  */
 const myPrvKey = new Browseth.Signers.PrivateKey(
     Buffer.from(SOME_PRIVATE_KEY_STRING).replace('0x', ''), 
@@ -41,17 +42,18 @@ const myPrvKey = new Browseth.Signers.PrivateKey(
 - [Sign Message](#sign-message)
 - [To String](#to-string)
 - [To V3](#to-v3)
+- [Get Keystore File Name](#get-keystore-file-name)
 
 ### From V3
 
 > **.fromV3(keystore, pw)**
 
-(Static) Takes a keystore file and password and returns a private key.
+(Static) Takes a V3 keystore file and password and returns a private key.
 
 #### Parameters
 
 1. `keystore`: `object` | `string`<br>
-A keystore in object or string form. This method is not case sensitive, all characters are treated as lower case.
+A V3 keystore in object or string form. This method is not case sensitive, all characters are treated as lower case.
 2. `pw`: `string`<br>
 A password.
 
@@ -133,10 +135,6 @@ console.log(await prvKey.account());
 
 1. `obj`: `object`
 
-#### Returns
-
-`Promise<string>`: Returns a `Promise` that resolves to a `string` that represents a transaction receipt.
-
 ```javascript
 { // obj
   nonce: string | Buffer | number,    // defaults to '0x'
@@ -148,6 +146,10 @@ console.log(await prvKey.account());
   chainId: number,                    // defaults to '0x1'
 }
 ```
+
+#### Returns
+
+`Promise<string>`: A `Promise` that resolves to a `string` representation of the transaction hash in hexidecimal.
 
 #### Example
 
@@ -169,7 +171,7 @@ await pk.signTransaction();
 
 #### Returns
 
-`Promise`
+`Promise<string>`: A `Promise` that resolves to a `string` representation of the transaction hash in hexidecimal.
 
 #### Example
 
@@ -192,7 +194,7 @@ console.log(pk.toString());
 
 > **.toV3(pw, options?)**
 
-(Asynchronous) Takes a password and generates a keystore object.
+(Asynchronous) Takes a password and generates a V3 keystore object.
 
 #### Parameters
 
@@ -229,11 +231,11 @@ A password.
 
 #### Returns
 
-`Promise<string>`: A promise that resolves to a keystore object in `string` format.
+`Promise<string>`: A promise that resolves to a V3 keystore object in `string` format.
 
 #### Example
 
-Code
+###### Code
 
 ```javascript
 const password = 'somestring';
@@ -241,7 +243,7 @@ const pk = Browseth.Signers.PrivateKey.fromRandomBytes();
 console.log(await pk.toV3(password));
 ```
 
-Output
+###### Output
 
 ```javascript
 {
@@ -265,4 +267,28 @@ Output
     "mac": "230e7f33536e1bf6860cce7dac2528a7b46b64270470ceca4bdd46016482d281"
   }
 }
+```
+
+### Get Keystore File Name
+
+> **.getKeyStoreFileName(date?)**
+
+Generates a filename for keystore file using the private key's address. Uses (geth's)[https://geth.ethereum.org/] naming convention for keystore files. Also compatible with (Parity)[https://www.parity.io/].
+
+#### Parameters
+
+1. `date?`: `Date`<br>
+(Optional) Defaults to the current UTC date.
+
+#### Example
+
+```javascript
+const pk = Browseth.Signers.PrivateKey.fromRandomBytes();
+console.log(pk.getKeyStoreFileName())
+```
+
+###### Output
+
+```
+UTC--2018-01-01T18-10-02.771Z--1234567890abcdef0123456789abcdef01234567
 ```

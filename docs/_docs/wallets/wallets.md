@@ -1,6 +1,6 @@
 ---
 title: Browseth.Wallets
-category: Wallet Interaction
+category: Wallets - Wallet Interaction
 order: 1
 ---
 
@@ -70,6 +70,7 @@ for modifying data on the blockchain.
   gas?: number | string,
   gasPrice: number | string,
   value: number | string,
+  data?: string,
 }
 ```
 
@@ -79,14 +80,16 @@ for modifying data on the blockchain.
 * `gas?`: (optional) The gas limit. Filled with the result from a call to
   `.gas()` by default. Can be a number or string representation in hexidecimal
   form.
-* `from`: Address is filled with the beth instance wallet address by default.
-  Cannot be overwritten.
-* `data`: Filled with the function call's data by default. Cannot be
-  overwritten.
+* `data`: (optional) For interacting with smart contracts.
+<!-- * `from`: Address is filled with the beth instance wallet address by default.
+  Cannot be overwritten. -->
+<br>
+<br>
+_**Note**:_`from` _and_ `nonce` _are filled by default and cannot be overwritten._
 
 ##### Returns
 
-`string`: Transaction receipt in hexidecimal.
+`string`: Transaction hash in hexidecimal.
 
 ### Call
 
@@ -106,6 +109,7 @@ The address of a specific block, `'earliest'`, `'latest'`, or `'pending'`.
   gas?: number | string,
   gasPrice: number | string,
   value: number | string,
+  data?: string,
 }
 ```
 
@@ -115,10 +119,11 @@ The address of a specific block, `'earliest'`, `'latest'`, or `'pending'`.
 * `gas?`: (optional) The gas limit. Filled with the result from a call to
   `.gas()` by default. Can be a number or string representation in hexidecimal
   form.
-* `from`: Address is filled with the beth instance wallet address by default.
-  Cannot be overwritten.
-* `data`: Filled with the function call's data by default. Cannot be
-  overwritten.
+<!-- * `from`: Address is filled with the beth instance wallet address by default.
+  Cannot be overwritten. -->
+* `data`: (optional) For interacting with smart contracts. Can be overwritten.
+<br><br>
+_**Note**:_`from` _and_ `nonce` _are filled by default and cannot be overwritten._
 
 ### Gas
 

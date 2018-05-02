@@ -1,7 +1,7 @@
 ---
 title: Mapping Over an Array for Batch
-category: RPCs
-order: 2
+category: RPCs - Sending Requests
+order: 4
 ---
 
 In this example we use `.map()` to take an array of addresses and give each one the same `eth_getBalance` method and pass them all into `.batch()`.<br>

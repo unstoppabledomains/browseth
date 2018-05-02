@@ -4,16 +4,15 @@ category: Example Scripts
 order: 2
 ---
 
-Here's a simple script that prompts the user for an Ethereum domain name and
-states whether or not the name is available.
+###### Here's a simple script that prompts the user for an Ethereum domain name and states whether or not the name is available.<br><br>
 
 #### Code using Browseth
 
 ```javascript
 const cliInteract = require('cli-interact');
 const Web3 = require('web3'); // Needed for Sha3, will be removed on next update
-const {Browseth} = require('browseth'); // Browseth needs to be deconstructed when required
-const registrarJSON = require('./registrar.json'); // Ethereum Name Registrar
+const Browseth = require('browseth');
+const registrarJSON = require('./registrar.json'); // Ethereum Name Registrar file located in current directory
 
 const beth = new Browseth('https://mainnet.infura.io/YOUR_API_KEY');
 
@@ -23,9 +22,10 @@ beth.addContract('registrar', registrarJSON, {
 });
 
 const checkNameAvailability = async () => {
+  let name;
   // Prompt user for a name
   try {
-    const name = cliInteract.question('What is your name? :');
+    name = cliInteract.question('What is your name?:');
   } catch (e) {
     console.error(e);
     return;

@@ -20,7 +20,7 @@ export class Default extends Rpc {
         headers: {...this.headers, 'Content-Type': 'application/json'},
         timeout: this.timeout,
       },
-      (err: Error | void, response?: Transport.Response) => {
+     (err: Error | void, response?: Transport.Response) => {
         if (err) {
           cb(err);
           return;

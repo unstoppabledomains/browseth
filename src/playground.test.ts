@@ -14,7 +14,11 @@ Browseth.Signers.Ledger.Transport = HWTransportNodeHid;
 
 test('', async () => {
   const b = new Browseth('https://mainnet.infura.io/mew');
-
+  const l = new Browseth.Signers.Ledger();
+  const qwe = await l.publicKey(1).catch(e => {
+    console.error(e);
+  });
+  console.log(qwe);
   // const wallet = new Browseth.Wallets.Online(b.rpc);
 });
 // const addr1 = '0x11c9D4Dc5B34dDD7F4eA03E59402404a170DFeF7';

@@ -1,14 +1,14 @@
 ---
-title: Online Wallets
-category: Wallet Interaction
+title: Wallets.Online
+category: Wallets - Wallet Interaction
 order: 2
 ---
+
+## Online Wallets
 
 #### [Metamask](https://metamask.io/) allows you to run dApps and store value on encrypted **online** wallets. Interact with Metamask using Browseth!
 
 <!-- **Note:** Metamask is currently the only online wallet Browseth supports as it is the most widely used. -->
-
-<hr>
 
 > **new Browseth.Wallets.Online(rpc)**
 
