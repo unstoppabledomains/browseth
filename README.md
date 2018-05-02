@@ -2,11 +2,9 @@
 
 #### A library for interacting with ethereum, well suited for the browser.
 
-[Introducing Browseth a New Library for Interacting with Ethereum](https://medium.com/buyethdomains/introducing-browseth-a-new-library-for-interacting-with-ethereum-795d18e7b87d)
+##### [Introducing Browseth a New Library for Interacting with Ethereum](https://medium.com/buyethdomains/introducing-browseth-a-new-library-for-interacting-with-ethereum-795d18e7b87d)
 
-<br>
-
-[npm package: 0.0.15](https://www.npmjs.com/package/browseth)
+###### [npm package: 0.0.15](https://www.npmjs.com/package/browseth)
 
 ## Installation
 

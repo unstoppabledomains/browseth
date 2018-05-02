@@ -4,6 +4,8 @@ title: Welcome to Browseth!
 
 #### A library for interacting with ethereum, well suited for the browser.
 
+###### [npm package: 0.0.15](https://www.npmjs.com/package/browseth)
+
 <hr/>
 
 ## Installation
