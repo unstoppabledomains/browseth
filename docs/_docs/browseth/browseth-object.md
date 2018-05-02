@@ -33,7 +33,7 @@ const beth = new Browseth('https://mainnet.infura.io/YOUR_API_KEY');
 * [**Rpcs**]({{ site.baseurl }}{% link _docs/rpcs/rpcs.md %})
 * [**Signers**]({{ site.baseurl }}{% link _docs/signers/signers.md %})
 * [**Wallets**]({{ site.baseurl }}{% link _docs/wallets/wallets.md %})
-* [**Apis**]({{ site.baseurl }}{% link _docs/rpcs/rpcs.md %})
+* [**Apis**]({{ site.baseurl }}{% link _docs/apis/apis.md %})
 
 <hr>
 
@@ -58,5 +58,5 @@ beth.addContract('contractName', contractName.abi, {
 
 #### Add Api
 
-> **.addApi()**
+> **.addApi(name, api)**
 

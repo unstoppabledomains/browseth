@@ -4,7 +4,9 @@
 
 #### [Introducing Browseth a New Library for Interacting with Ethereum](https://medium.com/buyethdomains/introducing-browseth-a-new-library-for-interacting-with-ethereum-795d18e7b87d)
 
-##### [npm package: 0.0.15](https://www.npmjs.com/package/browseth)
+##### [Browseth documentation](https://buyethdomains.github.io/browseth/)
+
+##### [npm package: 0.0.16](https://www.npmjs.com/package/browseth)
 
 ## Installation
 
@@ -18,7 +20,7 @@
 
 ## Usage
 
-```
+```javascript
 const Browseth = require('browseth')
 // or
 // import Browseth from 'browseth'
