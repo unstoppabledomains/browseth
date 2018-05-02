@@ -34,15 +34,15 @@ const myPrvKey = new Browseth.Signers.PrivateKey(
 
 ## Methods
 
-- [From V3](#from-v3)
-- [From Hex](#from-hex)
-- [From Random Bytes](#from-random-bytes)
-- [Account](#account)
-- [Sign Transaction](#sign-transaction)
-- [Sign Message](#sign-message)
-- [To String](#to-string)
-- [To V3](#to-v3)
-- [Get Keystore File Name](#get-keystore-file-name)
+- [fromV3](#from-v3)
+- [fromHex](#from-hex)
+- [fromRandomBytes](#from-random-bytes)
+- [account](#account)
+- [signTransaction](#sign-transaction)
+- [signMessage](#sign-message)
+- [toString](#to-string)
+- [toV3](#to-v3)
+- [getKeyStoreFileName](#get-keystore-file-name)
 
 ### From V3
 
@@ -94,7 +94,7 @@ const prvKeyObj = Browseth.Signers.PrivateKey.fromHex(SOME_PRIVATE_KEY_STRING);
 
 > **.fromRandomBytes()**
 
-(Static) Produces a random 32 bytes address.
+(Static) Produces a random 32 byte address.
 
 #### Returns
 

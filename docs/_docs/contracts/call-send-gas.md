@@ -4,7 +4,8 @@ category: Contracts
 order: 2
 ---
 
-#### Once a contract has been added to a beth instance you can make calls to methods or send transactions to the block from that contract using:<br><b>call(), send(), gas()</b>
+#### Once a contract has been added to a beth instance you can make calls to methods or send transactions to the block from that contract using:
+`.contract.contractName.function.functionName`
 
 ### Jump
 
@@ -113,13 +114,13 @@ beth.contract.contractName.function.myFunction().gas();
 
 ### Aliases
 
-> **contract**
+> **.contract**
 
-`c`
+`.c`
 
-> **function**
+> **.function**
 
-`f` or `methods`
+`.f` or `.methods`
 
 #### Examples
 

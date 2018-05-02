@@ -21,15 +21,15 @@ title: Welcome to Browseth!
 ```
 const Browseth = require('browseth')
 // or
-// import * as Browseth from 'browseth'
+// import Browseth from 'browseth'
 
 const beth = new Browseth();
 ```
 
 <hr>
 
-_Also check out our blog about our development on
-[Medium!](https://medium.com/buyethdomains/introducing-browseth-a-new-library-for-interacting-with-ethereum-795d18e7b87d)_
+**_Also check out our blog about our development on
+[Medium!](https://medium.com/buyethdomains/introducing-browseth-a-new-library-for-interacting-with-ethereum-795d18e7b87d)_**
 
 <!--
 Documentation may end up migrating over to NPM, and this site may be used mainly

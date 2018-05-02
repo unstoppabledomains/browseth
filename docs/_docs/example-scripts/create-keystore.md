@@ -43,4 +43,4 @@ createKeystore();
 
 ```
 
-###### Then go to [MyEtherWallet](https://www.myetherwallet.com/) and try it out!
+###### Then go to [MyEtherWallet](https://www.myetherwallet.com/) and try your keystore file and password out!

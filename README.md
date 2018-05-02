@@ -2,14 +2,31 @@
 
 #### A library for interacting with ethereum, well suited for the browser.
 
-https://medium.com/buyethdomains/introducing-browseth-a-new-library-for-interacting-with-ethereum-795d18e7b87d
+[Introducing Browseth a New Library for Interacting with Ethereum](https://medium.com/buyethdomains/introducing-browseth-a-new-library-for-interacting-with-ethereum-795d18e7b87d)
 
-## Want to use `browseth`?
+<br>
 
-For now just `git submodule add https://github.com/buyethdomains/browseth`. And
-`yarn install` the project.
+[npm package: 0.0.15](https://www.npmjs.com/package/browseth)
 
-There will be an npm release soon: https://www.npmjs.com/package/browseth
+## Installation
+
+#### Node.js
+
+`npm install browseth`
+
+#### Yarn
+
+`yarn add browseth`
+
+## Usage
+
+```
+const Browseth = require('browseth')
+// or
+// import Browseth from 'browseth'
+
+const beth = new Browseth();
+```
 
 ## Structure
 
@@ -85,7 +102,7 @@ There will be an npm release soon: https://www.npmjs.com/package/browseth
 
   * These packages expose a standard set of functionality that one might need to
     interact with ethereum.
-  * Support is tenativly the same as the rpc nodes.
+  * Support is tentatively the same as the rpc nodes.
 
 - ### `apis`
 
@@ -106,7 +123,6 @@ There will be an npm release soon: https://www.npmjs.com/package/browseth
 * Support More Wallets:
 
   * Generic HD Wallet
-  * JSON Keystore V3
   * Parity Mnemonic
 
 * Favor code generated config-based (jsonschema?) rpc.
@@ -121,8 +137,8 @@ make pull requests, we are aiming to have a fully featured package built over
 the summer and will be actively building and maintaining this library going
 forward.
 
-Sicnce this is a developer pre-relase shared with close friends, also feel more
+Since this is a developer pre-release shared with close friends, also feel more
 than free to reach out directly to myself braden@buyethdomains.com or the team
 contact@buyethdomains.com.
 
-Thanks for taking a look, please excuse any spelling errors :-).
+Thanks for taking a look :-).
