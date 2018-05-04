@@ -1,10 +1,10 @@
-import {Browseth} from '.';
-import {keccak256} from './crypto';
+import * as Browseth from '../';
+import {keccak256} from '../crypto';
+import {Default} from '../rpc';
+import {NodeHttp} from '../transport';
+import {Online} from '../wallet';
 import EventListener from './event-listener';
-import {Default} from './rpc';
 import TransactionListener from './transaction-listener';
-import {NodeHttp} from './transport';
-import {Online} from './wallet';
 
 const RegistrarJson = [
   {
@@ -329,31 +329,59 @@ it(
     // });
     // console.log(logs);
 
-    const e = new EventListener(b.rpc, RegistrarJson as any, false, '0x536400');
+    const e = new EventListener(b.rpc, RegistrarJson as any, false, '0x547990');
     e.startPolling();
-    e.abi.event.AuctionStarted.signature;
+    // e.abi.event.AuctionStarted.signature;
 
     const subscription = e.addEventListener(
       '0x6090a6e47849629b7245dfa1ca21d94cd15878ef',
       'AuctionStarted',
       [],
       logs => {
-        console.log(
-          'its probs AuctionStarted',
-          logs.find(log => {
-            // console.log(e.abi.event.AuctionStarted.signature, log.topics[0]);
-            return (
-              '0x' + e.abi.event.AuctionStarted.signature === log.topics[0]
-            );
-          }),
-        );
-
-        // console.log(logs);
-        done();
+        // console.log(
+        //   'its probs AuctionStarted',
+        //   logs.find(log => {
+        //     // console.log(e.abi.event.AuctionStarted.signature, log.topics[0]);
+        //     return (
+        //       '0x' + e.abi.event.AuctionStarted.signature === log.topics[0]
+        //     );
+        //   }),
+        // );
+        if (logs !== undefined && logs.length > 0) {
+          console.log(logs);
+        }
+        // done();
       },
     );
+    console.log(subscription.contract);
+    console.log(subscription.cb);
+
+    setTimeout(() => {
+      const subscription2 = e.addEventListener(
+        '0x6090a6e47849629b7245dfa1ca21d94cd15878ef',
+        'AuctionStarted',
+        [],
+        logs => {
+          if (logs !== undefined && logs.length > 0) {
+            console.log(logs);
+          }
+        },
+      );
+    }, 8000);
+
+    setTimeout(() => {
+      subscription.remove();
+    }, 10000)
+
+    setTimeout(() => {
+      e.removeAllListeners();
+    }, 13000)
+
+    setTimeout(() => {
+      e.stopPolling();
+    }, 15000)
   },
-  5000,
+  100000,
 );
 
 // keccak256('ENumber1()');

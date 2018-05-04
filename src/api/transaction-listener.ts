@@ -80,9 +80,12 @@ class TransactionListener {
   }
 
   private poll(done: () => void) {
+    console.log("polling");
     if (this.listeningFor.length === 0) {
       done();
       return;
+    } else {
+      console.log("listening for:", this.listeningFor);
     }
 
     this.wallet.rpc.batch(

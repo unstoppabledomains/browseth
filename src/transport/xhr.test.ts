@@ -1,4 +1,5 @@
 import * as Xhr from './xhr';
+import { once } from 'cluster';
 
 test('', async () => {
   console.log(
@@ -22,3 +23,15 @@ test('', async () => {
     }),
   );
 });
+
+
+b.c.contract.e.Name.subscribe({
+  // topics
+}, {
+  fromBlock,
+  address,
+});
+
+{
+  ser
+}
