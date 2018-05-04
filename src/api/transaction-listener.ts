@@ -68,24 +68,21 @@ class TransactionListener {
   }
 
   public resolveTransaction(transactionHash: string) {
-    return new Promise(async resolve => {
+    return new Promise((resolve, reject) => {
       this.addTransactionListener(transactionHash, receipt => {
         if (receipt.status === '0x1') {
           resolve(receipt);
           return;
         }
-        throw new Error('not mined');
+        reject(new Error('not mined'));
       });
     });
   }
 
   private poll(done: () => void) {
-    console.log("polling");
     if (this.listeningFor.length === 0) {
       done();
       return;
-    } else {
-      console.log("listening for:", this.listeningFor);
     }
 
     this.wallet.rpc.batch(

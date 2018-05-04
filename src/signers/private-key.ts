@@ -198,7 +198,7 @@ export class PrivateKey implements Signer {
       p = 1,
     } = {},
   ): Promise<string> {
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
       const kdfparams: KdfParams = {
         dklen,
         salt: salt.toString('hex'),
@@ -229,7 +229,7 @@ export class PrivateKey implements Signer {
           kdfparams.dklen,
         );
       } else {
-        throw new Error('Unsupported kdf');
+        reject(new Error('Unsupported kdf'));
       }
 
       const ciph = createCipheriv(cipher, derivedKey.slice(0, 16), iv);

@@ -99,7 +99,6 @@ class EventListener {
         if (index > -1) {
           this.listeningFor.splice(index, 1);
         }
-        console.log("removing");
         subscription.remove();
       }
     });
@@ -113,13 +112,11 @@ class EventListener {
 
   private async poll(done: () => void) {
     if (this.listeningFor.length === 0) {
-      console.log("im empty");
       done();
       return;
     }
 
     const latestBlock = await this.getBlockNumber();
-    console.log('listening for:', this.listeningFor);/////////////////////////////////////////////////////////////////////////
 
     const prep = (contractStr: string) => {
       const contract = JSON.parse(contractStr);

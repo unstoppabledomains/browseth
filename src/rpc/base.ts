@@ -36,7 +36,7 @@ export function isRpcError(v: RpcResponse | RpcError): v is RpcError {
 let id = 0;
 export abstract class Rpc {
   public send(method: string, ...params: any[]): Promise<any> {
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
       const request = this.prep(
         {
           method,
@@ -44,7 +44,7 @@ export abstract class Rpc {
         },
         (err: Error | void, result: any) => {
           if (err) {
-            throw err;
+            reject(err);
           }
           resolve(result);
         },
@@ -110,9 +110,9 @@ export abstract class Rpc {
               request,
               (err: Error | void, response: any) => {
                 promises.push(
-                  new Promise(resolve => {
+                  new Promise((resolve, reject) => {
                     if (err) {
-                      throw err;
+                      reject(err);
                     }
                     resolve(response);
                   }),
