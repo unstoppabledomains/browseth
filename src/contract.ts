@@ -1,7 +1,7 @@
 // import {EventEmitter, EventSubscription} from 'fbemitter';
 import {EventElement} from './abi';
 import {AbiCodec, createAbiCodec, JsonInterface} from './abi';
-import TransactionListener from './transaction-listener';
+// import TransactionListener from './transaction-listener';
 import {Wallet} from './wallet';
 
 export class Contract {

@@ -25,5 +25,10 @@ export function toHex(v: any): any {
     }
     return ret;
   }
-  return '0x' + toBuffer(v).toString('hex');
+  return (
+    '0x' +
+    toBuffer(v)
+      .toString('hex')
+      .replace(/^0+/, '')
+  );
 }

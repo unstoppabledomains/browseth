@@ -10,11 +10,27 @@ import * as NodeHttp from './transport/node-http';
 import * as Xhr from './transport/xhr';
 import {Wallet} from './wallet';
 
+const EnsJson = require('./ENS.json');
+const {promisify} = require('util');
+const fs = require('fs');
+const readFilePromisified = promisify(fs.readFile);
+
 // Browseth.transport = NodeHttp;
 Browseth.Signers.Ledger.Transport = HWTransportNodeHid as any;
 
 test('', async () => {
-  const b = new Browseth('https://mainnet.infura.io/mew');
+  // const b = new Browseth('https://mainnet.infura.io/mew');
+  const b = new Browseth();
+  b.wallet = new Browseth.Wallets.Online(b.rpc);
+  b.addContract('ens', EnsJson, {
+    bytecode: await readFilePromisified(`${__dirname}/./ENS.bin`),
+  });
+  const asd = await b.c.ens.deploy().send();
+  // b.c.ens.options.address = (await b.rpc.send(
+  //   'eth_getTransactionReceipt',
+  //   await b.c.ens.deploy().send(),
+  // )).contractAddress;
+
   // const l = new Browseth.Signers.Ledger();
   // b.wallet = new Browseth.Wallets.Offline(b.rpc, l);
   // const qwe = await b.wallet.account(0).catch(e => {
@@ -22,8 +38,8 @@ test('', async () => {
   // });
   // console.log(qwe);
 
-  const block = await b.rpc.send('eth_blockNumber');
-  console.log(block);
+  // const block = await b.rpc.send('eth_blockNumber');
+  // console.log(block);
   // const wallet = new Browseth.Wallets.Online(b.rpc);
   // console.log(await wallet.account());
 });
