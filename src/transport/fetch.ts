@@ -21,16 +21,27 @@ async function fetchRequest(request: Request): Promise<TransportResponse> {
   const promises = [
     fetch(request.url, {
       body: request.msg,
-      headers:
-        request.headers &&
-        new Headers(
-          Object.keys(request.headers).map(v => {
-            const value = request.headers![v];
-            return typeof value === 'string'
-              ? [v, value]
-              : [v, value.join(', ')];
-          }),
-        ),
+      // headers:
+        // request.headers, // &&
+        // new Headers(
+        //   Object.keys(request.headers).map(v => {
+        //     const value = request.headers![v];
+        //     return typeof value === 'string'
+        //       ? [v, value]
+        //       : [v, value.join(', ')];
+        //   }),
+        // ),
+        headers:
+          request.headers &&
+          new Headers(
+            Object.keys(request.headers).reduce((acc, key) => {
+              const val = request.headers![key];
+              acc[key] =  typeof val === 'string'
+              ?  val
+              : val.join(', ');
+              return acc;
+               }, {} as {[k: string]: string}),
+          ),
       method: 'POST',
     }).then(async resp => {
       if (resp.ok !== true) {
