@@ -22,9 +22,10 @@ test('', async () => {
   // });
   // console.log(qwe);
 
-  const block = await b.rpc.send('eth_blockNumber');
-  console.log(block);
-  // const wallet = new Browseth.Wallets.Online(b.rpc);
+  // const block = await b.rpc.send('eth_blockNumber');
+  // console.log(block);
+  const wallet = new Browseth.Wallets.Online(b.rpc);
+  console.log(await wallet.account());
 });
 // const addr1 = '0x11c9D4Dc5B34dDD7F4eA03E59402404a170DFeF7';
 //   const addr2 = '0x9490E324203D77937d9ae041F65878901f7e3948';

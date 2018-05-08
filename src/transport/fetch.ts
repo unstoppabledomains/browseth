@@ -36,9 +36,6 @@ async function fetchRequest(request: Request): Promise<TransportResponse> {
       if (resp.ok !== true) {
         throw new Error(`Not ok resp.status<${resp.status}> & '${await resp.text()}'`);
       }
-
-    
-
       return {
         headers: {},
         msg: await resp.text(),
