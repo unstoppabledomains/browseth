@@ -1,24 +1,29 @@
 import HWTransportNodeHid from '@ledgerhq/hw-transport-node-hid';
 import {BN} from 'ethereumjs-util';
 import {provider} from 'ganache-core';
-import * as Browseth from '.';
+import Browseth from '.';
 import {keccak256} from './crypto';
 import {Default, Rpc} from './rpc';
 
 import {randomBytes} from 'crypto';
 import * as NodeHttp from './transport/node-http';
+import * as Xhr from './transport/xhr';
 import {Wallet} from './wallet';
 
-Browseth.transport = NodeHttp;
-Browseth.Signers.Ledger.Transport = HWTransportNodeHid;
+// Browseth.transport = NodeHttp;
+Browseth.Signers.Ledger.Transport = HWTransportNodeHid as any;
 
 test('', async () => {
   const b = new Browseth('https://mainnet.infura.io/mew');
-  const l = new Browseth.Signers.Ledger();
-  const qwe = await l.publicKey(1).catch(e => {
-    console.error(e);
-  });
-  console.log(qwe);
+  // const l = new Browseth.Signers.Ledger();
+  // b.wallet = new Browseth.Wallets.Offline(b.rpc, l);
+  // const qwe = await b.wallet.account(0).catch(e => {
+  //   console.error(e);
+  // });
+  // console.log(qwe);
+
+  const block = await b.rpc.send('eth_blockNumber');
+  console.log(block);
   // const wallet = new Browseth.Wallets.Online(b.rpc);
 });
 // const addr1 = '0x11c9D4Dc5B34dDD7F4eA03E59402404a170DFeF7';

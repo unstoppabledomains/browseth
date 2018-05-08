@@ -57,16 +57,6 @@ class TransactionListener {
     this.listeningFor = [];
   }
 
-  public addTransactionListener(
-    transactionHash: string,
-    cb: (receipt?: any) => void,
-  ): EventSubscription {
-    this.listeningFor.push(transactionHash);
-
-    const subscription = this.ee.once(transactionHash, cb);
-    return subscription; // this does nothing ///////////////////////////////////////////////////////////
-  }
-
   public resolveTransaction(transactionHash: string) {
     return new Promise((resolve, reject) => {
       this.addTransactionListener(transactionHash, receipt => {
@@ -77,6 +67,16 @@ class TransactionListener {
         reject(new Error('not mined'));
       });
     });
+  }
+
+  private addTransactionListener(
+    transactionHash: string,
+    cb: (receipt?: any) => void,
+  ): EventSubscription {
+    this.listeningFor.push(transactionHash);
+
+    const subscription = this.ee.once(transactionHash, cb);
+    return subscription; // this does nothing ///////////////////////////////////////////////////////////
   }
 
   private poll(done: () => void) {

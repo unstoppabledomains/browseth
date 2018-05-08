@@ -107,7 +107,15 @@ export class PrivateKey implements Signer {
     return new PrivateKey(randomBytes(32));
   }
 
-  constructor(public privateKey: Buffer) {}
+  public privateKey: Buffer;
+
+  constructor(privKey: Buffer | string) {
+    if (typeof privKey === 'string') {
+      this.privateKey = Buffer.from(privKey.replace('0x', ''), 'hex');
+      return;
+    }
+    this.privateKey = privKey;
+  }
 
   public account() {
     return Promise.resolve(this.toAddress());

@@ -31,6 +31,9 @@ export class Offline implements Wallet {
       ),
     );
   };
+  // public batch = async (transactions: object[]) => {
+    
+  // }
   public call = async (transaction: object, block?: string) =>
     this.rpc.send(
       'eth_call',

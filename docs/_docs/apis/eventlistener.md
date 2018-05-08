@@ -1,7 +1,7 @@
 ---
 title: Apis.EventListener
 category: APIs
-order: 2
+order: 3
 ---
 
 ## Event Listener
@@ -40,7 +40,10 @@ const eventlistener = new Browseth.Apis.EventListener(beth.rpc, abi, false, '0x5
 
 ## Methods
 
-[startPolling](#start-polling)
+- [startPolling](#start-polling)
+- [stopPolling](#stop-polling)
+- [removeAllListeners](#remove-all-listeners)
+- [addEventListener](#add-event-listener)
 
 ### Start Polling
 
@@ -71,6 +74,51 @@ Stops polling if the listener is polling.
 
 > **.removeAllListeners()**
 
-Removes all listeners stored on the current listeners
+Removes all events being listened for on the current listener.
 
+#### Example
 
+`eventListener.removeAllListeners();`
+
+### Add Event Listener
+
+> **.addEventListener(address, eventName, topics, cb)**
+
+Adds an event to listen for to the current listener.
+
+#### Parameters
+
+1. `address`: `string`<br>
+The address of the contract that contains the event to listen for.
+
+2. `eventName`: `string`<br>
+The name of the event on the contract to listen for.
+
+3. `topics`: `any[]`<br>
+An array of any topics on the event.
+
+4. `cb`: `(logs?: any) => void`<br>
+A callback to call once a listener finds the specified event. The resulting logs will be passed into the callback.
+
+#### Returns
+
+`object`: A subscription to the listener. The subscription object contains one method `.remove()` which removes itself from the event listener.
+
+#### Example
+
+```javascript
+// You can start polling without any listeners and add after.
+eventListener.startPolling()
+
+const subscription = e.addEventListener(
+  '0x123...',   // some contract address
+  'someEvent',  // name of event on that contract
+  [],           // topics
+  logs => {     // callback
+      console.log(logs);
+  },
+);
+
+// Removes subscription even while polling 
+subscription.remove();
+```

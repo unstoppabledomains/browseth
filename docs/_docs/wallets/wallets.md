@@ -6,7 +6,7 @@ order: 1
 
 #### Interact with wallets using Browseth
 
-These packages are for account managment, sending transactions, and signing
+These packages are for account management, sending transactions, and signing
 messages for each wallet (current support and planned support below).
 
 * Support:

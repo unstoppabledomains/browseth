@@ -24,6 +24,17 @@ export class Online implements Wallet {
     );
   };
 
+  // public batch = async (transactions: object[]) => {
+  //   const account = await this.account();
+  //   transactions.map(transaction => {
+  //     const tx: any = {
+  //       ...transaction,
+  //       from: account,
+  //     };
+  //     return 
+  //   })
+  // }
+
   public call = async (transaction: object, block?: string) =>
     this.rpc.send(
       'eth_call',

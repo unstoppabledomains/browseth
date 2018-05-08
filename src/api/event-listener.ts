@@ -76,7 +76,7 @@ class EventListener {
     address: string,
     eventName: string,
     topics: any[],
-    cb: (receipt?: any) => void,
+    cb: (logs?: any) => void,
   ) {
     if (typeof this.abi.event[eventName].encode !== 'function') {
       throw new Error("event doesn't exist");
@@ -104,9 +104,8 @@ class EventListener {
     });
   }
 
-  public async getBlockNumber() {
+  private async getBlockNumber() {
     const latest = await this.rpc.send('eth_blockNumber');
-    // this.blockNumber = latest;
     return latest;
   }
 
@@ -146,12 +145,6 @@ class EventListener {
                 // this.abi.event[contract.eventName].decode(logs),
                 logs,
               );
-              // const index = this.listeningFor.findIndex(
-              //   i => i.address === contract.address,
-              // );
-              // if (index > -1) {
-              //   this.listeningFor.splice(index, 1);
-              // }
             }
           },
         ] as any

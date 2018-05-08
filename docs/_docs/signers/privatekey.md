@@ -5,13 +5,12 @@ order: 2
 ---
 ## Private Keys
 
-> **new Browseth.Signers.PrivateKey(prvKeyString)**
+> **new Browseth.Signers.PrivateKey(privKey)**
 
 #### Parameters
 
-`prvKeyString`: `Buffer`<br>
-A 32-bit private key in buffer form.<br>
-_**Note**: If you have a private key in string form you can use_ `Buffer.from()`_, but the leading_ `'0x'` _must be removed._
+`privKey`: `Buffer | string`<br>
+A 32-bit private key. If passed as a string, any '0x' is removed and converted to Buffer.<br>
 
 #### Returns
 
@@ -20,14 +19,7 @@ _**Note**: If you have a private key in string form you can use_ `Buffer.from()`
 #### Example
 
 ```javascript
-/* 
- * Takes a private key, finds the first occurrence of '0x' and removes it.
- * Then converts it to a buffer, and converts it to a private key.
- */
-const myPrvKey = new Browseth.Signers.PrivateKey(
-    Buffer.from(SOME_PRIVATE_KEY_STRING).replace('0x', ''), 
-    'hex'
-);
+const myPrvKey = new Browseth.Signers.PrivateKey(SOME_PRIVATE_KEY_STRING);
 ```
 
 <hr>

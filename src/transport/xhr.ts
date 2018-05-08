@@ -1,4 +1,4 @@
-import {XMLHttpRequest} from 'xmlhttprequest';
+// import {XMLHttpRequest} from 'xmlhttprequest';
 import {Handler, Request, Response} from './types';
 
 export function isSupported(): boolean {

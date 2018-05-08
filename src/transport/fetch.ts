@@ -21,7 +21,6 @@ async function fetchRequest(request: Request): Promise<TransportResponse> {
   const promises = [
     fetch(request.url, {
       body: request.msg,
-      credentials: 'same-origin',
       headers:
         request.headers &&
         new Headers(
@@ -32,16 +31,16 @@ async function fetchRequest(request: Request): Promise<TransportResponse> {
               : [v, value.join(', ')];
           }),
         ),
+      method: 'POST',
     }).then(async resp => {
       if (resp.ok !== true) {
-        throw new Error(`Not ok resp.status<${resp.status}>`);
+        throw new Error(`Not ok resp.status<${resp.status}> & '${await resp.text()}'`);
       }
 
+    
+
       return {
-        headers: [...resp.headers.entries()].reduce(
-          (a, [k, v]) => ({...a, [k]: v}),
-          {},
-        ),
+        headers: {},
         msg: await resp.text(),
         status: resp.status,
       };
