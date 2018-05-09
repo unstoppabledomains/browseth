@@ -4,6 +4,51 @@ import {Rpc} from '../rpc';
 import {Wallet} from './types';
 
 export class Online implements Wallet {
+  public batch = {
+    send: async (transaction: object, cb: () => void) => {
+      const tx: any = {
+        ...transaction,
+        from: await this.account(),
+      };
+      return [
+        {
+          method: 'eth_sendTransaction',
+          params: [toHex({
+            ...tx,
+            gas: tx.gas || (await this.gas(tx)),
+          })],
+        },
+        cb,
+    ];
+    },
+    call: async (transaction: object, block: string, cb: () => void) => {
+      return [
+        {
+          method: 'eth_call',
+          params: [toHex({
+            ...transaction,
+            from: await this.account(),
+          }),
+          block],
+        },
+        cb,
+      ];
+    },
+    gas: async (transaction: object, block: string, cb: () => void) => {
+      return [
+        {
+          method: 'eth_estimateGas',
+          params: [toHex({
+            ...transaction,
+            from: await this.account(),
+          })],
+          // block,
+        },
+        cb,
+      ];
+    }
+  }
+
   constructor(public rpc: Rpc) {}
 
   public account = () => this.rpc.send('eth_coinbase');
@@ -23,17 +68,6 @@ export class Online implements Wallet {
       }),
     );
   };
-
-  // public batch = async (transactions: object[]) => {
-  //   const account = await this.account();
-  //   transactions.map(transaction => {
-  //     const tx: any = {
-  //       ...transaction,
-  //       from: account,
-  //     };
-  //     return 
-  //   })
-  // }
 
   public call = async (transaction: object, block?: string) =>
     this.rpc.send(

@@ -94,6 +94,57 @@ export class Contract {
           const data = v.encode(...params);
 
           return {
+            batch: {
+              send: ({
+                transaction = {},
+                cb,
+              }: {
+                transaction?: object;
+                cb?: () => void;
+              }) =>
+                this.wallet.batch.send({
+                  to: this.options.address,
+                  ...transaction,
+                  data,
+                  cb,
+                }),
+              call: ({
+                transaction = {},
+                block = 'latest',
+                cb,
+              }: {
+                transaction?: object;
+                block?: string;
+                cb?: () => void;
+              }) =>
+                this.wallet.batch.call(
+                  {
+                    to: this.options.address,
+                    ...transaction,
+                    data,
+                  },
+                  block,
+                  cb,
+                ),
+              gas: ({
+                transaction = {},
+                block = 'latest',
+                cb,
+              }: {
+                transaction?: object;
+                block?: string;
+                cb?: () => void;
+              }) =>
+                this.wallet.batch.gas(
+                  {
+                    to: this.options.address,
+                    ...transaction,
+                    data,
+                  },
+                  block,
+                  cb,
+                ),
+            },
             send: (transaction = {}) =>
               this.wallet.send({
                 to: this.options.address,
@@ -189,3 +240,35 @@ export class Contract {
     return this.function;
   }
 }
+
+// class Transaction {
+//   constructor(public txObj: object, batch: boolean) {
+//     return this.send(txObj)
+//   }
+
+//   pBatch() {
+//     return this.txObj;
+//   }
+
+//   batch(cb) {
+//     return [this.txObj, cb];
+//   }
+
+//   send(rpc) {
+//     rpc.send(this.txObj)
+//   }
+// }
+
+// new Transaction(true) // return Promise<string>;
+
+// b.c.cname.function.batch.send({
+//   // transaction
+// },
+// () => {})
+
+// b.rpc.batch(
+//   () => {},
+//   b.c.cname.function.fname.batch.send({to: '0x123456789'}, () => {}), // [req, cb] || req if send args
+//   b.c.cname.function.fname.batch.send(() => {}),
+//   b.c.cname.function.fname.batch.send({}, () => {}),
+// )

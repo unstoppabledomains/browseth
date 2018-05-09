@@ -80,13 +80,13 @@ Any number of requests as individual parameters containing an array that contain
 #### Example
 
 Here we declare two requests and a callback and pass them into batch(). Because the callbacks don't return anything we assign the responses to their respective variables in the callbacks instead. <br>
-Check out this example that maps over an array of addresses [here]({{base.url}}{% link _docs/rpcs/map-example.md %}) as well.
+Check out this example that maps over an array of addresses [here]({{base.url}}{/browseth}{% link _docs/rpcs/map-example.md %}) as well.
 
 ```javascript
 const request1 = [
   {
     method: 'eth_getBalance',
-    params: [addr1], 'latest',
+    params: [addr1, 'latest'],
   },
   (err, response) => {
     if (err) {

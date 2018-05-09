@@ -10,11 +10,10 @@ import * as NodeHttp from './transport/node-http';
 import * as Xhr from './transport/xhr';
 import {Wallet} from './wallet';
 
-const EnsJson = require('./ENS.json');
-const {promisify} = require('util');
-const fs = require('fs');
-const readFilePromisified = promisify(fs.readFile);
-
+const simple =
+  '[{"constant":true,"inputs":[{"name":"a","type":"uint256"},{"name":"b","type":"uint256"}],"name":"add","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"pure","type":"function"},{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"}]';
+const bin =
+  '608060405234801561001057600080fd5b5060c58061001f6000396000f300608060405260043610603f576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff168063771602f7146044575b600080fd5b348015604f57600080fd5b5060766004803603810190808035906020019092919080359060200190929190505050608c565b6040518082815260200191505060405180910390f35b60008183019050929150505600a165627a7a72305820d33e45d5f6cc9627f6b61d94c1d8d597a800d698c723d1b41ae2b5a022e8d56b0029';
 // Browseth.transport = NodeHttp;
 Browseth.Signers.Ledger.Transport = HWTransportNodeHid as any;
 
@@ -22,14 +21,39 @@ test('', async () => {
   // const b = new Browseth('https://mainnet.infura.io/mew');
   const b = new Browseth();
   b.wallet = new Browseth.Wallets.Online(b.rpc);
-  b.addContract('ens', EnsJson, {
-    bytecode: await readFilePromisified(`${__dirname}/./ENS.bin`),
+  b.addContract('simple', simple, {
+    bytecode: bin,
   });
-  const asd = await b.c.ens.deploy().send();
-  // b.c.ens.options.address = (await b.rpc.send(
-  //   'eth_getTransactionReceipt',
-  //   await b.c.ens.deploy().send(),
-  // )).contractAddress;
+
+  b.addApi('tx', new Browseth.Apis.TransactionListener(b.wallet));
+  b.api.tx.startPolling();
+  const txreciept = await b.api.tx.resolveTransaction(
+    await b.c.simple.deploy().send(),
+  );
+  b.c.simple.options.address = txreciept.contractAddress;
+  // console.log(await b.c.simple.f.add(1, 2).call());
+  const requests = [];
+
+  requests.push(
+    await b.c.simple.f.add(1, 2).batch.call({
+      cb: (e, r) => {
+        console.log(r);
+      },
+    }),
+  );
+  requests.push(
+    await b.c.simple.f.add(3, 2).batch.call({
+      cb: (e, r) => {
+        console.log(r);
+      },
+    }),
+  );
+  console.log(...requests);
+  await b.rpc.batch(() => {
+    console.log('done!');
+  }, ...requests);
+
+  // b.wallet = new Browseth.Wallets.Online(b.rpc);
 
   // const l = new Browseth.Signers.Ledger();
   // b.wallet = new Browseth.Wallets.Offline(b.rpc, l);
@@ -40,8 +64,15 @@ test('', async () => {
 
   // const block = await b.rpc.send('eth_blockNumber');
   // console.log(block);
-  // const wallet = new Browseth.Wallets.Online(b.rpc);
-  // console.log(await wallet.account());
+
+  // await b.wallet.send({
+  //   to:
+  //   value:
+  //   gasPrice: '0x1',
+  // });
+
+  // const sumGuysSigner = new Browseth.Signers.PrivateKey(PRIVATE_KEY);
+  // const hisAddress = await sumGuysSigner.account();
 });
 // const addr1 = '0x11c9D4Dc5B34dDD7F4eA03E59402404a170DFeF7';
 //   const addr2 = '0x9490E324203D77937d9ae041F65878901f7e3948';
