@@ -46,7 +46,7 @@ const beth = new Browseth('https://mainnet.infura.io/YOUR_API_KEY');
 
 > **.addContract(contractName, jsonInterface, options?)**
 
-See [Adding a Contract]({{base.url}}{%link _docs/contracts/add-contract.md%})
+See [Adding a Contract]({{site.baseurl}}{%link _docs/contracts/add-contract.md%})
 
 ```javascript
 beth.addContract('contractName', contractName.abi, {

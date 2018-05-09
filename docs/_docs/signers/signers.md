@@ -10,8 +10,8 @@ order: 1
 
 #### Parameters
 
-See [Private Keys]({.{base.url}}{%link _docs/signers/privatekey.md%}) or 
-[Ledgers]({{base.url}}{%link _docs/signers/ledger.md%}).
+See [Private Keys]({{site.baseurl}}{%link _docs/signers/privatekey.md%}) or 
+[Ledgers]({{site.baseurl}}{%link _docs/signers/ledger.md%}).
 
 #### Returns
 

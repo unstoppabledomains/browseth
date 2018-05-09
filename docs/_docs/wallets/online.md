@@ -37,7 +37,7 @@ beth.wallet = new Browseth.Wallets.Online(beth.rpc);
 
 ### Methods
 
-See [Wallet methods]({{base.url}}{%link _docs/wallets/wallets.md%}) for all other methods.
+See [Wallet methods]({{site.baseurl}}{%link _docs/wallets/wallets.md%}) for all other methods.
 
 > .accounts()
 
