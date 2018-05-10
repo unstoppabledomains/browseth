@@ -1,6 +1,6 @@
 {
   "name": "browseth",
-  "version": "0.0.27",
+  "version": "0.0.29",
   "description": "A library for interacting with ethereum, well suited for the browser.",
   "author": "Braden Pezeshki <braden.pezeshki@gmail.com>",
   "homepage": "https://github.com/buyethdomains/browseth",
@@ -30,8 +30,7 @@
     "rlp": "^2.0.0",
     "scryptsy": "^2.0.0",
     "secp256k1": "^3.5.0",
-    "uuid": "^3.2.1",
-    "xmlhttprequest": "^1.8.0"
+    "uuid": "^3.2.1"
   },
   "devDependencies": {
     "@types/jest": "^22.1.1",
