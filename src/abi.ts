@@ -147,35 +147,40 @@ export function createAbiCodec(jsonInterface: JsonInterface): AbiCodec {
             return encodedTopics;
           },
           decode(log: any) {
-            // console.log(log);
             if (!element.anonymous) {
               log.topics.shift();
             }
 
-            const unIndexedInputs = element.inputs.filter(i => !i.indexed);
-            // console.log(
-            //   unIndexedInputs.map(i => i.type),
-            //   Buffer.from(log.data.replace('0x', ''), 'hex'),
-            // );
-            const raw = Abi.rawDecode(
-              unIndexedInputs.map(i => i.type),
-              Buffer.from(log.data.replace('0x', '')),
+            const indexedInputs = element.inputs
+              .map((v, i) => ({v, i}))
+              .filter(({v}) => v.indexed);
+            const indexedDecoded = Abi.rawDecode(
+              indexedInputs.map(({v}) => v.type),
+              Buffer.from(log.data.replace('0x', ''), 'hex'),
+            );
+
+            const unIndexedInputs = element.inputs
+              .map((v, i) => ({v, i}))
+              .filter(({v}) => !v.indexed);
+            const unIndexedDecoded = Abi.rawDecode(
+              unIndexedInputs.map(({v}) => v.type),
+              Buffer.from(log.data.replace('0x', ''), 'hex'),
             );
 
             return {
-              ...element.inputs.filter(i => i.indexed).reduce(
-                (a, v, i) => ({
+              ...indexedInputs.reduce(
+                (a, {v, i: originalIndex}, i) => ({
                   ...a,
-                  // [i]: raw[i],
-                  [v.name]: log.topics[i],
+                  [originalIndex]: indexedDecoded[i],
+                  [v.name]: indexedDecoded[i],
                 }),
                 {},
               ),
               ...unIndexedInputs.reduce(
-                (a, v, i) => ({
+                (a, {v, i: originalIndex}, i) => ({
                   ...a,
-                  // [i]: raw[i],
-                  [v.name]: raw[i],
+                  [originalIndex]: unIndexedDecoded[i],
+                  [v.name]: unIndexedDecoded[i],
                 }),
                 {},
               ),

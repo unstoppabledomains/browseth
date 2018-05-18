@@ -1,6 +1,4 @@
-require('isomorphic-fetch');
-
-import HWTransportNodeHid from '@ledgerhq/hw-transport-node-hid';
+// import HWTransportNodeHid from '@ledgerhq/hw-transport-node-hid';
 import HWTransportU2F from '@ledgerhq/hw-transport-u2f';
 import {BN} from 'bn.js';
 import {JsonInterface} from './abi';
@@ -9,8 +7,8 @@ import {Contract} from './contract';
 import * as Rpcs from './rpc';
 import * as Signers from './signers';
 // import * as NodeHttp from './transport/node-http';
-// import * as Xhr from './transport/xhr';
-import * as fetch from './transport/fetch';
+import * as Xhr from './transport/xhr';
+// import * as fetch from './transport/fetch';
 import * as Utils from './utils';
 
 import * as Wallets from './wallet';
@@ -23,7 +21,7 @@ class Browseth {
   public static Signers = Signers;
   public static Apis = Apis;
 
-  public static transport = fetch;
+  public static transport = Xhr;
   public contract: {
     [k: string]: Contract;
   } = {};

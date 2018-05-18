@@ -61,18 +61,19 @@ export class Contract {
               toBlock = 'latest',
               address?: string,
             ) =>
-              this.wallet.rpc.send('eth_getLogs', {
-                fromBlock,
-                toBlock,
-                address: address ? address : this.options.address,
-                topics: encodedTopics,
-              }),
-            /* .then(logs =>
+              this.wallet.rpc
+                .send('eth_getLogs', {
+                  fromBlock,
+                  toBlock,
+                  address: address ? address : this.options.address,
+                  topics: encodedTopics,
+                })
+                .then(logs =>
                   logs.map((log: any) => ({
                     ...log,
                     decodedTopics: v.decode(log),
                   })),
-                ) */
+                ),
             // sub(topics: {
             //   [k: string]: any | any[];
             // }): Promise<EventSubscription> {
