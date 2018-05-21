@@ -48,10 +48,10 @@ test('', async () => {
       },
     }),
   );
+  // await b.rpc.batch(() => {
+  //   console.log('done!');
+  // }, ...requests);
   console.log(...requests);
-  await b.rpc.batch(() => {
-    console.log('done!');
-  }, ...requests);
 
   // b.wallet = new Browseth.Wallets.Online(b.rpc);
 
