@@ -4,6 +4,7 @@
 **/dist/
 **/out/
 TIM
+timnotes.ts
 
 # Node
 **/node_modules/
