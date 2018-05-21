@@ -154,10 +154,13 @@ export function createAbiCodec(jsonInterface: JsonInterface): AbiCodec {
             const indexedInputs = element.inputs
               .map((v, i) => ({v, i}))
               .filter(({v}) => v.indexed);
-            const indexedDecoded = Abi.rawDecode(
-              indexedInputs.map(({v}) => v.type),
-              Buffer.from(log.data.replace('0x', ''), 'hex'),
-            );
+
+            const indexedDecoded = indexedInputs.map(({v}, i) => {
+              return Abi.rawDecode(
+                [v.type],
+                Buffer.from(log.topics[i].replace('0x', ''), 'hex'),
+              )[0];
+            });
 
             const unIndexedInputs = element.inputs
               .map((v, i) => ({v, i}))

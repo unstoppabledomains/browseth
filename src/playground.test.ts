@@ -1,6 +1,4 @@
 import HWTransportNodeHid from '@ledgerhq/hw-transport-node-hid';
-import {BN} from 'ethereumjs-util';
-import {provider} from 'ganache-core';
 import Browseth from '.';
 import {keccak256} from './crypto';
 import {Default, Rpc} from './rpc';
@@ -12,43 +10,30 @@ import {Wallet} from './wallet';
 Browseth.transport = NodeHttp;
 Browseth.Signers.Ledger.Transport = HWTransportNodeHid as any;
 
-const simple = [
-  {
-    inputs: [],
-    payable: false,
-    stateMutability: 'nonpayable',
-    type: 'constructor',
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {indexed: true, name: 'iui', type: 'uint256'},
-      {indexed: false, name: 's', type: 'string'},
-      {indexed: false, name: 'ui', type: 'uint256'},
-    ],
-    name: 'Event',
-    type: 'event',
-  },
-];
-
-const bin =
-  '6080604052348015600f57600080fd5b5060408051601460208201528181526005818301527f68656c6c6f000000000000000000000000000000000000000000000000000000606082015290516032917f9a8638d69c886c4aa29475d78d676e6ea25b41e1d94f912950dea370ae50c647919081900360800190a260358060876000396000f3006080604052600080fd00a165627a7a723058208bd3c9120601fd160a671245103044ee271a54a9eced41b4f71abfcb9f8b81980029';
+const simple =
+  '[{"constant":false,"inputs":[{"name":"addrs","type":"address[]"}],"name":"removeAddressesFromWhitelist","outputs":[{"name":"success","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"addr","type":"address"}],"name":"removeAddressFromWhitelist","outputs":[{"name":"success","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[],"name":"withdraw","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_hash","type":"bytes32"},{"name":"_value","type":"uint256"},{"name":"_salt","type":"bytes32"}],"name":"reveal","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"addr","type":"address"}],"name":"addAddressToWhitelist","outputs":[{"name":"success","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"owner","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"_shaBid","type":"bytes32"}],"name":"getBid","outputs":[{"name":"","type":"uint256"},{"name":"","type":"uint256"},{"name":"","type":"bytes32"},{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_shaBid","type":"bytes32"}],"name":"finalize","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_shaBid","type":"bytes32"}],"name":"bid","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"whitelist","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_shaBid","type":"bytes32"},{"name":"reward","type":"uint256"},{"name":"_cypherBid","type":"bytes"},{"name":"_gasPrices","type":"bytes8"}],"name":"add","outputs":[],"payable":true,"stateMutability":"payable","type":"function"},{"constant":false,"inputs":[{"name":"addrs","type":"address[]"}],"name":"addAddressesToWhitelist","outputs":[{"name":"success","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_shaBid","type":"bytes32"}],"name":"forfeit","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_newRegistrar","type":"address"}],"name":"setRegistrar","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"inputs":[{"name":"_registrar","type":"address"}],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"payable":true,"stateMutability":"payable","type":"fallback"},{"anonymous":false,"inputs":[{"indexed":true,"name":"owner","type":"address"},{"indexed":true,"name":"shaBid","type":"bytes32"},{"indexed":true,"name":"gasPrices","type":"bytes8"},{"indexed":false,"name":"cypherBid","type":"bytes"}],"name":"Added","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"shaBid","type":"bytes32"}],"name":"Finished","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"shaBid","type":"bytes32"}],"name":"Forfeited","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"to","type":"address"},{"indexed":false,"name":"value","type":"uint256"}],"name":"Withdrawn","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"addr","type":"address"}],"name":"WhitelistedAddressAdded","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"addr","type":"address"}],"name":"WhitelistedAddressRemoved","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"previousOwner","type":"address"},{"indexed":true,"name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"}]';
 
 fit('', async () => {
-  const b = new Browseth().addContract('simple', simple as any, {
-    bytecode: bin,
-  });
-  b.addApi('tx', new Browseth.Apis.TransactionListener(b.w));
-  b.api.tx.startPolling();
+  const b = new Browseth('https://mainnet.infura.io/mew').addContract(
+    'simple',
+    simple,
+    {address: '0x9eead2301792af12115d125c48966246e5b455a1'},
+  );
 
-  b.wallet = new Browseth.Wallets.Online(b.rpc);
-
-  const hash = await b.c.simple.deploy().send();
-  console.log(hash);
-
-  const receipt = await b.api.tx.resolveTransaction(hash);
-  console.log(receipt);
-
-  const logs = await b.c.simple.e.Event().logs();
-  console.log(logs);
+  console.log(
+    'add',
+    await b.c.simple.e.Added().logs('0x' + (5637702).toString(16)),
+  );
+  console.log(
+    'fin',
+    await b.c.simple.e.Finished().logs('0x' + (5637702).toString(16)),
+  );
+  console.log(
+    'for',
+    await b.c.simple.e.Forfeited().logs('0x' + (5637702).toString(16)),
+  );
+  console.log(
+    'with',
+    await b.c.simple.e.Withdrawn().logs('0x' + (5637702).toString(16)),
+  );
 });
