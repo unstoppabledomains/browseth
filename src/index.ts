@@ -9,7 +9,7 @@ import * as Signers from './signers';
 // import * as NodeHttp from './transport/node-http';
 import * as Xhr from './transport/xhr';
 // import * as fetch from './transport/fetch';
-import * as Utils from './utils';
+import * as Units from './units';
 
 import * as Wallets from './wallet';
 
@@ -20,6 +20,7 @@ class Browseth {
   public static Wallets = Wallets;
   public static Signers = Signers;
   public static Apis = Apis;
+  public static Units = Units;
 
   public static transport = Xhr;
   public contract: {

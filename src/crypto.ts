@@ -1,5 +1,5 @@
 import {BN} from 'bn.js';
-import {toBuffer} from 'ethereumjs-util';
+// import {toBuffer} from 'ethereumjs-util';
 import createKeccak = require('keccak');
 
 export function keccak256(message: string | Buffer | DataView) {
