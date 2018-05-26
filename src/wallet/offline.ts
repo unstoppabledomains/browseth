@@ -7,6 +7,7 @@ export class Offline implements Wallet {
   public batch = {
     send: async (transaction: any, cb: () => {}) => {
       const tx = {
+        gasPrice: this.options.gasPrice,
         ...transaction,
         from: await this.signer.account(),
       };
@@ -37,6 +38,7 @@ export class Offline implements Wallet {
         {
           method: 'eth_call',
           params: [toHex({
+            gasPrice: this.options.gasPrice,
             ...transaction,
             from: await this.account(),
           }),
@@ -50,6 +52,7 @@ export class Offline implements Wallet {
         {
           method: 'eth_estimateGas',
           params: [toHex({
+            gasPrice: this.options.gasPrice,
             ...transaction,
             from: await this.account(),
           })],
@@ -60,12 +63,13 @@ export class Offline implements Wallet {
     }
   }
 
-  constructor(public rpc: Rpc, public signer: Signer) {}
+  constructor(public rpc: Rpc, public signer: Signer, public options: {gasPrice: string} = {gasPrice: '0x0'}) {}
 
   public account = (...args: any[]) => this.signer.account(...args);
   
   public send = async (transaction: any) => {
     const tx = {
+      gasPrice: this.options.gasPrice,
       ...transaction,
       from: await this.signer.account(),
     };
@@ -93,6 +97,7 @@ export class Offline implements Wallet {
     this.rpc.send(
       'eth_call',
       toHex({
+        gasPrice: this.options.gasPrice,
         ...transaction,
         from: await this.account(),
       }),
@@ -103,6 +108,7 @@ export class Offline implements Wallet {
     this.rpc.send(
       'eth_estimateGas',
       toHex({
+        gasPrice: this.options.gasPrice,
         ...transaction,
         from: await this.account(),
       }),

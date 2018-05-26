@@ -152,23 +152,23 @@ export class PrivateKey implements Signer {
         rlpEncode(
           raw.concat(
             chainId > 0
-              ? [Buffer.from([chainId]), Buffer.from([]), Buffer.from([])]
+              ? [stripZeros(toBuffer(chainId)), Buffer.from([]), Buffer.from([])]
               : [],
           ),
         ),
       ),
       this.privateKey,
     );
-
+  
     return Promise.resolve(
       '0x' +
         rlpEncode(
           raw.concat(
-            Buffer.from([
+            stripZeros(toBuffer(
               sig.recovery + 27 + (chainId > 0 ? chainId * 2 + 8 : 0),
-            ]),
-            sig.signature.slice(0, 32),
-            sig.signature.slice(32, 64),
+            )),
+            stripZeros(sig.signature.slice(0, 32)),
+            stripZeros(sig.signature.slice(32, 64)),
           ),
         ).toString('hex'),
     );

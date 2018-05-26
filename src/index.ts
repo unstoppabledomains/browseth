@@ -33,7 +33,7 @@ class Browseth {
   private _rpc: Rpcs.Rpc;
   private _wallet: Wallets.Wallet;
 
-  constructor(initializer?: string | Rpcs.Rpc | Wallets.Wallet) {
+  constructor(initializer?: string | Rpcs.Rpc | Wallets.Wallet, public options: {gasPrice: string} = {gasPrice: '0x0'}) {
     if (typeof initializer === 'string') {
       this._rpc = new Rpcs.Default(Browseth.transport, initializer);
       this._wallet = new Wallets.ReadOnly(this._rpc);
@@ -111,6 +111,30 @@ class Browseth {
     api.wallet = this._wallet;
     this.api[name] = api;
     return this;
+  }
+
+  public setGasPrice(amount: string | BN) {
+    let amt = '';
+    if (typeof amount === 'number') {
+      throw new Error(`For {${amount}}, please use a string for numbers to avoid precision issues.`);
+    } else if (typeof amount === 'string') {
+      amt = amount;
+      if (/^-/.test(amt)) {
+        throw new Error(`{${amt}}: Please use a positive number`);
+      }
+      if (!(/^(\d*\.\d+)|\d+$$/.test(amt))) {
+        if (!(/^0x[0-9a-f]+$/i.test(amt))) {
+          throw new Error(`'${amount}' is not a valid number or hex`);
+        }
+      }
+      if (!amt.includes('0x')) {
+        amt = '0x' + new BN(amt).toString(16);
+      }
+    } else { // if BN
+      amt = '0x' + amount.toString(16);
+    }
+    this.options.gasPrice = amt;
+    this.wallet.options.gasPrice = amt;
   }
 
   // public monitorTransaction(transactionHash: string) {}

@@ -5,6 +5,7 @@ import {Default, Rpc} from './rpc';
 
 import {BN} from 'bn.js'
 import {randomBytes} from 'crypto';
+import * as web3 from 'web3';
 import * as NodeHttp from './transport/node-http';
 import {Wallet} from './wallet';
 
@@ -38,19 +39,24 @@ fit('', async () => {
   //   await b.c.simple.e.Withdrawn().logs('0x' + (5637702).toString(16)),
   // );
 
- 
-  // includes decimal place 
-  console.log(Browseth.Units.toWei(12345.678));
-  console.log(Browseth.Units.toWei('12345.678'));
-  console.log(Browseth.Units.toWei('12345.12345678912345678909875654321', 'tether'));
-  console.log(Browseth.Units.toWei('12345.12345678912345678909875654321', 'gwei'));
-  console.log(Browseth.Units.toWei('12345.12345678912345678909875654321', 'wei'));
+  const keystore = '{"version":3,"id":"b919560d-346b-44d4-92a9-8059c6ee7989","address":"82137e3b5a4fd84250bbfbad8c58e65a4460f991","Crypto":{"ciphertext":"f599218f7155512595ee5f191ae922f2c61ba6560c1ac283a1162569f3f490ba","cipherparams":{"iv":"629773b80c288af597383d029ce4a24d"},"cipher":"aes-128-ctr","kdf":"scrypt","kdfparams":{"dklen":32,"salt":"a41900b88518ffd14ee04bbac893d705e4231d52580c9bc72f3c277e663892cd","n":8192,"r":8,"p":1},"mac":"2dd028de90423af0c47549afa819c52a99bd36df2cbf11ad3b386aec79a203ba"}}';
+  const pw = '111111111';
+  const b = new Browseth();
+  // b.wallet = new Browseth.Wallets.Online(b.rpc);
+  // console.log('my address:', await b.wallet.account());
+  // console.log('my balance:', await b.rpc.send('eth_getBalance', await b.wallet.account(), 'latest'));
+  b.wallet = new Browseth.Wallets.Offline(b.rpc, Browseth.Signers.PrivateKey.fromV3(keystore, pw));
+  console.log('my address:', await b.wallet.account());
+  // console.log('my balance:', await b.rpc.send('eth_getBalance', await b.wallet.account(), 'latest'));
+  b.setGasPrice('8');
+  const t = await b.wallet.send({
+    to: '0x9971404CD2c28F824b6321793c94d9B9A1ca76F8',
+    value: '0xf12f1',
+    chainId: 123,
+  });
+  console.log('tx:', t);
+  console.log('their balance:', await b.rpc.send('eth_getBalance', '0x9971404CD2c28F824b6321793c94d9B9A1ca76F8', 'latest'));
+  console.log('gas price:', b.wallet.options.gasPrice);
+  // console.log(b.wallet.options.gasPrice);
 
-  // ignores decimal place
-  console.log(Browseth.Units.toWei(new BN(12345.678)));
-  console.log(Browseth.Units.toWei('0x3039.AD916872B020C49BA5E3'));
-  console.log(Browseth.Units.toWei('0X3039.AD916872B020C49BA5E3'));
-  console.log(Browseth.Units.toWei('0x3039'));
-  // console.log(Browseth.Units.toWei(new BN(12345).toString()));
 });
-

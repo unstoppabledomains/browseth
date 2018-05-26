@@ -7,6 +7,7 @@ export class Online implements Wallet {
   public batch = {
     send: async (transaction: object, cb: () => void) => {
       const tx: any = {
+        gasPrice: this.options.gasPrice,
         ...transaction,
         from: await this.account(),
       };
@@ -26,6 +27,7 @@ export class Online implements Wallet {
         {
           method: 'eth_call',
           params: [toHex({
+            gasPrice: this.options.gasPrice,
             ...transaction,
             from: await this.account(),
           }),
@@ -39,6 +41,7 @@ export class Online implements Wallet {
         {
           method: 'eth_estimateGas',
           params: [toHex({
+            gasPrice: this.options.gasPrice,
             ...transaction,
             from: await this.account(),
           })],
@@ -49,7 +52,7 @@ export class Online implements Wallet {
     }
   }
 
-  constructor(public rpc: Rpc) {}
+  constructor(public rpc: Rpc, public options: {gasPrice: string} = {gasPrice: '0x0'}) {}
 
   public account = () => this.rpc.send('eth_coinbase');
 
@@ -57,6 +60,7 @@ export class Online implements Wallet {
 
   public send = async (transaction: object) => {
     const tx: any = {
+      gasPrice: this.options.gasPrice,
       ...transaction,
       from: await this.account(),
     };
@@ -73,6 +77,7 @@ export class Online implements Wallet {
     this.rpc.send(
       'eth_call',
       toHex({
+        gasPrice: this.options.gasPrice,
         ...transaction,
         from: await this.account(),
       }),
@@ -83,6 +88,7 @@ export class Online implements Wallet {
     this.rpc.send(
       'eth_estimateGas',
       toHex({
+        gasPrice: this.options.gasPrice,
         ...transaction,
         from: await this.account(),
       }),
