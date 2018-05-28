@@ -70,7 +70,11 @@ export interface AbiCodec {
 
 export function createAbiCodec(jsonInterface: JsonInterface): AbiCodec {
   const abi: any = {
-    constructor: {},
+    constructor: {
+      encode(bytecode: string, ...params: any[]) {
+        return '0x' + bytecode;
+      },
+    },
     event: {},
     function: {},
   };
@@ -100,47 +104,59 @@ export function createAbiCodec(jsonInterface: JsonInterface): AbiCodec {
           encode(topics: {[k: string]: any}) {
             const encodedTopics = [] as any[];
 
+            // [keccak('Test(uint256,string)')]
             if (!element.anonymous) {
               encodedTopics.push('0x' + signature);
             }
 
+            // {
+            //   anonymous: false,
+            //   inputs: [
+            //     {indexed: true, name: 'test', type: 'bytes32'},
+            //     {indexed: true, name: 'someNumber', type: 'bytes32'},
+            //     {indexed: true, name: 'value', type: 'uint256'},
+            //   ],
+            //   name: 'Test',
+            //   type: 'event',
+            // },
+
             element.inputs.forEach(i => {
-              // console.log(i.indexed, topics[i.name]);
               if (i.indexed && topics[i.name]) {
-                /*
-                  if (Array.isArray(topics[i.name])) {
-                    const encodedTopicArray: string[] = [];
+                if (Array.isArray(topics[i.name])) {
+                  const encodedTopicArray: string[] = [];
 
-                    topics[i.name].forEach((t: any) => {
-                      const ete = Abi.rawEncode([i.type], t).toString('hex');
+                  topics[i.name].forEach((t: any) => {
+                    const encodedTopicElement = Abi.rawEncode(
+                      [i.type],
+                      [t],
+                    ).toString('hex');
 
-                      encodedTopicArray.push(
-                        '0x' +
-                          (ete.length > 32
-                            ? Abi.soliditySHA3([i.type], topics[i.name]).toString(
-                                'hex',
-                              )
-                            : ete),
-                      );
-                    });
+                    encodedTopicArray.push(
+                      '0x' +
+                        (encodedTopicElement.length > 64
+                          ? Abi.soliditySHA3([i.type], [t]).toString('hex')
+                          : encodedTopicElement),
+                    );
+                  });
 
-                    encodedTopics.push(encodedTopicArray);
-                    return;
-                  }
-                */
-                // console.log([i.type], [topics[i.name]]);
-                const encodedTopic = Abi.rawEncode(
-                  [i.type],
-                  [topics[i.name]],
-                ).toString('hex');
-                // console.log(encodedTopic);
-                encodedTopics.push(
-                  '0x' +
-                    (encodedTopic.length > 64
-                      ? Abi.soliditySHA3([i.type], [topics[i.name]])
-                      : encodedTopic),
-                );
-                // encodedTopics.push(topics[i.name]);
+                  encodedTopics.push(encodedTopicArray);
+                } else {
+                  const encodedTopic = Abi.rawEncode(
+                    [i.type],
+                    [topics[i.name]],
+                  ).toString('hex');
+
+                  encodedTopics.push(
+                    '0x' +
+                      (encodedTopic.length > 64
+                        ? Abi.soliditySHA3([i.type], [topics[i.name]]).toString(
+                            'hex',
+                          )
+                        : encodedTopic),
+                  );
+                }
+              } else {
+                encodedTopics.push(null);
               }
             });
 
@@ -156,8 +172,13 @@ export function createAbiCodec(jsonInterface: JsonInterface): AbiCodec {
               .filter(({v}) => v.indexed);
 
             const indexedDecoded = indexedInputs.map(({v}, i) => {
+              console.log(v, i);
               return Abi.rawDecode(
-                [v.type],
+                [
+                  v.type === 'string' || v.type === 'bytes'
+                    ? 'bytes32'
+                    : v.type,
+                ],
                 Buffer.from(log.topics[i].replace('0x', ''), 'hex'),
               )[0];
             });
@@ -226,6 +247,8 @@ export function createAbiCodec(jsonInterface: JsonInterface): AbiCodec {
       }
     }
   });
+
+  // if abi.constructor then like return or if not abi constructor then right
 
   return abi;
 }

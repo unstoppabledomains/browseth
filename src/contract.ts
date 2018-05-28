@@ -2,6 +2,7 @@
 import {EventElement} from './abi';
 import {AbiCodec, createAbiCodec, JsonInterface} from './abi';
 // import TransactionListener from './transaction-listener';
+import {toHex} from './crypto';
 import {Wallet} from './wallet';
 
 export class Contract {
@@ -63,8 +64,8 @@ export class Contract {
             ) =>
               this.wallet.rpc
                 .send('eth_getLogs', {
-                  fromBlock,
-                  toBlock,
+                  fromBlock: toHex(fromBlock),
+                  toBlock: toHex(toBlock),
                   address: address ? address : this.options.address,
                   topics: encodedTopics,
                 })
