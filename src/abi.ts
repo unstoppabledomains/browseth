@@ -248,7 +248,7 @@ export function createAbiCodec(jsonInterface: JsonInterface): AbiCodec {
     }
   });
 
-  // if abi.constructor then like return or if not abi constructor then right
+  // if abi.constructor then return or if not abi constructor then
 
   return abi;
 }

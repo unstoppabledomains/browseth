@@ -123,5 +123,33 @@ describe('transaction.countByBlock', () => {
   });
 });
 
+describe('.block()', () => {
+  it('takes block as a string', async done => {
+    await e.block('0x65');
+    done();
+  });
+  it('takes block as a number, returns null when necessary', async done => {
+    await e.block(1298172983712);
+    done();
+  });
+  it('takes block as a hash', async done => {
+    await e.block(
+      '0xb7e2c7b05da9e72dc1febdf7e8a156216b6f172e2ce96c0a94d69517212ea5e8',
+    );
+    done();
+  });
+});
+
+describe('.blockCount()', () => {
+  it('returns a block number', async done => {
+    await e.blockCount();
+    done();
+  });
+});
+
+describe('.uncle()', () => {
+  it('takes block as a string', async done => {});
+});
+
 // const deployedCode = await e.codeAt(transaction.contractAddress, 'latest');
 // expect(deployedCode).toBe('0x' + bin.slice(64));

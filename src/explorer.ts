@@ -69,14 +69,14 @@ export interface BlockObject {
 
 export default class BlockchainExplorer {
   public transaction = {
-    receipt: (hash: string): Promise<TransactionObject> | null => {
+    receipt: (hash: string): Promise<TransactionObject | null> => {
       return this.rpc.send('eth_getTransactionReceipt', hash);
     },
 
     byBlockAndIndex: (
       block: string | number,
       index: string | number,
-    ): Promise<TransactionObject> | null => {
+    ): Promise<TransactionObject | null> => {
       const blockNum = checkIfString(block);
       const idx = checkIfString(index);
       return /^0x([0-9a-f]{64})/i.test(blockNum)
@@ -88,7 +88,7 @@ export default class BlockchainExplorer {
           );
     },
 
-    byHash: (hash: string): Promise<TransactionObject> | null => {
+    byHash: (hash: string): Promise<TransactionObject | null> => {
       return this.rpc.send('eth_getTransactionByHash', hash);
     },
 

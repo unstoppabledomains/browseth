@@ -14,6 +14,10 @@ export function toHex(v: any): any {
   }
   if (typeof v === 'number') {
     return toHex(new BN(v));
+  } else if (typeof v === 'string') {
+    return /^0x/i.test(v)
+      ? '0x' + new BN(v.replace('0x', ''), 16).toString(16)
+      : '0x' + new BN(v).toString(16);
   } else if (v instanceof BN) {
     return '0x' + v.toString(16);
   } else if (typeof v === 'object' || Array.isArray(v)) {
