@@ -89,7 +89,10 @@ export abstract class Rpc {
     });
   }
 
-  public async promiseBatch(resolveFun:(...promises: Array<Promise<any>>) => Promise<any[]> | Request, ...requests: Request[]): Promise<any[]> {
+  public async promiseBatch(
+    resolveFun: (...promises: Array<Promise<any>>) => Promise<any[]> | Request,
+    ...requests: Request[]
+  ): Promise<any[]> {
     const promises: Array<Promise<any>> = [];
 
     let rF = Promise.all.bind(Promise);
@@ -121,16 +124,16 @@ export abstract class Rpc {
             ] as [Request, (err: Error | void, response: any) => void],
         ),
       );
-    })
+    });
 
-    return rF(promises);    
+    return rF(promises);
   }
 
   public prep(
     request: Request,
     cb: (err: Error | void, response?: any) => void,
   ): [Request, ((err: Error | void, json?: any) => void)] {
-    console.log(request);
+    // console.log(request);
     const payload: Request = {
       method: request.method,
       params: request.params || [],

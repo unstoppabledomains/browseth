@@ -96,23 +96,24 @@ fit('', async () => {
   const tx = await txl.resolveTransaction(txh);
   // console.log('TX', tx);
   b.c.Simple.options.address = tx.contractAddress;
-  await b.c.Simple.f.f('hello', 'world').send();
-  await b.c.Simple.f
-    .f(
-      'on the next episode of dragon ball z frieza and cell join forces to put a stop to goku and the z squad',
-      'badger badger badger badger badger badger badger badger badger badger badger badger mushroom mushroom',
-    )
-    .send();
-  console.log(
-    await b.c.Simple.e
-      .Test({
-        a: [
-          'asd',
-          'on the next episode of dragon ball z frieza and cell join forces to put a stop to goku and the z squad',
-        ],
-        b:
-          'badger badger badger badger badger badger badger badger badger badger badger badger mushroom mushroom',
-      })
-      .logs(0),
-  );
+
+  // await b.c.Simple.f.f('hello', 'world').send();
+  // await b.c.Simple.f
+  //   .f(
+  //     'on the next episode of dragon ball z frieza and cell join forces to put a stop to goku and the z squad',
+  //     'badger badger badger badger badger badger badger badger badger badger badger badger mushroom mushroom',
+  //   )
+  //   .send();
+  // console.log(
+  //   await b.c.Simple.e
+  //     .Test({
+  //       a: [
+  //         'asd',
+  //         'on the next episode of dragon ball z frieza and cell join forces to put a stop to goku and the z squad',
+  //       ],
+  //       b:
+  //         'badger badger badger badger badger badger badger badger badger badger badger badger mushroom mushroom',
+  //     })
+  //     .logs(0),
+  // );
 });

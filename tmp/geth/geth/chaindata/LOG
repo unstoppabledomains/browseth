@@ -152,3 +152,37 @@
 13:38:07.942892 table@compaction committed F-1 S-3KiB Ke·0 D·181 T·7.028669ms
 13:38:07.943220 table@remove removed @33
 13:38:07.943468 table@remove removed @32
+=============== May 28, 2018 (PDT) ===============
+18:03:09.855606 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+18:03:09.856612 version@stat F·[0 1] S·150KiB[0B 150KiB] Sc·[0.00 0.00]
+18:03:09.856640 db@open opening
+18:03:09.856820 journal@recovery F·1
+18:03:09.863433 journal@recovery recovering @34
+18:03:09.880169 memdb@flush created L0@37 N·3247 S·297KiB "Blo..ion,v2058":"r\x00\x00..\x977\x93,v5298"
+18:03:09.893852 version@stat F·[1 1] S·448KiB[297KiB 150KiB] Sc·[0.25 0.00]
+18:03:09.908726 db@janitor F·4 G·0
+18:03:09.908781 db@open done T·52.12383ms
+18:03:09.955093 table@compaction L0·1 -> L1·1 S·448KiB Q·5307
+18:03:09.978120 table@build created L1@40 N·3423 S·405KiB "\x03\x95\x06..\v_I,v17":"\xfb\x05\x89..Q\xa5\xb9,v889"
+18:03:09.978331 version@stat F·[0 1] S·405KiB[0B 405KiB] Sc·[0.00 0.00]
+18:03:09.978649 table@compaction committed F-1 S-42KiB Ke·0 D·1111 T·23.190883ms
+18:03:09.979340 table@remove removed @37
+18:03:09.979714 table@remove removed @36
+18:14:55.546911 db@close closing
+18:14:55.547193 db@close done T·511.165µs
+=============== May 28, 2018 (PDT) ===============
+18:16:46.719216 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+18:16:46.719976 version@stat F·[0 1] S·405KiB[0B 405KiB] Sc·[0.00 0.00]
+18:16:46.720008 db@open opening
+18:16:46.720090 journal@recovery F·1
+18:16:46.724711 journal@recovery recovering @38
+18:16:46.727486 memdb@flush created L0@41 N·140 S·11KiB "\x05\xf2\xcb..n\xf7\xae,v5409":"\xed/\xba..\x9c\xf1\xe0,v5424"
+18:16:46.732457 version@stat F·[1 1] S·416KiB[11KiB 405KiB] Sc·[0.25 0.00]
+18:16:46.733859 db@janitor F·4 G·0
+18:16:46.733961 db@open done T·13.934281ms
+18:44:07.075736 table@compaction L0·1 -> L1·1 S·416KiB Q·5738
+18:44:07.096562 table@build created L1@44 N·3515 S·417KiB "\x03\x95\x06..\v_I,v17":"\xfb\x05\x89..Q\xa5\xb9,v889"
+18:44:07.096975 version@stat F·[0 1] S·417KiB[0B 417KiB] Sc·[0.00 0.00]
+18:44:07.098328 table@compaction committed F-1 S+947B Ke·0 D·48 T·21.400772ms
+18:44:07.098552 table@remove removed @41
+18:44:07.098997 table@remove removed @40
