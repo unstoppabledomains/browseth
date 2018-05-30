@@ -1,3 +1,4 @@
+import {BN} from 'bn.js';
 import * as Rpcs from './rpc';
 
 // interface ToStringable {toString(): string;}
@@ -67,6 +68,12 @@ export interface BlockObject {
   uncles: string[]; // Array - Array of uncle hashes.
 }
 
+export interface SyncStatus {
+  startingBlock: number; // QUANTITY - The block at which the import started (will only be reset, after the sync reached his head)
+  currentBlock: number; // QUANTITY - The current block, same as eth_blockNumber
+  highestBlock: number; // QUANTITY - The estimated highest block
+}
+
 export default class BlockchainExplorer {
   public transaction = {
     receipt: (hash: string): Promise<TransactionObject | null> => {
@@ -92,7 +99,7 @@ export default class BlockchainExplorer {
       return this.rpc.send('eth_getTransactionByHash', hash);
     },
 
-    countByBlock: (block: number | string): Promise<number> | null => {
+    countByBlock: (block: number | string): Promise<number | null> => {
       const blockNum = checkIfString(block);
       return /^0x([0-9a-f]{64})/i.test(blockNum)
         ? this.rpc.send('eth_getBlockTransactionCountByHash', blockNum)
@@ -116,23 +123,31 @@ export default class BlockchainExplorer {
     return this.rpc.send('eth_blockNumber');
   }
 
-  public uncle(block: string | number, index: number): Promise<BlockObject> {
+  public uncle(
+    block: string | number,
+    index: string | number,
+  ): Promise<BlockObject> {
     const blockNum = checkIfString(block);
+    const idx = checkIfString(index);
     return /^0x([0-9a-f]{64})/i.test(blockNum)
-      ? this.rpc.send('eth_getUncleByBlockHashAndIndex')
-      : this.rpc.send('eth_getUncleByBlockNumberAndIndex');
+      ? this.rpc.send('eth_getUncleByBlockHashAndIndex', blockNum, idx)
+      : this.rpc.send('eth_getUncleByBlockNumberAndIndex', blockNum, idx);
   }
 
-  public uncleCount(block: string | number): Promise<number> {
+  public uncleCount(block: string | number): Promise<number | null> {
     const blockNum = checkIfString(block);
     return /^0x([0-9a-f]{64})/i.test(blockNum)
-      ? this.rpc.send('eth_getUncleCountByBlockHash')
-      : this.rpc.send('eth_getUncleCountByBlockNumber');
+      ? this.rpc.send('eth_getUncleCountByBlockHash', blockNum)
+      : this.rpc.send('eth_getUncleCountByBlockNumber', blockNum);
   }
 
-  public balanceOf(address: string): Promise<string> {
+  public balanceOf(
+    address: string,
+    block: string | number,
+  ): Promise<string | null> {
+    const blockNum = checkIfString(block);
     const addr = /^0x/.test(address) ? address : '0x' + address;
-    return this.rpc.send('eth_getBalance', addr);
+    return this.rpc.send('eth_getBalance', addr, blockNum);
   }
 
   public hashRate(): Promise<string> {
@@ -152,26 +167,93 @@ export default class BlockchainExplorer {
     return this.rpc.send('web3_clientVersion');
   }
 
-  // BONUS
-
-  // eth_getCode
   public codeAt(address: string, block: string | number): Promise<string> {
     const addr = /^0x/.test(address) ? address : '0x' + address;
     const blockNum = checkIfString(block);
-    try {
-      return this.rpc.send('eth_getCode', addr, blockNum);
-    } catch (err) {
-      console.error(err);
-    }
+    return this.rpc.send('eth_getCode', addr, blockNum);
   }
 
-  // eth_getStorageAt
-  // public storageAt(address: Data, block: Block):Promise<??>;
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+
+  public protocolVersion(): Promise<string> {
+    return this.rpc.send('eth_protocolVersion');
+  }
+
+  public sshVersion(): Promise<string> {
+    return this.rpc.send('shh_version');
+  }
+
+  /////////////////////////////////////////////////////////////////////////////////////////////////
+
+  public clientIsListening(): Promise<boolean> {
+    return this.rpc.send('net_listening');
+  }
+
+  public peersConnected(): Promise<number> {
+    return this.rpc.send('net_peerCount');
+  }
+
+  public isSyncing(): Promise<SyncStatus | boolean> {
+    return this.rpc.send('eth_syncing');
+  }
+
+  public isMining(): Promise<boolean> {
+    return this.rpc.send('eth_mining');
+  }
+
+  // Returns the hash of the current block, the seedHash, and the boundary condition to be met ("target").
+  public getWork(): Promise<[string, string, string]> {
+    return this.rpc.send('eth_getWork');
+  }
+
+  //////////////////////////////////////////////////////////////////////////
+
+  public coinbase(): Promise<string> {
+    return this.rpc.send('eth_coinbase');
+  }
+
+  public accounts(): Promise<string[]> {
+    return this.rpc.send('eth_accounts');
+  }
+
+  public gasPrice(): Promise<number> {
+    return this.rpc.send('eth_gasPrice');
+  }
+
+  public transactionCount(
+    address: string,
+    block: string | number,
+  ): Promise<number> {
+    const addr = checkIfString(address);
+    const blockNum = checkIfString(block);
+    return this.rpc.send('eth_getTransactionCount', addr, blockNum);
+  }
+
+  public blockTransactionCount(block: string | number): Promise<number> {
+    const blockNum = checkIfString(block);
+    return /^0x([0-9a-f]{64})/i.test(blockNum)
+      ? this.rpc.send('eth_getBlockTransactionCountByHash', blockNum)
+      : this.rpc.send('eth_getBlockTransactionCountByNumber', blockNum);
+  }
+
+  public storageAt(
+    address: string,
+    index: string | number,
+    block: string | number,
+  ): Promise<string> {
+    const idx = checkIfString(index);
+    const blockNum = checkIfString(block);
+    return this.rpc.send('eth_getStorageAt', address, idx, blockNum);
+  }
 }
 
-function checkIfString(block: string | number) {
-  return typeof block === 'number' ? '0x' + block.toString(16) : block;
+function checkIfString(val: string | number) {
+  if (typeof val === 'string') {
+    if (/[g-z]/i.test(val)) {
+      // if 'latest' 'earliest' 'pending'
+      return val;
+    }
+    return /^0x/i.test(val) ? val : '0x' + new BN(val).toString(16);
+  }
+  return '0x' + val.toString(16);
 }
-0x608060405234801561001057600080fd5b50610187806100206000396000f300;
-'0x60806040526004361061004c576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff16806318159cfb14610051578063771602f714610097575b600080fd5b6100956004803603810190808035906020019082018035906020019190919293919293908035906020019082018035906020019190919293919293905050506100e2565b005b3480156100a357600080fd5b506100cc600480360381019080803590602001909291908035906020019092919050505061014e565b6040518082815260200191505060405180910390f35b818160405180838380828437820191505092505050604051809103902084846040518083838082843782019150509250505060405180910390207f74cb234c0dd0ccac09c19041a69978ccb865f1f44a2877a009549898f6395b1060405160405180910390a350505050565b60008183019050929150505600a165627a7a72305820dfbb700f57eda16a1cbc1cccde42304941c07f90e852c59105afc812c988a61e0029';
-'0x60806040526004361061004c576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff16806318159cfb14610051578063771602f714610097575b600080fd5b6100956004803603810190808035906020019082018035906020019190919293919293908035906020019082018035906020019190919293919293905050506100e2565b005b3480156100a357600080fd5b506100cc600480360381019080803590602001909291908035906020019092919050505061014e565b6040518082815260200191505060405180910390f35b818160405180838380828437820191505092505050604051809103902084846040518083838082843782019150509250505060405180910390207f74cb234c0dd0ccac09c19041a69978ccb865f1f44a2877a009549898f6395b1060405160405180910390a350505050565b60008183019050929150505600a165627a7a72305820dfbb700f57eda16a1cbc1cccde42304941c07f90e852c59105afc812c988a61e0029';

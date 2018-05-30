@@ -172,7 +172,7 @@ export function createAbiCodec(jsonInterface: JsonInterface): AbiCodec {
               .filter(({v}) => v.indexed);
 
             const indexedDecoded = indexedInputs.map(({v}, i) => {
-              console.log(v, i);
+              // console.log(v, i);
               return Abi.rawDecode(
                 [
                   v.type === 'string' || v.type === 'bytes'

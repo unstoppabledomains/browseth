@@ -133,7 +133,6 @@ export abstract class Rpc {
     request: Request,
     cb: (err: Error | void, response?: any) => void,
   ): [Request, ((err: Error | void, json?: any) => void)] {
-    // console.log(request);
     const payload: Request = {
       method: request.method,
       params: request.params || [],
