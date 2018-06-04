@@ -16,19 +16,21 @@ it('toHex()', () => {
       j: null,
       k: undefined,
       l: '',
+      m: 'latest',
     }),
   ).toEqual({
     a: '0x7b',
     b: '0x0',
     c: '0x1',
-    d: '0x313233',
-    e: '0x0123',
-    f: '0x307831323376',
-    g: {x: '0x307831323376', y: '0x7b', z: '0x22b'},
+    d: '0x7b',
+    e: '0x123',
+    f: '0x123v', // '0x307831323376',
+    g: {x: '0x123v', y: '0x7b', z: '0x22b'},
     h: '0x7',
     i: '0x0',
-    j: '0x',
-    k: '0x',
-    l: '0x',
+    j: undefined,
+    k: undefined,
+    l: '0x0', // check with braden
+    m: 'latest',
   });
 });

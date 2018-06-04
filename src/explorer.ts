@@ -173,51 +173,12 @@ export default class BlockchainExplorer {
     return this.rpc.send('eth_getCode', addr, blockNum);
   }
 
-  //////////////////////////////////////////////////////////////////////////////////////////////////
-
   public protocolVersion(): Promise<string> {
     return this.rpc.send('eth_protocolVersion');
   }
 
   public sshVersion(): Promise<string> {
     return this.rpc.send('shh_version');
-  }
-
-  /////////////////////////////////////////////////////////////////////////////////////////////////
-
-  public clientIsListening(): Promise<boolean> {
-    return this.rpc.send('net_listening');
-  }
-
-  public peersConnected(): Promise<number> {
-    return this.rpc.send('net_peerCount');
-  }
-
-  public isSyncing(): Promise<SyncStatus | boolean> {
-    return this.rpc.send('eth_syncing');
-  }
-
-  public isMining(): Promise<boolean> {
-    return this.rpc.send('eth_mining');
-  }
-
-  // Returns the hash of the current block, the seedHash, and the boundary condition to be met ("target").
-  public getWork(): Promise<[string, string, string]> {
-    return this.rpc.send('eth_getWork');
-  }
-
-  //////////////////////////////////////////////////////////////////////////
-
-  public coinbase(): Promise<string> {
-    return this.rpc.send('eth_coinbase');
-  }
-
-  public accounts(): Promise<string[]> {
-    return this.rpc.send('eth_accounts');
-  }
-
-  public gasPrice(): Promise<number> {
-    return this.rpc.send('eth_gasPrice');
   }
 
   public transactionCount(
@@ -235,6 +196,31 @@ export default class BlockchainExplorer {
       ? this.rpc.send('eth_getBlockTransactionCountByHash', blockNum)
       : this.rpc.send('eth_getBlockTransactionCountByNumber', blockNum);
   }
+
+  /////////////////////////////////////////////////////////////////////////////////////////////////
+
+  // public clientIsListening(): Promise<boolean> {
+  //   return this.rpc.send('net_listening');
+  // }
+
+  // public peersConnected(): Promise<number> {
+  //   return this.rpc.send('net_peerCount');
+  // }
+
+  // public isSyncing(): Promise<SyncStatus | boolean> {
+  //   return this.rpc.send('eth_syncing');
+  // }
+
+  // public isMining(): Promise<boolean> {
+  //   return this.rpc.send('eth_mining');
+  // }
+
+  // // Returns the hash of the current block, the seedHash, and the boundary condition to be met ("target").
+  // public getWork(): Promise<[string, string, string]> {
+  //   return this.rpc.send('eth_getWork');
+  // }
+
+  //////////////////////////////////////////////////////////////////////////
 
   public storageAt(
     address: string,

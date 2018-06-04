@@ -102,7 +102,7 @@ export function createAbiCodec(jsonInterface: JsonInterface): AbiCodec {
           ...element,
           signature,
           encode(topics: {[k: string]: any}) {
-            const encodedTopics = [] as any[];
+            let encodedTopics = [] as any[];
 
             // [keccak('Test(uint256,string)')]
             if (!element.anonymous) {
@@ -145,7 +145,6 @@ export function createAbiCodec(jsonInterface: JsonInterface): AbiCodec {
                     [i.type],
                     [topics[i.name]],
                   ).toString('hex');
-
                   encodedTopics.push(
                     '0x' +
                       (encodedTopic.length > 64
@@ -159,7 +158,7 @@ export function createAbiCodec(jsonInterface: JsonInterface): AbiCodec {
                 encodedTopics.push(null);
               }
             });
-
+            encodedTopics = encodedTopics.slice(0, 4);
             return encodedTopics;
           },
           decode(log: any) {
