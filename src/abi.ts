@@ -158,7 +158,12 @@ export function createAbiCodec(jsonInterface: JsonInterface): AbiCodec {
                 encodedTopics.push(null);
               }
             });
-            encodedTopics = encodedTopics.slice(0, 4);
+            while (
+              encodedTopics.length >= 0 &&
+              encodedTopics[encodedTopics.length - 1] == null
+            ) {
+              encodedTopics = encodedTopics.slice(0, -1);
+            }
             return encodedTopics;
           },
           decode(log: any) {

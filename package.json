@@ -25,6 +25,7 @@
     "ethereumjs-util": "^5.1.5",
     "event-emitter": "^0.3.5",
     "fbemitter": "^2.1.1",
+    "ipfs": "^0.29.3",
     "keccak": "^1.4.0",
     "pbkdf2": "^3.0.14",
     "rlp": "^2.0.0",

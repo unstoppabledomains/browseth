@@ -13,7 +13,7 @@ export function toHex(v: any): any {
     return undefined;
   }
   if (typeof v === 'number') {
-    return toHex(new BN(v));
+    return '0x' + new BN(v).toString(16);
   } else if (typeof v === 'string') {
     return /[g-z]/i.test(v) ? v : '0x' + new BN(v).toString(16);
   } else if (v instanceof BN) {

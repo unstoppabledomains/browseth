@@ -9,7 +9,7 @@ import * as web3 from 'web3';
 import * as NodeHttp from './transport/node-http';
 import {Wallet} from './wallet';
 
-import Bzz from './swarm';
+import {Bzz, Ipfs} from './dfs';
 
 Browseth.transport = NodeHttp;
 Browseth.Signers.Ledger.Transport = HWTransportNodeHid as any;
@@ -101,26 +101,40 @@ fit('', async () => {
   // console.log('TX', tx);
   b.c.Simple.options.address = tx.contractAddress;
 
-  await b.c.Simple.f.f('hello', 'world').send();
-  await b.c.Simple.f
-    .f
-    // 'on the next episode of dragon ball z frieza and cell join forces to put a stop to goku and the z squad',
-    // 'badger badger badger badger badger badger badger badger badger badger badger badger mushroom mushroom',
-    ()
-    .send();
-  // console.log(
-  const asd = await b.c.Simple.event
-    .Test() // {
-    //   a: [
-    //     'asd',
-    //     'on the next episode of dragon ball z frieza and cell join forces to put a stop to goku and the z squad',
-    //   ],
-    //   b:
-    //     'badger badger badger badger badger badger badger badger badger badger badger badger mushroom mushroom',
-    // })
-    .logs();
-  console.log(asd);
+  // await b.c.Simple.f.f('hello', 'world').send();
+  // await b.c.Simple.f
+  //   .f
+  // // 'on the next episode of dragon ball z frieza and cell join forces to put a stop to goku and the z squad',
+  // // 'badger badger badger badger badger badger badger badger badger badger badger badger mushroom mushroom',
+  //   ()
+  //   .send();
+  // // console.log(
+  // const asd = await b.c.Simple.event
+  //   .Test() // {
+  //   //   a: [
+  //   //     'asd',
+  //   //     'on the next episode of dragon ball z frieza and cell join forces to put a stop to goku and the z squad',
+  //   //   ],
+  //   //   b:
+  //   //     'badger badger badger badger badger badger badger badger badger badger badger badger mushroom mushroom',
+  //   // })
+  //   .logs();
+  // console.log(asd);
   // );
+
   // const bzz = new Bzz();
   // console.log(bzz.swarm);
+
+  const ipfs = new Ipfs();
+  await ipfs.start();
+  // await ipfs.stop();
+  // try {
+  //   await ipfs.start();
+  // } catch (e) {
+  //   console.error('err', e);
+  // }
+  await ipfs.stop();
+
+  // await ipfs.stop();
+  // console.log(ipfs.node);
 });
