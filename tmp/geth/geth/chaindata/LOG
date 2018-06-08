@@ -205,3 +205,6 @@
 14:37:01.700288 table@compaction committed F-1 S-75KiB Ke·0 D·2321 T·40.657971ms
 14:37:01.700604 table@remove removed @45
 14:37:01.701556 table@remove removed @44
+=============== Jun 8, 2018 (PDT) ===============
+14:19:06.224031 db@close closing
+14:19:06.227327 db@close done T·3.414152ms

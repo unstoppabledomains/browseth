@@ -55,7 +55,8 @@ describe('ipfs', () => {
 
   it('can download one file', async done => {
     const uploadedData = await ipfs.upload(f2);
-    const downloadedData = (await ipfs.download(uploadedData[0].hash)) as any;
+    const downloadedData = await ipfs.download(uploadedData[0].hash);
+    // console.log(downloadedData);
     expect(downloadedData.toString()).toBe(f2.toString());
 
     /* DOWNLOADING PIC
@@ -67,7 +68,7 @@ describe('ipfs', () => {
   });
 
   it('can upload multiple files/directory', async done => {
-    const uploadedData = (await ipfs.upload(dir)) as any;
+    const uploadedData = await ipfs.upload(dir);
     // console.log(uploadedData);
     expect(uploadedData[uploadedData.length - 1].hash).toEqual(
       'QmXJa48wxLSRhDLadhJGr1y4MnsGKnnTdFEUhTHq9XSrod',
@@ -81,7 +82,7 @@ describe('ipfs', () => {
   it('can display uploaded files at a given path (viewFiles())', async done => {
     const upped = await ipfs.upload(dir);
     // console.log(upped);
-    const ls = (await ipfs.viewFiles(upped[0].hash)) as any;
+    const ls = await ipfs.viewFiles(upped[0].hash);
     // console.log(ls);
     expect(ls.length).toBe(2);
     done();
@@ -89,7 +90,7 @@ describe('ipfs', () => {
 
   it('can download a directory', async done => {
     const up = await ipfs.upload(dir);
-    const dl = (await ipfs.downloadDirectory(up[0].hash)) as any;
+    const dl = await ipfs.downloadDirectory(up[0].hash);
     // console.log(dl);
     expect(dl.length).toBe(3);
     done();
@@ -99,14 +100,20 @@ describe('ipfs', () => {
     const obj = {
       a: 1,
       b: 2,
+      asd: {
+        z: 'qwe',
+        y: 123,
+        x: 'asd',
+      },
     };
-    const up = await ipfs.uploadDag(obj, {
-      format: 'dag-cbor',
-      hashAlg: 'sha2-256',
-    });
-    console.log(up);
-    const down = await ipfs.downloadDag(up);
-    console.log(down);
+    const up = await ipfs.uploadObject(obj);
+    // console.log(up);
+    expect('codec' in up).toBe(true);
+    expect('version' in up).toBe(true);
+    expect('multihash' in up).toBe(true);
+    const down = await ipfs.downloadObject(up);
+    // console.log(down);
+    expect(down.value).toEqual(obj);
     done();
   });
 

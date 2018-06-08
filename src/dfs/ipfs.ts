@@ -64,23 +64,28 @@ export interface UploadOptions {
   onlyHash: boolean; // (boolean): doesn't actually add the file to IPFS, but rather calculates its hash.
 }
 
+export interface CID {
+  version: number;
+  codec: string;
+  multihash: Buffer;
+}
+
 export class Ipfs {
   private node: any;
 
   constructor(private options?: IpfsOptions) {}
 
-  public start(): Promise<void> {
+  public start(): Promise<any> {
     if (!this.node) {
       this.node = new IPFS(this.options);
       this.node.on('error', () => {
         /*  */
       });
-      console.log(this.node);
+      // console.log(this.node);
       return new Promise(resolve => {
         this.node.on('ready', resolve);
       });
     }
-    // does it need async/await if returns promise?
     return new Promise((resolve, reject) => {
       this.node.start((err: any) => {
         if (err) {
@@ -118,7 +123,7 @@ export class Ipfs {
     data: string | Buffer | ArrayBuffer | ArrayBufferView | object[],
     options?: UploadOptions,
     cb?: () => void,
-  ) {
+  ): Promise<Array<{path: string; hash: string; size: number}>> {
     let files: any;
 
     if (data instanceof ArrayBuffer) {
@@ -143,7 +148,7 @@ export class Ipfs {
     });
   }
 
-  public download(path: string): Promise<void> {
+  public download(path: string): Promise<Buffer> {
     return new Promise((resolve, reject) => {
       this.node.files.cat(path, (err: any, res: any) => {
         if (err) {
@@ -155,7 +160,17 @@ export class Ipfs {
     });
   }
 
-  public viewFiles(path: string): Promise<void> {
+  public viewFiles(
+    path: string,
+  ): Promise<
+    Array<{
+      depth: number;
+      name: string;
+      path: string;
+      size: number;
+      type: string;
+    }>
+  > {
     return new Promise((resolve, reject) => {
       this.node.ls(path, (err: any, res: any) => {
         if (err) {
@@ -167,7 +182,19 @@ export class Ipfs {
     });
   }
 
-  public downloadDirectory(path: string): Promise<void> {
+  public downloadDirectory(
+    path: string,
+  ): Promise<
+    Array<{
+      depth: number;
+      name: string;
+      path: string;
+      size: number;
+      hash: Buffer;
+      content: Buffer | undefined;
+      type: string;
+    }>
+  > {
     return new Promise((resolve, reject) => {
       this.node.files.get(path, (err: any, res: any) => {
         if (err) {
@@ -179,9 +206,26 @@ export class Ipfs {
     });
   }
 
-  public uploadDag(node: any, options: any) {
+  public uploadObject(
+    obj: any,
+    options?: {format?: string; hashAlg?: string} | {cid: string},
+  ): Promise<CID> {
+    let opts: {format?: string; hashAlg?: string} | {cid: string} = {
+      format: 'dag-cbor',
+      hashAlg: ' sha2-256',
+    };
+    if (options) {
+      if ('cid' in options) {
+        opts = options;
+      } else {
+        opts = {
+          format: options.format ? options.format : 'dag-cbor',
+          hashAlg: options.hashAlg ? options.hashAlg : 'sha2-256',
+        };
+      }
+    }
     return new Promise((resolve, reject) => {
-      this.node.dag.put(node, options, (err: any, res: any) => {
+      this.node.dag.put(obj, opts, (err: any, res: any) => {
         if (err) {
           reject(err);
         } else {
@@ -191,7 +235,9 @@ export class Ipfs {
     });
   }
 
-  public downloadDag(cid: any) {
+  public downloadObject(
+    cid: CID | string,
+  ): Promise<{value: any; remainderPath: string}> {
     return new Promise((resolve, reject) => {
       this.node.dag.get(cid, (err: any, res: any) => {
         if (err) {
