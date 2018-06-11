@@ -7,9 +7,9 @@ import {
   randomBytes,
 } from 'crypto';
 import {stripZeros, toBuffer} from 'ethereumjs-util';
-import {pbkdf2Sync} from 'pbkdf2';
+import {pbkdf2} from 'pbkdf2';
 import {encode as rlpEncode} from 'rlp';
-import * as scryptsy from 'scryptsy';
+import * as scrypt from 'scrypt-async';
 import {publicKeyCreate, sign} from 'secp256k1';
 import * as uuidv4 from 'uuid/v4';
 import {keccak256} from '../crypto';
@@ -28,7 +28,7 @@ export interface KdfParams {
 export class PrivateKey implements Signer {
   // public static fromV1(json: any, passphrase: string): PrivateKey {}
 
-  public static fromV3(keystore: any, pw: string) {
+  public static async fromV3(keystore: any, pw: string) {
     const parsedKeystore = JSON.parse(
       (typeof keystore === 'string'
         ? keystore
@@ -44,7 +44,7 @@ export class PrivateKey implements Signer {
     const kdfparams = parsedKeystore.crypto.kdfparams;
 
     if (parsedKeystore.crypto.kdf === 'pbkdf2') {
-      derivedKey = pbkdf2Sync(
+      derivedKey = await pbkdf2Async(
         Buffer.from(pw),
         Buffer.from(kdfparams.salt, 'hex'), // salt
         kdfparams.c || 262144, // iterations
@@ -52,14 +52,12 @@ export class PrivateKey implements Signer {
         'sha256',
       );
     } else if (parsedKeystore.crypto.kdf === 'scrypt') {
-      derivedKey = scryptsy(
-        Buffer.from(pw),
-        Buffer.from(kdfparams.salt, 'hex'),
-        kdfparams.n || 262144,
-        kdfparams.r, // memory factor
-        kdfparams.p, // parallelization factor
-        kdfparams.dklen,
-      );
+      derivedKey = scrypt(Buffer.from(pw), Buffer.from(kdfparams.salt, 'hex'), {
+        N: kdfparams.n || 262144,
+        r: kdfparams.r, // memory factor
+        p: kdfparams.p, // parallelization factor
+        dkLen: kdfparams.dklen,
+      });
     } else {
       throw new Error('Unsupported kdf');
     }
@@ -88,19 +86,18 @@ export class PrivateKey implements Signer {
   }
 
   // returns bip39 seed
-  public static fromMnemonic(
+  public static async fromMnemonic(
     phrase: string | string[],
     password?: string,
-  ): PrivateKey {
-    return new PrivateKey(
-      pbkdf2Sync(
-        typeof phrase === 'string' ? phrase : phrase.join(' '),
-        password ? `mnemonic${password}` : 'mnemonic',
-        2048,
-        64,
-        'SHA512',
-      ),
+  ): Promise<PrivateKey> {
+    const key = await pbkdf2Async(
+      typeof phrase === 'string' ? phrase : phrase.join(' '),
+      password ? `mnemonic${password}` : 'mnemonic',
+      2048,
+      64,
+      'SHA512',
     );
+    return new PrivateKey(key);
   }
 
   public static fromRandomBytes() {
@@ -152,21 +149,25 @@ export class PrivateKey implements Signer {
         rlpEncode(
           raw.concat(
             chainId > 0
-              ? [stripZeros(toBuffer(chainId)), Buffer.from([]), Buffer.from([])]
+              ? [
+                  stripZeros(toBuffer(chainId)),
+                  Buffer.from([]),
+                  Buffer.from([]),
+                ]
               : [],
           ),
         ),
       ),
       this.privateKey,
     );
-  
+
     return Promise.resolve(
       '0x' +
         rlpEncode(
           raw.concat(
-            stripZeros(toBuffer(
-              sig.recovery + 27 + (chainId > 0 ? chainId * 2 + 8 : 0),
-            )),
+            stripZeros(
+              toBuffer(sig.recovery + 27 + (chainId > 0 ? chainId * 2 + 8 : 0)),
+            ),
             stripZeros(sig.signature.slice(0, 32)),
             stripZeros(sig.signature.slice(32, 64)),
           ),
@@ -191,7 +192,7 @@ export class PrivateKey implements Signer {
     return `${this.privateKey.toString('hex')}`;
   }
 
-  public toV3(
+  public async toV3(
     pw: string,
     {
       salt = randomBytes(32),
@@ -206,79 +207,74 @@ export class PrivateKey implements Signer {
       p = 1,
     } = {},
   ): Promise<string> {
-    return new Promise((resolve, reject) => {
-      const kdfparams: KdfParams = {
-        dklen,
-        salt: salt.toString('hex'),
-      };
+    const kdfparams: KdfParams = {
+      dklen,
+      salt: salt.toString('hex'),
+    };
 
-      let derivedKey;
+    let derivedKey: Buffer;
 
-      if (kdf === 'pbkdf2') {
-        kdfparams.c = c;
-        kdfparams.prf = 'hmac-sha256';
-        derivedKey = pbkdf2Sync(
-          Buffer.from(pw),
-          salt,
-          kdfparams.c,
-          kdfparams.dklen,
-          'sha256',
-        );
-      } else if (kdf === 'scrypt') {
-        kdfparams.n = n;
-        kdfparams.r = r;
-        kdfparams.p = p;
-        derivedKey = scryptsy(
-          Buffer.from(pw),
-          salt,
-          kdfparams.n,
-          kdfparams.r,
-          kdfparams.p,
-          kdfparams.dklen,
-        );
-      } else {
-        reject(new Error('Unsupported kdf'));
-      }
-
-      const ciph = createCipheriv(cipher, derivedKey.slice(0, 16), iv);
-
-      if (!ciph) {
-        throw new Error('Unsupported cipher');
-      }
-
-      const ciphertext = Buffer.concat([
-        ciph.update(this.privateKey),
-        ciph.final(),
-      ]);
-
-      const mac = keccak256(
-        Buffer.concat([derivedKey.slice(16, 32), ciphertext]),
+    if (kdf === 'pbkdf2') {
+      kdfparams.c = c;
+      kdfparams.prf = 'hmac-sha256';
+      derivedKey = await pbkdf2Async(
+        Buffer.from(pw),
+        salt,
+        kdfparams.c,
+        kdfparams.dklen,
+        'sha256',
       );
+    } else if (kdf === 'scrypt') {
+      kdfparams.n = n;
+      kdfparams.r = r;
+      kdfparams.p = p;
+      derivedKey = await scryptAsync(Buffer.from(pw), salt, {
+        N: kdfparams.n,
+        r: kdfparams.r,
+        p: kdfparams.p,
+        dkLen: kdfparams.dklen,
+      });
+    } else {
+      throw new Error('Unsupported kdf');
+    }
 
-      resolve(
-        JSON.stringify({
-          version: 3,
-          id: uuidv4({random: uuid}),
-          address: this.toAddress(),
-          crypto: {
-            ciphertext: ciphertext.toString('hex'),
-            cipherparams: {
-              iv: iv.toString('hex'),
-            },
-            cipher,
-            kdf,
-            kdfparams,
-            mac: mac.toString('hex'),
-          },
-        }),
-      );
+    const ciph = createCipheriv(cipher, derivedKey.slice(0, 16), iv);
+
+    if (!ciph) {
+      throw new Error('Unsupported cipher');
+    }
+
+    const ciphertext = Buffer.concat([
+      ciph.update(this.privateKey),
+      ciph.final(),
+    ]);
+
+    const mac = keccak256(
+      Buffer.concat([derivedKey.slice(16, 32), ciphertext]),
+    );
+
+    return JSON.stringify({
+      version: 3,
+      id: uuidv4({random: uuid}),
+      address: this.toAddress(),
+      crypto: {
+        ciphertext: ciphertext.toString('hex'),
+        cipherparams: {
+          iv: iv.toString('hex'),
+        },
+        cipher,
+        kdf,
+        kdfparams,
+        mac: mac.toString('hex'),
+      },
     });
   }
 
   public getKeyStoreFileName(date = new Date()) {
-    return `UTC--${date.getUTCFullYear()}-${('0' + (date.getUTCMonth() + 1)).slice(
-      -2,
-    )}-${('0' + date.getUTCDate()).slice(-2)}T${(
+    return `UTC--${date.getUTCFullYear()}-${(
+      '0' +
+      (date.getUTCMonth() + 1)
+    ).slice(-2)}-${('0' + date.getUTCDate()).slice(-2)}T${(
       '0' + date.getUTCHours()
     ).slice(-2)}-${('0' + date.getUTCMinutes()).slice(-2)}-${(
       '0' + date.getUTCSeconds()
@@ -299,4 +295,39 @@ export class PrivateKey implements Signer {
         .toString('hex')
     );
   }
+}
+
+function pbkdf2Async(
+  password: string | Buffer | ArrayBufferView,
+  salt: string | Buffer | ArrayBufferView,
+  iterations: number,
+  keylen: number,
+  digest: string,
+): Promise<Buffer> {
+  return new Promise((resolve, reject) => {
+    pbkdf2(password, salt, iterations, keylen, digest, (err: any, res: any) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(res);
+      }
+    });
+  });
+}
+
+function scryptAsync(
+  password: string | Buffer | ArrayBufferView,
+  salt: string | Buffer | ArrayBufferView,
+  options: {
+    N: number;
+    r: number;
+    p: number;
+    dkLen: number;
+    interruptStep?: number;
+    encoding?: string;
+  },
+): Promise<Buffer> {
+  return new Promise((resolve, reject) => {
+    scrypt(password, salt, options, resolve);
+  }).then(arr => Buffer.from(arr as any));
 }

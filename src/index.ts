@@ -4,6 +4,7 @@ import {BN} from 'bn.js';
 import {JsonInterface} from './abi';
 import * as Apis from './api';
 import {Contract} from './contract';
+import * as Dfs from './dfs';
 import BlockchainExplorer from './explorer';
 import * as Rpcs from './rpc';
 import * as Signers from './signers';
@@ -11,7 +12,6 @@ import * as Signers from './signers';
 import * as Xhr from './transport/xhr';
 // import * as fetch from './transport/fetch';
 import * as Units from './units';
-
 import * as Wallets from './wallet';
 
 Signers.Ledger.Transport = HWTransportU2F;
@@ -22,6 +22,7 @@ class Browseth {
   public static Signers = Signers;
   public static Apis = Apis;
   public static Units = Units;
+  public static Dfs = Dfs;
   public static BlockChainExplorer = BlockchainExplorer;
 
   public static transport = Xhr;

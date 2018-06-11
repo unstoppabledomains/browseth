@@ -7961,6 +7961,10 @@ sax@^1.2.4:
   version "1.2.4"
   resolved "https://registry.yarnpkg.com/sax/-/sax-1.2.4.tgz#2816234e2378bddc4e5354fab5caa895df7100d9"
 
+scrypt-async@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/scrypt-async/-/scrypt-async-2.0.0.tgz#419e8e9b40cef9173b44b4602acf50a3d27cf8ad"
+
 scrypt.js@0.2.0, scrypt.js@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/scrypt.js/-/scrypt.js-0.2.0.tgz#af8d1465b71e9990110bedfc593b9479e03a8ada"

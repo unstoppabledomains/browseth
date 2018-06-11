@@ -122,19 +122,8 @@ fit('', async () => {
   // console.log(asd);
   // );
 
-  // const bzz = new Bzz();
-  // console.log(bzz.swarm);
-
-  const ipfs = new Ipfs();
-  await ipfs.start();
-  // await ipfs.stop();
-  // try {
-  //   await ipfs.start();
-  // } catch (e) {
-  //   console.error('err', e);
-  // }
-  await ipfs.stop();
-
-  // await ipfs.stop();
-  // console.log(ipfs.node);
+  const asd = Browseth.Signers.PrivateKey.fromRandomBytes();
+  const qwe = await asd.toV3(''); // , {kdf: 'pbkdf2'});
+  console.log(asd);
+  console.log(qwe);
 });
