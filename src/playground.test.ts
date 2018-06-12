@@ -5,7 +5,7 @@ import {Default, Rpc} from './rpc';
 
 import {BN} from 'bn.js';
 import {randomBytes} from 'crypto';
-import * as web3 from 'web3';
+import * as Web3 from 'web3';
 import * as NodeHttp from './transport/node-http';
 import {Wallet} from './wallet';
 
@@ -77,8 +77,8 @@ fit('', async () => {
   const keystore =
     '{"version":3,"id":"b919560d-346b-44d4-92a9-8059c6ee7989","address":"82137e3b5a4fd84250bbfbad8c58e65a4460f991","Crypto":{"ciphertext":"f599218f7155512595ee5f191ae922f2c61ba6560c1ac283a1162569f3f490ba","cipherparams":{"iv":"629773b80c288af597383d029ce4a24d"},"cipher":"aes-128-ctr","kdf":"scrypt","kdfparams":{"dklen":32,"salt":"a41900b88518ffd14ee04bbac893d705e4231d52580c9bc72f3c277e663892cd","n":8192,"r":8,"p":1},"mac":"2dd028de90423af0c47549afa819c52a99bd36df2cbf11ad3b386aec79a203ba"}}';
   const pw = '111111111';
-  const b = new Browseth();
-  b.wallet = new Browseth.Wallets.Online(b.rpc);
+  const b = new Browseth('https://mainnet.infura.io/mew');
+  // b.wallet = new Browseth.Wallets.Online(b.rpc);
   // console.log('my address:', await b.wallet.account());
   // console.log('my balance:', await b.rpc.send('eth_getBalance', await b.wallet.account(), 'latest'));
   // b.wallet = new Browseth.Wallets.Offline(b.rpc, Browseth.Signers.PrivateKey.fromV3(keystore, pw));
@@ -95,13 +95,13 @@ fit('', async () => {
   // console.log('gas price:', b.wallet.options.gasPrice);
   // console.log(b.wallet.options.gasPrice);
 
-  b.addContract('Simple', simple as any, {bytecode: bin});
-  const txh = await b.c.Simple.deploy().send();
-  const txl = new Browseth.Apis.TransactionListener(b.wallet);
-  txl.startPolling();
-  const tx = await txl.resolveTransaction(txh);
+  // b.addContract('Simple', simple as any, {bytecode: bin});
+  // const txh = await b.c.Simple.deploy().send();
+  // const txl = new Browseth.Apis.TransactionListener(b.wallet);
+  // txl.startPolling();
+  // const tx = await txl.resolveTransaction(txh);
   // console.log('TX', tx);
-  b.c.Simple.options.address = tx.contractAddress;
+  // b.c.Simple.options.address = tx.contractAddress;
 
   // await b.c.Simple.f.f('hello', 'world').send();
   // await b.c.Simple.f
@@ -124,30 +124,15 @@ fit('', async () => {
   // console.log(asd);
   // );
 
-  const a = {
-    a: 'asdasd',
-    b: {
-      qwe: 'asd',
-    },
-  };
-
-  const ipfs = new Browseth.Fs.Ipfs();
-  console.log(ipfs.getNodeStatus());
-  await ipfs.start();
-  console.log(ipfs.getNodeStatus());
-  const lebron = fs.readFileSync(__dirname + '/fs/lebron.jpg');
-  console.log(lebron);
-  const uploaded = await ipfs.upload(lebron);
-  console.log(uploaded);
-
-  setInterval(() => {
-    console.log(ipfs.getNodeStatus());
-  }, 1000);
-  // const downloaded = await ipfs.download(uploaded[0].hash);
-  // console.log(downloaded);
-  // fs.writeFileSync(__dirname + '/temp.jpg', downloaded);
-  // const u = await ipfs.uploadObject(a);
-  // console.log(u);
-  // const d = await ipfs.downloadObject(u);
-  // console.log(d);
+  const registrarJSON =
+    '[{"constant":false,"inputs":[{"name":"_hash","type":"bytes32"}],"name":"releaseDeed","outputs":[],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"_hash","type":"bytes32"}],"name":"getAllowedTime","outputs":[{"name":"timestamp","type":"uint256"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"unhashedName","type":"string"}],"name":"invalidateName","outputs":[],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"hash","type":"bytes32"},{"name":"owner","type":"address"},{"name":"value","type":"uint256"},{"name":"salt","type":"bytes32"}],"name":"shaBid","outputs":[{"name":"sealedBid","type":"bytes32"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"bidder","type":"address"},{"name":"seal","type":"bytes32"}],"name":"cancelBid","outputs":[],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"_hash","type":"bytes32"}],"name":"entries","outputs":[{"name":"","type":"uint8"},{"name":"","type":"address"},{"name":"","type":"uint256"},{"name":"","type":"uint256"},{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"ens","outputs":[{"name":"","type":"address"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"_hash","type":"bytes32"},{"name":"_value","type":"uint256"},{"name":"_salt","type":"bytes32"}],"name":"unsealBid","outputs":[],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"_hash","type":"bytes32"}],"name":"transferRegistrars","outputs":[],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"},{"name":"","type":"bytes32"}],"name":"sealedBids","outputs":[{"name":"","type":"address"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"_hash","type":"bytes32"}],"name":"state","outputs":[{"name":"","type":"uint8"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"_hash","type":"bytes32"},{"name":"newOwner","type":"address"}],"name":"transfer","outputs":[],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"_hash","type":"bytes32"},{"name":"_timestamp","type":"uint256"}],"name":"isAllowed","outputs":[{"name":"allowed","type":"bool"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"_hash","type":"bytes32"}],"name":"finalizeAuction","outputs":[],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"registryStarted","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"launchLength","outputs":[{"name":"","type":"uint32"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"sealedBid","type":"bytes32"}],"name":"newBid","outputs":[],"payable":true,"type":"function"},{"constant":false,"inputs":[{"name":"labels","type":"bytes32[]"}],"name":"eraseNode","outputs":[],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"_hashes","type":"bytes32[]"}],"name":"startAuctions","outputs":[],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"hash","type":"bytes32"},{"name":"deed","type":"address"},{"name":"registrationDate","type":"uint256"}],"name":"acceptRegistrarTransfer","outputs":[],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"_hash","type":"bytes32"}],"name":"startAuction","outputs":[],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"rootNode","outputs":[{"name":"","type":"bytes32"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"hashes","type":"bytes32[]"},{"name":"sealedBid","type":"bytes32"}],"name":"startAuctionsAndBid","outputs":[],"payable":true,"type":"function"},{"inputs":[{"name":"_ens","type":"address"},{"name":"_rootNode","type":"bytes32"},{"name":"_startDate","type":"uint256"}],"payable":false,"type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"name":"hash","type":"bytes32"},{"indexed":false,"name":"registrationDate","type":"uint256"}],"name":"AuctionStarted","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"hash","type":"bytes32"},{"indexed":true,"name":"bidder","type":"address"},{"indexed":false,"name":"deposit","type":"uint256"}],"name":"NewBid","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"hash","type":"bytes32"},{"indexed":true,"name":"owner","type":"address"},{"indexed":false,"name":"value","type":"uint256"},{"indexed":false,"name":"status","type":"uint8"}],"name":"BidRevealed","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"hash","type":"bytes32"},{"indexed":true,"name":"owner","type":"address"},{"indexed":false,"name":"value","type":"uint256"},{"indexed":false,"name":"registrationDate","type":"uint256"}],"name":"HashRegistered","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"hash","type":"bytes32"},{"indexed":false,"name":"value","type":"uint256"}],"name":"HashReleased","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"hash","type":"bytes32"},{"indexed":true,"name":"name","type":"string"},{"indexed":false,"name":"value","type":"uint256"},{"indexed":false,"name":"registrationDate","type":"uint256"}],"name":"HashInvalidated","type":"event"}]';
+  b.addContract('registrar', registrarJSON, {
+    address: '0x6090A6e47849629b7245Dfa1Ca21D94cd15878Ef',
+  });
+  console.log(Web3.utils.sha3('browseth'));
+  console.log(Browseth.keccak256('browseth'));
+  const state = await b.contract.registrar.function
+    .state('0x' + Browseth.keccak256('browseth'))
+    .call();
+  console.log(state.toString());
 });

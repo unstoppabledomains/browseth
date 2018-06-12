@@ -5,7 +5,7 @@ import createKeccak = require('keccak');
 export function keccak256(message: string | Buffer | DataView) {
   return createKeccak('keccak256')
     .update(message)
-    .digest();
+    .digest('hex');
 }
 
 export function toHex(v: any): any {

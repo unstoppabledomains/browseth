@@ -269,3 +269,5 @@
 10:17:16.639134 table@compaction committed F-1 S-407B Ke·0 D·6 T·61.756231ms
 10:17:16.639347 table@remove removed @60
 10:17:16.639670 table@remove removed @59
+14:55:20.136436 db@close closing
+14:55:20.137988 db@close done T·1.903701ms
