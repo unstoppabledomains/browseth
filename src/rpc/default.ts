@@ -34,3 +34,5 @@ export class Default extends Rpc {
     );
   }
 }
+
+{'Access-Control...': '*'}

@@ -1,12 +1,9 @@
-import HWTransportNodeHid from '@ledgerhq/hw-transport-node-hid';
-import {BN} from 'bn.js';
 import * as fs from 'fs';
 import {Bzz, Ipfs} from '.';
 import Browseth from '../';
 import * as NodeHttp from '../transport/node-http';
 
 Browseth.transport = NodeHttp;
-// Browseth.Signers.Ledger.Transport = HWTransportNodeHid as any;
 
 const ipfs = new Ipfs();
 const f1 = fs.readFileSync(__dirname + '/lebron.jpg');
@@ -21,7 +18,7 @@ const dir = [
     content: f2,
   },
 ];
-
+jest.setTimeout(1000000);
 describe('ipfs', () => {
   it('node can start', async done => {
     expect(ipfs.getNodeStatus()).toBe('uninitialized');

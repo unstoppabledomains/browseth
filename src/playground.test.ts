@@ -9,7 +9,9 @@ import * as web3 from 'web3';
 import * as NodeHttp from './transport/node-http';
 import {Wallet} from './wallet';
 
-import {Bzz, Ipfs} from './dfs';
+import {SSL_OP_MSIE_SSLV2_RSA_PADDING} from 'constants';
+import * as fs from 'fs';
+import {Bzz, Ipfs} from './fs';
 
 Browseth.transport = NodeHttp;
 Browseth.Signers.Ledger.Transport = HWTransportNodeHid as any;
@@ -122,8 +124,30 @@ fit('', async () => {
   // console.log(asd);
   // );
 
-  const asd = Browseth.Signers.PrivateKey.fromRandomBytes();
-  const qwe = await asd.toV3(''); // , {kdf: 'pbkdf2'});
-  console.log(asd);
-  console.log(qwe);
+  const a = {
+    a: 'asdasd',
+    b: {
+      qwe: 'asd',
+    },
+  };
+
+  const ipfs = new Browseth.Fs.Ipfs();
+  console.log(ipfs.getNodeStatus());
+  await ipfs.start();
+  console.log(ipfs.getNodeStatus());
+  const lebron = fs.readFileSync(__dirname + '/fs/lebron.jpg');
+  console.log(lebron);
+  const uploaded = await ipfs.upload(lebron);
+  console.log(uploaded);
+
+  setInterval(() => {
+    console.log(ipfs.getNodeStatus());
+  }, 1000);
+  // const downloaded = await ipfs.download(uploaded[0].hash);
+  // console.log(downloaded);
+  // fs.writeFileSync(__dirname + '/temp.jpg', downloaded);
+  // const u = await ipfs.uploadObject(a);
+  // console.log(u);
+  // const d = await ipfs.downloadObject(u);
+  // console.log(d);
 });

@@ -39,13 +39,13 @@ export interface ConfigObject {
 }
 
 export interface IpfsOptions {
-  repo: string; // The file path at which to store the IPFS node’s data. (Default: '~/.jsipfs' in Node.js, 'ipfs' in browsers.)
-  init: boolean | InitObject; // Initialize the repo when creating the IPFS node. (Default: true)
-  start: boolean; // If false, do not automatically start the IPFS node. (Default: true)
-  pass: string; // A passphrase to encrypt/decrypt your keys.
-  EXPERIMENTAL: ExperimentalObject; // Enable and configure experimental features.
-  config: ConfigObject; // Modify the default IPFS node config
-  libp2p: {
+  repo?: string; // The file path at which to store the IPFS node’s data. (Default: '~/.jsipfs' in Node.js, 'ipfs' in browsers.)
+  init?: boolean | InitObject; // Initialize the repo when creating the IPFS node. (Default: true)
+  start?: boolean; // If false, do not automatically start the IPFS node. (Default: true)
+  pass?: string; // A passphrase to encrypt/decrypt your keys.
+  EXPERIMENTAL?: ExperimentalObject; // Enable and configure experimental features.
+  config?: ConfigObject; // Modify the default IPFS node config
+  libp2p?: {
     // add custom modules to the libp2p stack of your node
     modules: {
       transport: any[]; // array of libp2p.Transport instances
@@ -77,13 +77,21 @@ export class Ipfs {
 
   public start(): Promise<any> {
     if (!this.node) {
-      this.node = new IPFS(this.options);
+      this.node = new IPFS({start: false, ...this.options});
       this.node.on('error', () => {
         /*  */
       });
       // console.log(this.node);
-      return new Promise(resolve => {
-        this.node.on('ready', resolve);
+      return new Promise((resolve, reject) => {
+        this.node.on('ready', () => {
+          this.node.start((err: any) => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve();
+            }
+          });
+        });
       });
     }
     return new Promise((resolve, reject) => {

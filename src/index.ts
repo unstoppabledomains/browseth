@@ -4,8 +4,9 @@ import {BN} from 'bn.js';
 import {JsonInterface} from './abi';
 import * as Apis from './api';
 import {Contract} from './contract';
-import * as Dfs from './dfs';
+import {keccak256} from './crypto';
 import BlockchainExplorer from './explorer';
+import * as Fs from './fs';
 import * as Rpcs from './rpc';
 import * as Signers from './signers';
 // import * as NodeHttp from './transport/node-http';
@@ -22,8 +23,9 @@ class Browseth {
   public static Signers = Signers;
   public static Apis = Apis;
   public static Units = Units;
-  public static Dfs = Dfs;
+  public static Fs = Fs;
   public static BlockChainExplorer = BlockchainExplorer;
+  public static keccak256 = keccak256;
 
   public static transport = Xhr;
   public contract: {
