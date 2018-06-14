@@ -1,5 +1,6 @@
 import * as fs from 'fs';
 import * as IPFS from 'ipfs';
+import * as IPFSFactory from 'ipfsd-ctl';
 
 export interface InitObject {
   emptyRepo: boolean;
@@ -73,11 +74,13 @@ export interface CID {
 export class Ipfs {
   private node: any;
 
-  constructor(private options?: IpfsOptions) {}
+  constructor(private options?: IpfsOptions) {
+    this.node = new IPFS({start: false, ...options});
+  }
 
   public start(): Promise<any> {
-    if (!this.node) {
-      this.node = new IPFS({start: false, ...this.options});
+    if (this.getNodeStatus() === 'uninitalized') {
+      // this.node = new IPFS({start: false, ...this.options});
       this.node.on('error', () => {
         /*  */
       });
@@ -124,7 +127,7 @@ export class Ipfs {
     if (this.node) {
       return this.node.state.state();
     }
-    return 'uninitialized';
+    return 'uninitalized';
   }
 
   public upload(
@@ -253,6 +256,49 @@ export class Ipfs {
         } else {
           resolve(res);
         }
+      });
+    });
+  }
+
+  public peers() {
+    return new Promise((resolve, reject) => {
+      this.node.swarm.peers((err: any, peers: any) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(peers);
+        }
+      });
+    });
+  }
+
+  public id() {
+    return new Promise((resolve, reject) => {
+      this.node.id((err: any, id: any) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(id);
+        }
+      });
+    });
+  }
+
+  public test() {
+    const f = IPFSFactory.create();
+
+    f.spawn((err: any, ipfsd: any) => {
+      if (err) {
+        throw err;
+      }
+
+      ipfsd.api.id((e: any, id: any) => {
+        if (e) {
+          throw e;
+        }
+
+        console.log(id);
+        ipfsd.stop();
       });
     });
   }

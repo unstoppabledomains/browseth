@@ -5,7 +5,7 @@ import * as NodeHttp from '../transport/node-http';
 
 Browseth.transport = NodeHttp;
 
-const ipfs = new Ipfs();
+let ipfs;
 const f1 = fs.readFileSync(__dirname + '/lebron.jpg');
 const f2 = fs.readFileSync(__dirname + '/index.ts');
 const dir = [
@@ -18,10 +18,16 @@ const dir = [
     content: f2,
   },
 ];
-jest.setTimeout(1000000);
+
+// jest.setTimeout(1000000);
+
+beforeAll(() => {
+  ipfs = new Ipfs();
+});
+
 describe('ipfs', () => {
   it('node can start', async done => {
-    expect(ipfs.getNodeStatus()).toBe('uninitialized');
+    expect(ipfs.getNodeStatus()).toBe('uninitalized');
     await ipfs.start();
     expect(ipfs.getNodeStatus()).toBe('running');
     done();
@@ -119,6 +125,16 @@ describe('ipfs', () => {
     await ipfs.stop();
     await ipfs.stop();
     expect(ipfs.getNodeStatus()).toBe('stopped');
+    done();
+  });
+
+  it('can retrieve id', async done => {
+    const id = await ipfs.id();
+    expect(id).toBeDefined();
+    // console.log(id);
+    // const peers = await ipfs.peers();
+    // console.log(peers);
+    ipfs.test();
     done();
   });
 });

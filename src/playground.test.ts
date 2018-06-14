@@ -9,7 +9,6 @@ import * as Web3 from 'web3';
 import * as NodeHttp from './transport/node-http';
 import {Wallet} from './wallet';
 
-import {SSL_OP_MSIE_SSLV2_RSA_PADDING} from 'constants';
 import * as fs from 'fs';
 import {Bzz, Ipfs} from './fs';
 
