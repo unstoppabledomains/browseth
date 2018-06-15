@@ -1,3 +1,7 @@
+import {keccak256} from './crypto';
+import * as serialize from './serialize';
+import * as Types from './types';
+
 export function namehash(name: string) {
   let node: string =
     '0x0000000000000000000000000000000000000000000000000000000000000000';
