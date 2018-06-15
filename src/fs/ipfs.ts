@@ -72,6 +72,7 @@ export interface CID {
 }
 
 export class Ipfs {
+  public daemon: any;
   private node: any;
 
   constructor(private options?: IpfsOptions) {
@@ -284,21 +285,44 @@ export class Ipfs {
     });
   }
 
-  public test() {
-    const f = IPFSFactory.create();
+  public spawnDaemon() {
+    return new Promise((resolve, reject) => {
+      IPFSFactory.create({type: 'proc'}).spawn(
+        {exec: IPFS},
+        (err: Error, ipfsd: any) => {
+          // console.log(ipfsd);
+          if (err) {
+            throw err;
+          }
+          this.daemon = ipfsd;
+          resolve();
+          // ipfsd.api.id((e: Error, id: any) => {
+          //   if (e) {
+          //     throw e;
+          //   }
+          //   console.log('bob');
+          //   console.log(id);
+          //   ipfsd.stop((error: Error) => {
+          //     if (error) {
+          //       reject(error);
+          //     } else {
+          //       resolve();
+          //     }
+          //   });
+          // });
+        },
+      );
+    });
+  }
 
-    f.spawn((err: any, ipfsd: any) => {
-      if (err) {
-        throw err;
-      }
-
-      ipfsd.api.id((e: any, id: any) => {
-        if (e) {
-          throw e;
+  public stopDaemon() {
+    return new Promise((resolve, reject) => {
+      this.daemon.stop((err: Error) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve();
         }
-
-        console.log(id);
-        ipfsd.stop();
       });
     });
   }

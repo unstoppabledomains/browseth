@@ -132,9 +132,9 @@ describe('ipfs', () => {
     const id = await ipfs.id();
     expect(id).toBeDefined();
     // console.log(id);
-    // const peers = await ipfs.peers();
-    // console.log(peers);
-    ipfs.test();
+    await ipfs.spawnDaemon();
+    const peers = await ipfs.peers();
+    console.log(peers);
     done();
   });
 });

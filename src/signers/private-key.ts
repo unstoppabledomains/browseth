@@ -52,21 +52,27 @@ export class PrivateKey implements Signer {
         'sha256',
       );
     } else if (parsedKeystore.crypto.kdf === 'scrypt') {
-      derivedKey = scrypt(Buffer.from(pw), Buffer.from(kdfparams.salt, 'hex'), {
-        N: kdfparams.n || 262144,
-        r: kdfparams.r, // memory factor
-        p: kdfparams.p, // parallelization factor
-        dkLen: kdfparams.dklen,
-      });
+      derivedKey = await scryptAsync(
+        Buffer.from(pw),
+        Buffer.from(kdfparams.salt, 'hex'),
+        {
+          N: kdfparams.n || 262144,
+          r: kdfparams.r, // memory factor
+          p: kdfparams.p, // parallelization factor
+          dkLen: kdfparams.dklen,
+        },
+      );
     } else {
       throw new Error('Unsupported kdf');
     }
+
+    console.log(derivedKey);
 
     const ciphertext = Buffer.from(parsedKeystore.crypto.ciphertext, 'hex');
     const mac = keccak256(
       Buffer.concat([derivedKey.slice(16, 32), ciphertext]),
     );
-    if (mac.toString('hex') !== parsedKeystore.crypto.mac) {
+    if (mac !== parsedKeystore.crypto.mac) {
       throw new Error('Macs do not match. Check password');
     }
 
@@ -265,7 +271,7 @@ export class PrivateKey implements Signer {
         cipher,
         kdf,
         kdfparams,
-        mac: mac.toString('hex'),
+        mac,
       },
     });
   }
@@ -288,12 +294,7 @@ export class PrivateKey implements Signer {
     if (pubKey.length !== 64) {
       throw new Error(`invalid PublicKey<${pubKey}>`);
     }
-    return (
-      '0x' +
-      keccak256(pubKey)
-        .slice(-20)
-        .toString('hex')
-    );
+    return '0x' + keccak256(pubKey.slice(-20));
   }
 }
 
@@ -327,7 +328,7 @@ function scryptAsync(
     encoding?: string;
   },
 ): Promise<Buffer> {
-  return new Promise((resolve, reject) => {
+  return new Promise(resolve => {
     scrypt(password, salt, options, resolve);
   }).then(arr => Buffer.from(arr as any));
 }
