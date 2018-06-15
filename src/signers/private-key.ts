@@ -1,4 +1,3 @@
-import {ETIME} from 'constants';
 import {
   createCipheriv,
   createDecipheriv,
@@ -10,9 +9,10 @@ import {stripZeros, toBuffer} from 'ethereumjs-util';
 import {pbkdf2} from 'pbkdf2';
 import {encode as rlpEncode} from 'rlp';
 import * as scrypt from 'scrypt-async';
+import * as scryptsy from 'scryptsy';
 import {publicKeyCreate, sign} from 'secp256k1';
 import * as uuidv4 from 'uuid/v4';
-import {keccak256} from '../crypto';
+import {keccak256} from '../common';
 import {Signer} from './types';
 
 export interface KdfParams {
@@ -69,7 +69,8 @@ export class PrivateKey implements Signer {
     const ciphertext = Buffer.from(parsedKeystore.crypto.ciphertext, 'hex');
     const mac = keccak256(
       Buffer.concat([derivedKey.slice(16, 32), ciphertext]),
-    );
+    ).substring(2);
+
     if (mac !== parsedKeystore.crypto.mac) {
       throw new Error('Macs do not match. Check password');
     }
@@ -149,16 +150,18 @@ export class PrivateKey implements Signer {
     ];
 
     const sig = sign(
-      keccak256(
-        rlpEncode(
-          raw.concat(
-            chainId > 0
-              ? [
-                  stripZeros(toBuffer(chainId)),
-                  Buffer.from([]),
-                  Buffer.from([]),
-                ]
-              : [],
+      toBuffer(
+        keccak256(
+          rlpEncode(
+            raw.concat(
+              chainId > 0
+                ? [
+                    stripZeros(toBuffer(chainId)),
+                    Buffer.from([]),
+                    Buffer.from([]),
+                  ]
+                : [],
+            ),
           ),
         ),
       ),
@@ -180,8 +183,12 @@ export class PrivateKey implements Signer {
   }
 
   public signMessage(message: string) {
-    const hash = keccak256(
-      '\u0019Ethereum Signed Message:\n' + message.length.toString() + message,
+    const hash = toBuffer(
+      keccak256(
+        '\u0019Ethereum Signed Message:\n' +
+          message.length.toString() +
+          message,
+      ),
     );
 
     const sig = sign(hash, this.privateKey);
@@ -255,7 +262,7 @@ export class PrivateKey implements Signer {
 
     const mac = keccak256(
       Buffer.concat([derivedKey.slice(16, 32), ciphertext]),
-    );
+    ).substring(2);
 
     return JSON.stringify({
       version: 3,

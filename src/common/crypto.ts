@@ -7,7 +7,7 @@ export function keccak256(message: Types.Data) {
   return (
     '0x' +
     createKeccak('keccak256')
-      .update(data(message).substring(2))
+      .update(Buffer.from(data(message).substring(2), 'hex'))
       .digest('hex')
   );
 }
