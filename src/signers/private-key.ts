@@ -66,7 +66,7 @@ export class PrivateKey implements Signer {
       throw new Error('Unsupported kdf');
     }
 
-    console.log(derivedKey);
+    console.log('QWE', derivedKey);
 
     const ciphertext = Buffer.from(parsedKeystore.crypto.ciphertext, 'hex');
     const mac = keccak256(
@@ -294,7 +294,7 @@ export class PrivateKey implements Signer {
     if (pubKey.length !== 64) {
       throw new Error(`invalid PublicKey<${pubKey}>`);
     }
-    return '0x' + keccak256(pubKey.slice(-20));
+    return '0x' + keccak256(pubKey).slice(-40);
   }
 }
 

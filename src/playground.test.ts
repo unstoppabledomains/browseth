@@ -10,6 +10,7 @@ import * as NodeHttp from './transport/node-http';
 import {Wallet} from './wallet';
 
 import * as fs from 'fs';
+import {pbkdf2} from 'libp2p-crypto';
 import {Bzz, Ipfs} from './fs';
 
 Browseth.transport = NodeHttp;
@@ -123,10 +124,13 @@ fit('', async () => {
   // console.log(asd);
   // );
 
-  const pk = await Browseth.Signers.PrivateKey.fromRandomBytes();
-  console.log(await pk.account());
-  const v3 = await pk.toV3('asd');
-  console.log(v3);
-  const a = await Browseth.Signers.PrivateKey.fromV3(v3, 'asd');
-  console.log(a);
+  // const pk = await Browseth.Signers.PrivateKey.fromRandomBytes();
+  // console.log(await pk.account());
+  // const v3 = await pk.toV3('asd', {kdf: 'pbkdf2'});
+  // console.log(v3);
+  const a = await Browseth.Signers.PrivateKey.fromV3(
+    '{"version":3,"id":"d5140a7c-d61d-420f-89c8-e8b2e6645165","address":"714ef33943d925731fbb89c99af5780d888bd106","crypto":{"ciphertext":"7a67f6d7e3f255c257a7d32ca2ae33f9575d2c6db04baf3bbf20bcc0f9818068","cipherparams":{"iv":"b2a485895ac6a58e24549c3cd81cc00b"},"cipher":"aes-128-ctr","kdf":"scrypt","kdfparams":{"dklen":32,"salt":"e8720ab763ab8018498ed208312271aa88bd9df6ae3fa3906540519c91bca0aa","n":8192,"r":8,"p":1},"mac":"26f2750ead3beaec12eac7ea6ccf4ac30a9cadcfcf7c90308c08a9e8eb997e33"}}',
+    'testpassword!!',
+  );
+  console.log(a.account());
 });
