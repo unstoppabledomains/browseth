@@ -26,10 +26,10 @@ const fromMnemonicTests = [
 
 describe('PrivateKey.fromMnemonic()', () => {
   fromMnemonicTests.forEach(([input, output, pw]) => {
-    test(`${input} => ${output}`, () => {
-      expect(PrivateKey.fromMnemonic(input.split(' '), pw).toString()).toBe(
-        output,
-      );
+    test(`${input} => ${output}`, async () => {
+      expect(
+        (await PrivateKey.fromMnemonic(input.split(' '), pw)).toString(),
+      ).toBe(output);
     });
   });
 });
@@ -45,7 +45,7 @@ const privateKeys = keystores.map(([json, pwd]) =>
   PrivateKey.fromV3(json, pwd),
 );
 
-it('PrivateKey.fromV3()', () => {
+fit('PrivateKey.fromV3()', () => {
   expect(privateKeys[0].toString()).toBe(
     'ed0137b4b079d340b28290ec11972cf9c6983e83f04fee2351e3709b464f1b2f',
   );
