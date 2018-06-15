@@ -3,8 +3,14 @@ import HWTransportU2F from '@ledgerhq/hw-transport-u2f';
 import {BN} from 'bn.js';
 import {JsonInterface} from './abi';
 import * as Apis from './api';
+import {
+  keccak256,
+  namehash,
+  serialize,
+  subnodeHash,
+  tightlyPackedKeccak256,
+} from './common';
 import {Contract} from './contract';
-import {keccak256} from './crypto';
 import BlockchainExplorer from './explorer';
 import * as Fs from './fs';
 import * as Rpcs from './rpc';
@@ -25,8 +31,13 @@ class Browseth {
   public static Units = Units;
   public static Fs = Fs;
   public static BlockChainExplorer = BlockchainExplorer;
+  public static tightlyPackedKeccak256 = tightlyPackedKeccak256;
   public static keccak256 = keccak256;
-
+  public static serialize = serialize;
+  public static nameUtil = {
+    namehash,
+    subnodeHash,
+  };
   public static transport = Xhr;
   public contract: {
     [k: string]: Contract;
