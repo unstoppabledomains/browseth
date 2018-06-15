@@ -261,9 +261,9 @@ export class Ipfs {
     });
   }
 
-  public peers() {
+  public peers(options: any) {
     return new Promise((resolve, reject) => {
-      this.node.swarm.peers((err: any, peers: any) => {
+      this.node.swarm.peers(options, (err: any, peers: any) => {
         if (err) {
           reject(err);
         } else {
@@ -271,6 +271,34 @@ export class Ipfs {
         }
       });
     });
+  }
+
+  public addresses() {
+    return new Promise((resolve, reject) => {
+      this.node.swarm.addrs((err: Error, addrs: any) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(addrs);
+        }
+      });
+    });
+  }
+
+  public connectPeer(peerAddress: string) {
+    return new Promise((resolve, reject) => {
+      this.node.swarm.connect(peerAddress, (err: Error) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve();
+        }
+      });
+    });
+  }
+
+  public disconnectPeer(peerAddress: string) {
+    //
   }
 
   public id() {
@@ -285,47 +313,47 @@ export class Ipfs {
     });
   }
 
-  public spawnDaemon() {
-    return new Promise((resolve, reject) => {
-      IPFSFactory.create({type: 'proc'}).spawn(
-        {exec: IPFS},
-        (err: Error, ipfsd: any) => {
-          // console.log(ipfsd);
-          if (err) {
-            throw err;
-          }
-          this.daemon = ipfsd;
-          resolve();
-          // ipfsd.api.id((e: Error, id: any) => {
-          //   if (e) {
-          //     throw e;
-          //   }
-          //   console.log('bob');
-          //   console.log(id);
-          //   ipfsd.stop((error: Error) => {
-          //     if (error) {
-          //       reject(error);
-          //     } else {
-          //       resolve();
-          //     }
-          //   });
-          // });
-        },
-      );
-    });
-  }
+  // public spawnDaemon() {
+  //   return new Promise((resolve, reject) => {
+  //     IPFSFactory.create({type: 'proc'}).spawn(
+  //       {exec: IPFS},
+  //       (err: Error, ipfsd: any) => {
+  //         // console.log(ipfsd);
+  //         if (err) {
+  //           throw err;
+  //         }
+  //         this.daemon = ipfsd;
+  //         resolve();
+  //         // ipfsd.api.id((e: Error, id: any) => {
+  //         //   if (e) {
+  //         //     throw e;
+  //         //   }
+  //         //   console.log('bob');
+  //         //   console.log(id);
+  //         //   ipfsd.stop((error: Error) => {
+  //         //     if (error) {
+  //         //       reject(error);
+  //         //     } else {
+  //         //       resolve();
+  //         //     }
+  //         //   });
+  //         // });
+  //       },
+  //     );
+  //   });
+  // }
 
-  public stopDaemon() {
-    return new Promise((resolve, reject) => {
-      this.daemon.stop((err: Error) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve();
-        }
-      });
-    });
-  }
+  // public stopDaemon() {
+  //   return new Promise((resolve, reject) => {
+  //     this.daemon.stop((err: Error) => {
+  //       if (err) {
+  //         reject(err);
+  //       } else {
+  //         resolve();
+  //       }
+  //     });
+  //   });
+  // }
 }
 
 export default Ipfs;
