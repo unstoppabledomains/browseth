@@ -9,34 +9,34 @@ export interface InitObject {
 }
 
 export interface ExperimentalObject {
-  pubsub: boolean;
-  sharding: boolean;
-  dht: boolean;
-  relay: {
-    enabled: boolean;
-    hop: {
-      enabled: boolean;
-      active: boolean;
+  pubsub?: boolean;
+  sharding?: boolean;
+  dht?: boolean;
+  relay?: {
+    enabled?: boolean;
+    hop?: {
+      enabled?: boolean;
+      active?: boolean;
     };
   };
 }
 
 export interface ConfigObject {
-  Addresses: {
-    Swarm: string[];
-    API: string;
-    Gateway: string;
+  Addresses?: {
+    Swarm?: string[];
+    API?: string;
+    Gateway?: string;
   };
-  Discovery: {
-    MDNS: {
-      Enabled: boolean;
-      Interval: number;
+  Discovery?: {
+    MDNS?: {
+      Enabled?: boolean;
+      Interval?: number;
     };
-    webRTCStar: {
-      Enabled: boolean;
+    webRTCStar?: {
+      Enabled?: boolean;
     };
   };
-  Bootstrap: string[];
+  Bootstrap?: string[];
 }
 
 export interface IpfsOptions {

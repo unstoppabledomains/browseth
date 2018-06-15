@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-import {Bzz, Ipfs} from '.';
+import {Ipfs} from '.';
 import Browseth from '../';
 import * as NodeHttp from '../transport/node-http';
 
@@ -74,7 +74,7 @@ describe('ipfs', () => {
     const uploadedData = await ipfs.upload(dir);
     // console.log(uploadedData);
     expect(uploadedData[uploadedData.length - 1].hash).toEqual(
-      'QmXJa48wxLSRhDLadhJGr1y4MnsGKnnTdFEUhTHq9XSrod',
+      'QmYqFJKGDVkNiw4jSrqPA3usdjqTQoazKwwZhCYWmown2Q',
     );
     expect(uploadedData[uploadedData.length - 2].hash).toEqual(
       'QmasQSijKVS2aBgYs6kKFDusFJ5cK1yYAgSUmugZPfVVYJ',
@@ -132,7 +132,7 @@ describe('ipfs', () => {
     const id = await ipfs.id();
     expect(id).toBeDefined();
     // console.log(id);
-    await ipfs.spawnDaemon();
+    // await ipfs.spawnDaemon();
     const peers = await ipfs.peers();
     console.log(peers);
     done();

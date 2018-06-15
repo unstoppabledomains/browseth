@@ -66,8 +66,6 @@ export class PrivateKey implements Signer {
       throw new Error('Unsupported kdf');
     }
 
-    console.log('QWE', derivedKey);
-
     const ciphertext = Buffer.from(parsedKeystore.crypto.ciphertext, 'hex');
     const mac = keccak256(
       Buffer.concat([derivedKey.slice(16, 32), ciphertext]),
