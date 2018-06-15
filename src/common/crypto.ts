@@ -1,6 +1,5 @@
 import {soliditySHA3} from 'ethereumjs-abi';
 import createKeccak = require('keccak');
-import {serialize} from '.';
 import {data} from './serialize';
 import * as Types from './types';
 

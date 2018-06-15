@@ -117,8 +117,11 @@ export function block(v: Block): string {
   return block(v.toString());
 }
 
-export function tag(v: Tag) {
-  if (v === 'pending' || v === 'latest' || v === 'earliest') {
+export function tag(v: Tag): string {
+  if (
+    typeof v === 'string' &&
+    (v === 'pending' || v === 'latest' || v === 'earliest')
+  ) {
     return v;
   }
   try {
