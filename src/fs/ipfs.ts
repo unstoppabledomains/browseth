@@ -261,9 +261,9 @@ export class Ipfs {
     });
   }
 
-  public peers(options: any) {
+  public peers() {
     return new Promise((resolve, reject) => {
-      this.node.swarm.peers(options, (err: any, peers: any) => {
+      this.node.swarm.peers((err: any, peers: any) => {
         if (err) {
           reject(err);
         } else {
