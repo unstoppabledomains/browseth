@@ -79,8 +79,9 @@ export class Ipfs {
     this.node = new IPFS({start: false, ...options});
   }
 
-  public start(): Promise<any> {
-    if (this.getNodeStatus() === 'uninitalized') {
+  public start(): Promise<void> {
+    const status = this.getNodeStatus();
+    if (status === 'uninitalized') {
       // this.node = new IPFS({start: false, ...this.options});
       this.node.on('error', () => {
         /*  */
@@ -97,16 +98,19 @@ export class Ipfs {
           });
         });
       });
-    }
-    return new Promise((resolve, reject) => {
-      this.node.start((err: any) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve();
-        }
+    } else if (status !== 'starting' && status !== 'running') {
+      return new Promise((resolve, reject) => {
+        this.node.start((err: any) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve();
+          }
+        });
       });
-    });
+    } else {
+      return Promise.resolve();
+    }
   }
 
   public stop(): Promise<void> | undefined {
@@ -162,7 +166,7 @@ export class Ipfs {
 
   public download(path: string): Promise<Buffer> {
     return new Promise((resolve, reject) => {
-      this.node.files.cat(path, (err: any, res: any) => {
+      this.node.files.cat(path, (err: any, res: Buffer) => {
         if (err) {
           reject(err);
         } else {

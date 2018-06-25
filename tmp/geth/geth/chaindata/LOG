@@ -271,3 +271,38 @@
 10:17:16.639670 table@remove removed @59
 14:55:20.136436 db@close closing
 14:55:20.137988 db@close done T·1.903701ms
+=============== Jun 21, 2018 (PDT) ===============
+11:48:32.731433 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+11:48:32.732662 version@stat F·[0 1] S·1MiB[0B 1MiB] Sc·[0.00 0.02]
+11:48:32.732700 db@open opening
+11:48:32.732790 journal@recovery F·1
+11:48:32.741602 journal@recovery recovering @61
+11:48:32.744452 memdb@flush created L0@64 N·216 S·21KiB "\x01ի..o\xe38,v25464":"\xfc=\x1f..\x8cN\xb8,v25477"
+11:48:32.759445 version@stat F·[1 1] S·1MiB[21KiB 1MiB] Sc·[0.25 0.02]
+11:48:32.761642 db@janitor F·4 G·0
+11:48:32.761758 db@open done T·28.967723ms
+11:48:32.784271 table@compaction L0·1 -> L1·1 S·1MiB Q·25489
+11:48:32.842562 table@build created L1@67 N·16434 S·1MiB "\x00\x00`..\x8dϜ,v23361":"\xff\xdci..{\x06&,v23630"
+11:48:32.842628 version@stat F·[0 1] S·1MiB[0B 1MiB] Sc·[0.00 0.02]
+11:48:32.842912 table@compaction committed F-1 S-2KiB Ke·0 D·89 T·58.575381ms
+11:48:32.843113 table@remove removed @64
+11:48:32.845734 table@remove removed @63
+=============== Jun 25, 2018 (PDT) ===============
+15:37:41.441610 db@close closing
+15:37:41.444502 db@close done T·2.893834ms
+=============== Jun 25, 2018 (PDT) ===============
+15:37:47.306449 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+15:37:47.308838 version@stat F·[0 1] S·1MiB[0B 1MiB] Sc·[0.00 0.02]
+15:37:47.308887 db@open opening
+15:37:47.309007 journal@recovery F·1
+15:37:47.317835 journal@recovery recovering @65
+15:37:47.325345 memdb@flush created L0@68 N·164 S·17KiB "\x05wH...\x1d\xf8,v25627":"\xec\r\xe3..\xae\x93\xa7,v25617"
+15:37:47.334917 version@stat F·[1 1] S·1MiB[17KiB 1MiB] Sc·[0.25 0.02]
+15:37:47.337993 db@janitor F·4 G·0
+15:37:47.338082 db@open done T·29.157932ms
+15:37:47.354501 table@compaction L0·1 -> L1·1 S·1MiB Q·25654
+15:37:47.413004 table@build created L1@71 N·16540 S·1MiB "\x00\x00`..\x8dϜ,v23361":"\xff\xdci..{\x06&,v23630"
+15:37:47.413068 version@stat F·[0 1] S·1MiB[0B 1MiB] Sc·[0.00 0.02]
+15:37:47.413335 table@compaction committed F-1 S+144B Ke·0 D·58 T·58.774589ms
+15:37:47.413512 table@remove removed @68
+15:37:47.415532 table@remove removed @67

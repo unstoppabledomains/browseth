@@ -46,6 +46,8 @@ const transactionListener = new Browseth.Apis.TransactionListener(b.wallet);
 transactionListener.startPolling();
 
 b.addContract('Simple', simple as any, {bytecode: bin});
+b.addContract('Simple', simple as any, {bytecode: bin});
+b.addContract('Simple2', simple as any, {bytecode: bin});
 
 let transactionHash;
 let transaction;
@@ -251,79 +253,79 @@ describe('.sshVersion()', () => {
 
 /////////////////////////////////////////////////////////////////////////////////////////
 
-describe('.clientIsListening()', () => {
-  it('works', async done => {
-    const a = await e.clientIsListening();
-    // console.log(a);
-    done();
-  });
-});
+// describe('.clientIsListening()', () => {
+//   it('works', async done => {
+//     const a = await e.clientIsListening();
+//     // console.log(a);
+//     done();
+//   });
+// });
 
-describe('.peersConnected()', () => {
-  it('works', async done => {
-    const a = await e.peersConnected();
-    // console.log(a);
-    done();
-  });
-});
+// describe('.peersConnected()', () => {
+//   it('works', async done => {
+//     const a = await e.peersConnected();
+//     // console.log(a);
+//     done();
+//   });
+// });
 
-describe('.isSyncing()', () => {
-  it('works', async done => {
-    const a = await e.isSyncing();
-    // console.log(a);
-    done();
-  });
-});
+// describe('.isSyncing()', () => {
+//   it('works', async done => {
+//     const a = await e.isSyncing();
+//     // console.log(a);
+//     done();
+//   });
+// });
 
-describe('.isMining()', () => {
-  it('works', async done => {
-    const a = await e.isMining();
-    // console.log(a);
-    done();
-  });
-});
+// describe('.isMining()', () => {
+//   it('works', async done => {
+//     const a = await e.isMining();
+//     // console.log(a);
+//     done();
+//   });
+// });
 
-describe('.getWork()', () => {
-  it('works', async done => {
-    const a = await e.getWork();
-    // console.log(a);
-    done();
-  });
-});
+// describe('.getWork()', () => {
+//   it('works', async done => {
+//     const a = await e.getWork();
+//     // console.log(a);
+//     done();
+//   });
+// });
 
 /////////////////////////////////////////////////////////////////////////////////
 
-describe('.coinbase()', () => {
-  it('works', async done => {
-    const a = await e.coinbase();
-    // console.log(a);
-    done();
-  });
-});
+// describe('.coinbase()', () => {
+//   it('works', async done => {
+//     const a = await e.coinbase();
+//     // console.log(a);
+//     done();
+//   });
+// });
 
-describe('.accounts()', () => {
-  it('works', async done => {
-    const a = await e.accounts();
-    // console.log(a);
-    done();
-  });
-});
+// describe('.accounts()', () => {
+//   it('works', async done => {
+//     const a = await e.accounts();
+//     // console.log(a);
+//     done();
+//   });
+// });
 
-describe('.gasPrice()', () => {
-  it('works', async done => {
-    const a = await e.gasPrice();
-    // console.log(a);
-    done();
-  });
-});
+// describe('.gasPrice()', () => {
+//   it('works', async done => {
+//     const a = await e.gasPrice();
+//     // console.log(a);
+//     done();
+//   });
+// });
 
-describe('.transactionCount()', () => {
-  it('works', async done => {
-    const a = await e.transactionCount(await e.coinbase(), '0x0');
-    // console.log(a);
-    done();
-  });
-});
+// describe('.transactionCount()', () => {
+//   it('works', async done => {
+//     const a = await e.transactionCount(await e.coinbase(), '0x0');
+//     // console.log(a);
+//     done();
+//   });
+// });
 
 describe('.blockTransactionCount()', () => {
   it('takes block as hash', async done => {
