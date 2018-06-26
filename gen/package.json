@@ -1,0 +1,11 @@
+{
+  "name": "@browseth/generator",
+  "version": "0.0.0",
+  "bin": {
+    "browseth-cli": "./bin/browseth-cli.js"
+  },
+  "dependencies": {
+    "commander": "^2.15.1",
+    "fs-extra": "^6.0.1"
+  }
+}
