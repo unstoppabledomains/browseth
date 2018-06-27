@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import logo from './logo.svg';
 import './App.css';
 import PrivateKey from './components/PrivateKey';
 import Contract from './components/Contract';
@@ -18,8 +17,7 @@ class App extends Component {
     return (
       <div className="App">
         <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to Browseth</h1>
+          <h1>- Welcome to Browseth -</h1>
         </header>
         <br />
         <div className="middle">

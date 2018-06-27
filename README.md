@@ -8,7 +8,12 @@
 
 ##### [npm package: 0.0.16](https://www.npmjs.com/package/browseth)
 
-## Installation
+## Install Using Browseth Generator (Framework)
+
+`yarn global add @browseth/cli` `browseth-cli --help`
+`browseth-cli create-simple-site <path>` `cd <path>` `yarn` `yarn start`
+
+## Installation For Development
 
 #### Node.js
 
@@ -21,7 +26,7 @@
 ## Usage
 
 ```javascript
-const Browseth = require('browseth')
+const Browseth = require('browseth');
 // or
 // import Browseth from 'browseth'
 
@@ -30,104 +35,104 @@ const beth = new Browseth();
 
 ## Structure
 
-* ### `distributions`
+- ### `distributions`
 
-  * The intention is to build a few separate packages, one for the front end and
+  - The intention is to build a few separate packages, one for the front end and
     one for the back end and potentially a testing package. Currently everything
     is all under `/src/index.ts`
 
-* ### `wallet`
+- ### `wallet`
 
-  * These packages are for account managment, sending transactions, and signing
+  - These packages are for account managment, sending transactions, and signing
     messages for each wallet (current support and planned support below).
-  * Support:
-    * [ ] Digital BitBox
-    * [ ] Generic HD Wallet
-    * [x] JSON Keystore V3
-    * [ ] KeepKey
-    * [x] Ledger
-    * [x] No-op (dummy endpoint)
-    * [ ] Parity Mnemonic
-    * [x] Private Key
-    * [ ] Tezor
-    * [x] Web3
+  - Support:
+    - [ ] Digital BitBox
+    - [ ] Generic HD Wallet
+    - [x] JSON Keystore V3
+    - [ ] KeepKey
+    - [x] Ledger
+    - [x] No-op (dummy endpoint)
+    - [ ] Parity Mnemonic
+    - [x] Private Key
+    - [ ] Tezor
+    - [x] Web3
 
-* ### `transport`
+- ### `transport`
 
-  * These are the packages that manage the raw IO with the ethereum clients.
-  * Support:
-    * [x] `Fetch` API
-    * [x] Node js `http(s)`
-    * [ ] `XMLHttpRequest` API
-    * [ ] `Websocket` API
+  - These are the packages that manage the raw IO with the ethereum clients.
+  - Support:
+    - [x] `Fetch` API
+    - [x] Node js `http(s)`
+    - [ ] `XMLHttpRequest` API
+    - [ ] `Websocket` API
 
-* ### `rpc`
+- ### `rpc`
 
-  * This package wraps the transports with a strongly typed API for each of the
+  - This package wraps the transports with a strongly typed API for each of the
     different clients.
 
-  * Support:
+  - Support:
 
-    * [ ] [Etherscan](https://etherscan.io/apis)
-    * [ ] [Ganache (previously `testrpc`)](https://github.com/trufflesuite/ganache)
-    * [x] [Generic](https://github.com/ethereum/wiki/wiki/JSON-RPC)
-    * [ ] [Geth](https://github.com/ethereum/go-ethereum/wiki/Management-APIs)
-    * [x] [Infura (JSONRPC)](https://infura.io)
-    * [x] [Metamask Provider Engine](https://github.com/MetaMask/provider-engine)
-    * [ ] [MyEtherAPI](https://www.myetherapi.com)
-    * [ ] [Parity](https://wiki.parity.io/JSONRPC)
+    - [ ] [Etherscan](https://etherscan.io/apis)
+    - [ ] [Ganache (previously `testrpc`)](https://github.com/trufflesuite/ganache)
+    - [x] [Generic](https://github.com/ethereum/wiki/wiki/JSON-RPC)
+    - [ ] [Geth](https://github.com/ethereum/go-ethereum/wiki/Management-APIs)
+    - [x] [Infura (JSONRPC)](https://infura.io)
+    - [x] [Metamask Provider Engine](https://github.com/MetaMask/provider-engine)
+    - [ ] [MyEtherAPI](https://www.myetherapi.com)
+    - [ ] [Parity](https://wiki.parity.io/JSONRPC)
 
-  * Supported Method Sets:
-    * [ ] `admin`
-    * [x] `db`
-    * [ ] `debug`
-    * [x] `eth`
-    * [ ] `eth_pubsub`
-    * [ ] `evm`
-    * [ ] `miner`
-    * [x] `net`
-    * [ ] `parity`
-    * [ ] `parity_accounts`
-    * [ ] `parity_set`
-    * [ ] `personal`
-    * [ ] `pubsub`
-    * [ ] `secretstore`
-    * [ ] `signer`
-    * [x] `shh`
-    * [ ] `trace`
-    * [ ] `txpool`
-    * [x] `web3`
+  - Supported Method Sets:
+    - [ ] `admin`
+    - [x] `db`
+    - [ ] `debug`
+    - [x] `eth`
+    - [ ] `eth_pubsub`
+    - [ ] `evm`
+    - [ ] `miner`
+    - [x] `net`
+    - [ ] `parity`
+    - [ ] `parity_accounts`
+    - [ ] `parity_set`
+    - [ ] `personal`
+    - [ ] `pubsub`
+    - [ ] `secretstore`
+    - [ ] `signer`
+    - [x] `shh`
+    - [ ] `trace`
+    - [ ] `txpool`
+    - [x] `web3`
 
-* ### `nodes`
+- ### `nodes`
 
-  * These packages expose a standard set of functionality that one might need to
+  - These packages expose a standard set of functionality that one might need to
     interact with ethereum.
-  * Support is tentatively the same as the rpc nodes.
+  - Support is tentatively the same as the rpc nodes.
 
-- ### `apis`
+* ### `apis`
 
-  * These packages are for extending the functionality of ethereum beyond simple
+  - These packages are for extending the functionality of ethereum beyond simple
     wrappers for ethereum-jsonrpc calls. The intention is to be inclusive by
     supporting these packages as optinoal plug ins.
 
-  * Supported:
-    * [x] ENS .eth Registrar
-    * [ ] ENS
-    * [ ] Storage (ex: Swarm, Filecoin, Storj, etc.)
-    * [ ] Trading Protool (ex: 0x, ForkDelta, etc.)
+  - Supported:
+    - [x] ENS .eth Registrar
+    - [ ] ENS
+    - [ ] Storage (ex: Swarm, Filecoin, Storj, etc.)
+    - [ ] Trading Protool (ex: 0x, ForkDelta, etc.)
 
 ## Current TODOs
 
-* Make the Node transactions event emiters and build out Contract event
+- Make the Node transactions event emiters and build out Contract event
   listening capabilities.
-* Support More Wallets:
+- Support More Wallets:
 
-  * Generic HD Wallet
-  * Parity Mnemonic
+  - Generic HD Wallet
+  - Parity Mnemonic
 
-* Favor code generated config-based (jsonschema?) rpc.
-* Phase Out `web3-eth-abi` in favor of code generated abi.
-* Phase Out `bignumber.js` in favor of `bn.js` to be more in line with the rest
+- Favor code generated config-based (jsonschema?) rpc.
+- Phase Out `web3-eth-abi` in favor of code generated abi.
+- Phase Out `bignumber.js` in favor of `bn.js` to be more in line with the rest
   of the community.
 
 ## Contributing

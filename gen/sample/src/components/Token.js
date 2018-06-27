@@ -95,34 +95,30 @@ class Token extends React.Component {
   // Add contract to browseth instance
   beth.addContract('ERC20', abi);
 
-  // Check balance
-  // Note: Since we used the generic ERC20 contract abi it's
-  // important that we call the function using the token's
-  // contract address to call its version of balanceOf() instead
-  beth.contract.ERC20.function.balanceOf(
-    THEIR_PUBLIC_ADDRESS
-  ).call({to: tokenAddress})
-
-  // Send tokens
-  // Note: Call beth.contract.ERC20.function.decimals().call({to: tokenAddress})
-  // to get the number of the decimals to divide the AMOUNT_IN_TOKEN
-  // by to convert to user representation.
-  const tx = await beth.contract.ERC20.function
-        .transfer(THEIR_PUBLIC_ADDRESS, AMOUNT_IN_TOKEN)
-        .send({to: tokenAddress});
-
   // Create an "Offline" wallet using private key
   beth.wallet = new Browseth.Wallets.Offline(
     beth.rpc,
     Browseth.Signers.PrivateKey.fromHex(YOUR_PRIVATE_KEY),
   );
 
+  // Check our balance
+  // Note: Since we used the generic ERC20 contract abi it's
+  // important that we call the function using the token's
+  // contract address to call its version of balanceOf() instead.
+  //
+  // Call beth.contract.ERC20.function.decimals().call({to: tokenAddress})
+  // to get the number of the decimals to divide the AMOUNT_IN_TOKEN
+  // by to convert to user representation.
+  beth.contract.ERC20.function.balanceOf(
+    await beth.wallet.account()
+  ).call({to: tokenAddress})
+
   // Send tokens
-  // Note: Multiply AMOUNT_IN_TOKENS by decimals amount if
+  // Note: Multiply AMOUNT_IN_TOKEN by decimals amount if
   // in user representation
-  const transactionHash = await beth.contract.ERC20.function
-    .transfer(THEIR_PUBLIC_ADDRESS, AMOUNT_IN_TOKENS)
-    .send({to: tokenAddress});
+  const tx = await beth.contract.ERC20.function
+        .transfer(THEIR_PUBLIC_ADDRESS, AMOUNT_IN_TOKEN)
+        .send({to: tokenAddress});
                 `,
                 Prism.languages.javascript,
                 'javascript',
