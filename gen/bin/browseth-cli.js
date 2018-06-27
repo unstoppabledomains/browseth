@@ -16,7 +16,7 @@ program.command('create-simple-site <path>').action(path => {
   }
   fs.copySync(`${__dirname}/../sample`, `${process.cwd()}/${path}`);
   console.log(
-    `Successfully generated at ${path}\ncd into ${path} and run 'yarn' to install dependencies.\nThen run 'yarn start' to begin.\nPlease visit '/${path}/src/config.json' and update the URL to use your own Infura Api Key. You can retrieve yours by visiting 'https://infura.io'.`,
+    `\nSuccessfully generated at './${path}'\n\ncd into ${path} and run 'yarn' to install dependencies.\nThen run 'yarn start' to begin.\n\nPlease visit './${path}/src/config.json' and update the URL to use your own Infura Api Key.\nYou can retrieve yours by visiting 'https://infura.io'.`,
   );
 });
 
