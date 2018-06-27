@@ -51,8 +51,8 @@ class App extends Component {
         <hr />
         <Deploy />
         <hr />
-        <Event />
-        <hr />
+        {/* <Event /> */}
+        {/* <hr /> */}
         <Explorer />
         <hr />
         <Ipfs />

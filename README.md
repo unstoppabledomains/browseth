@@ -22,6 +22,8 @@
 
 `yarn`<br/> `yarn start`
 
+![Sample Site](screenshot.png 'Sample Site')
+
 ## Installation For Development
 
 #### Node.js
