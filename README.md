@@ -10,8 +10,17 @@
 
 ## Install Using Browseth Generator (Framework)
 
-`yarn global add @browseth/cli` `browseth-cli --help`
-`browseth-cli create-simple-site <path>` `cd <path>` `yarn` `yarn start`
+### Install @browseth/cli
+
+`yarn global add @browseth/cli`
+
+### Create a simple site
+
+`browseth-cli create-simple-site <path>`<br/> `cd <path>`
+
+### Install dependencies and run
+
+`yarn`<br/> `yarn start`
 
 ## Installation For Development
 
