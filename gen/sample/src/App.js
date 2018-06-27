@@ -9,7 +9,7 @@ import Metamask from './components/Metamask';
 import Explorer from './components/Explorer';
 import Deploy from './components/Deploy';
 import Token from './components/Token';
-import Event from './components/Event';
+// import Event from './components/Event';
 import Prism from 'prismjs';
 
 class App extends Component {

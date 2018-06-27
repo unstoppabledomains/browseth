@@ -6,7 +6,9 @@
 
 ##### [Browseth documentation](https://buyethdomains.github.io/browseth/)
 
-##### [npm package: 0.0.16](https://www.npmjs.com/package/browseth)
+##### [browseth npm package: 0.0.51](https://www.npmjs.com/package/browseth)
+
+##### [@browseth/cli npm package: 0.0.3](https://www.npmjs.com/package/@browseth/cli)
 
 ## Install Using Browseth Generator (Framework)
 
