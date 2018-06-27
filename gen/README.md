@@ -12,4 +12,4 @@
 
 `yarn`<br/> `yarn start`
 
-![Sample Site](https://raw.githubusercontent.com/buyethdomains/browseth/blob/master/screenshot.png 'Sample Site')
+![Sample Site](https://raw.githubusercontent.com/buyethdomains/browseth/master/screenshot.png 'Sample Site')
