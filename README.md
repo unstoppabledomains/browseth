@@ -8,7 +8,7 @@
 
 ##### [browseth npm package: 0.0.51](https://www.npmjs.com/package/browseth)
 
-##### [@browseth/cli npm package: 0.0.3](https://www.npmjs.com/package/@browseth/cli)
+##### [@browseth/cli npm package: 0.0.7](https://www.npmjs.com/package/@browseth/cli)
 
 ## Install Using Browseth Generator (Framework)
 
