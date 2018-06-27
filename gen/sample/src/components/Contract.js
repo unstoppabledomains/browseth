@@ -2,6 +2,7 @@ import * as React from 'react';
 import Browseth from 'browseth';
 import '../App.css';
 import Prism from 'prismjs';
+import * as config from '../config.json';
 
 class Contract extends React.Component {
   constructor(props) {
@@ -14,7 +15,7 @@ class Contract extends React.Component {
       nameState: '',
       availability: '',
     };
-    this.beth = new Browseth('https://mainnet.infura.io/mew');
+    this.beth = new Browseth(config.url);
     this.beth.addContract('ens', this.state.abi, {
       address: '0x6090A6e47849629b7245Dfa1Ca21D94cd15878Ef',
     });

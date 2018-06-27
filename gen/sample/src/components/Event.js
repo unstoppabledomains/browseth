@@ -3,6 +3,7 @@ import Browseth from 'browseth';
 import '../App.css';
 import Prism from 'prismjs';
 import * as abi from './etherdelta.json';
+import * as config from '../config.json';
 
 class Event extends React.Component {
   constructor(props) {
@@ -12,7 +13,7 @@ class Event extends React.Component {
       withdraws: false,
       deposits: false,
     };
-    this.beth = new Browseth('https://mainnet.infura.io/mew');
+    this.beth = new Browseth(config.url);
     this.eventListener = new Browseth.Apis.EventListener(
       this.beth.rpc,
       abi,

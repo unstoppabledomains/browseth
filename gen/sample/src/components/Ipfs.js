@@ -2,11 +2,12 @@ import * as React from 'react';
 import Browseth from 'browseth';
 import '../App.css';
 import Prism from 'prismjs';
+import * as config from '../config.json';
 
 class Ipfs extends React.Component {
   constructor(props) {
     super(props);
-    this.beth = new Browseth('https://mainnet.infura.io/mew');
+    this.beth = new Browseth(config.url);
     this.ipfs = new Browseth.Fs.Ipfs({
       config: {
         Addresses: {

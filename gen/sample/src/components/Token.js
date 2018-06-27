@@ -6,11 +6,12 @@ import * as Tokens from './tokens-eth.json';
 import * as ERC20 from './erc20.json';
 import Select from 'react-select';
 import 'react-select/dist/react-select.css';
+import * as config from '../config.json';
 
 class Token extends React.Component {
   constructor(props) {
     super(props);
-    this.beth = new Browseth('https://mainnet.infura.io/mew');
+    this.beth = new Browseth(config.url);
     this.beth.addContract('ERC20', ERC20);
     this.state = {
       tokenAddr: '',

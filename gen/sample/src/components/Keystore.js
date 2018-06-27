@@ -2,6 +2,7 @@ import * as React from 'react';
 import Browseth from 'browseth';
 import '../App.css';
 import Prism from 'prismjs';
+import * as config from '../config.json';
 
 class Keystore extends React.Component {
   constructor(props) {
@@ -12,7 +13,7 @@ class Keystore extends React.Component {
       url: '',
       filename: '',
     };
-    this.beth = new Browseth('https://mainnet.infura.io/mew');
+    this.beth = new Browseth(config.url);
   }
 
   render() {

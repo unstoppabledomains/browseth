@@ -2,11 +2,12 @@ import Browseth from 'browseth';
 import Prism from 'prismjs';
 import * as React from 'react';
 import '../App.css';
+import * as config from '../config.json';
 
 class Metamask extends React.Component {
   constructor(props) {
     super(props);
-    this.beth = new Browseth('https://mainnet.infura.io/mew');
+    this.beth = new Browseth(config.url);
     let err = '';
     try {
       this.beth.wallet = new Browseth.Wallets.Online(

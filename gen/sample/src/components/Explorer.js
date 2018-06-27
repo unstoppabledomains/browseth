@@ -2,6 +2,7 @@ import * as React from 'react';
 import Browseth from 'browseth';
 import '../App.css';
 import Prism from 'prismjs';
+import * as config from '../config.json';
 
 class Explorer extends React.Component {
   constructor(props) {
@@ -16,7 +17,7 @@ class Explorer extends React.Component {
       block3: '',
       res: '',
     };
-    this.beth = new Browseth('https://mainnet.infura.io/mew');
+    this.beth = new Browseth(config.url);
     this.explorer = new Browseth.BlockChainExplorer(this.beth.rpc);
   }
 

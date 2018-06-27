@@ -15,6 +15,8 @@ program.command('create-simple-site <path>').action(path => {
     process.exit();
   }
   fs.copySync(`${__dirname}/../sample`, `${process.cwd()}/${path}`);
+  console.log(`Successfully generated at ${path}\n`);
+  // go to so and so file and update key
 });
 
 program.parse(process.argv);
