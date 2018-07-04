@@ -1,0 +1,91 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 80px;
+}
+
+.App-header {
+  background-color: #09096e;
+  height: 150px;
+  padding: 20px;
+  color: white;
+}
+
+.App-title {
+  font-size: 1.5em;
+}
+
+.App-intro {
+  font-size: large;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+html,
+body {
+  height: 100%;
+}
+
+.container {
+  display: flex;
+  /* align-items: center; */
+  justify-content: center;
+  height: 100%;
+  padding: 5px;
+}
+
+.subBox {
+  height: 35em;
+  background-color: #4e9ef6;
+  border-radius: 7px;
+  width: 28%;
+  margin-left: 10px;
+  margin-right: 10px;
+  color: white;
+}
+
+.optOutBox {
+  width: 40%;
+  padding: 10px;
+  /* height: 5em; */
+  background-color: #4e9ef6;
+  border-radius: 7px;
+  font-size: 30px;
+  font-weight: bold;
+  color: white;
+  text-decoration: none;
+}
+
+.imgFit {
+  height: 100px;
+}
+
+.price {
+  font-weight: 900;
+  font-size: 37px;
+  color: #09096e;
+}
+
+.subscribe {
+  border: none;
+  height: 40px;
+  width: 60%;
+  border-radius: 5px;
+  font-size: 20px;
+  font-weight: bold;
+  background-color: gold;
+}
+
+.subscription-management {
+  font-size: 20px;
+}
