@@ -1,11 +1,12 @@
 pragma solidity ^0.4.23;
 
 import "./PriceCurve.sol";
-// import "./AccessControl.sol";
 import "./zeppelin/lifecycle/Pausable.sol";
 import "./zeppelin/token/ERC721/ERC721Token.sol";
 
 contract NFTSubscription is ERC721Token("SubscriptionToken", "SUB"), Pausable {
+    event Renew(uint256 tokenId, uint256 value, uint256 addedTime);
+
     PriceCurveInterface internal priceCurve_;
 
     uint256[] internal expirations_;
@@ -26,26 +27,35 @@ contract NFTSubscription is ERC721Token("SubscriptionToken", "SUB"), Pausable {
         return priceCurve_.getAmountFromTime(_subscriptionLength);
     }
 
-    function expiresAt(uint256 _tokenId) external view returns (uint256 _timestamp) {
-        uint256 timestamp = expirations_[_tokenId];
-        require(_timestamp != 0);
-        return timestamp;
+    function expiresAt(uint256 _tokenId) external view returns (uint256) {
+        return expirations_[_tokenId];
     }
 
     function () external payable whenNotPaused {
         mint_(msg.sender, block.timestamp + priceCurve_.getTimeFromAmount(msg.value));
     }
 
+    function getMinimumPrice() external view returns (uint256) {
+        return priceCurve_.getMinimumPrice();
+    }
+
+    function renew(uint256 _tokenId) external payable {
+        uint256 addedTime = priceCurve_.getTimeFromAmount(msg.value);
+        expirations_[_tokenId] += addedTime;
+
+        emit Renew(_tokenId, msg.value, addedTime);
+    }
+
     function mint_(address _owner, uint256 _expiresAt) internal returns (uint256 _tokenId) {
         uint256 newId = expirations_.push(_expiresAt) - 1;
 
-        transferFrom(0, _owner, newId);
-
+        _mint(_owner, newId);
         return newId;
     }
 
-    // function burn_(uint256 _tokenId) internal {
-    //     transfer_(tokenIdToOwner_[_tokenId], 0, _tokenId);
-    // }
-}
+    function getTokenId(uint256 _index) external view returns (uint256) {
+        require(_index < balanceOf(msg.sender));
 
+        return ownedTokens[msg.sender][_index];
+    }
+}

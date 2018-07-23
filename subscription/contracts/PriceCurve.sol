@@ -3,6 +3,7 @@ pragma solidity ^0.4.23;
 interface PriceCurveInterface {
     function getAmountFromTime(uint256 _subscriptionLength) external view returns (uint256 _amount);
     function getTimeFromAmount(uint256 _amount) external view returns (uint64 _subscriptionLength);
+    function getMinimumPrice() external view returns(uint256);
 }
 
 contract EthPriceCurve is PriceCurveInterface {
@@ -17,8 +18,8 @@ contract EthPriceCurve is PriceCurveInterface {
         costPerSecond_ = _costPerSecond;
     }
 
-    function getAmountFromTime(uint64 _subscriptionLength) external view returns (uint256 _amount) {
-        require(_subscriptionLength > minimumTime_);
+    function getAmountFromTime(uint256 _subscriptionLength) external view returns (uint256 _amount) {
+        require(_subscriptionLength >= minimumTime_);
 
         return _subscriptionLength * costPerSecond_;
     }
@@ -31,6 +32,10 @@ contract EthPriceCurve is PriceCurveInterface {
 
     function getMinimumTime() external view returns(uint256) {
         return minimumTime_;
+    }
+
+    function getMinimumPrice() external view returns(uint256) {
+        return minimumTime_ * costPerSecond_;
     }
 
     function getCostPerSecond() external view returns(uint256) {

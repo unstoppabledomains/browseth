@@ -9,7 +9,7 @@
 
 .App-header {
   background-color: #09096e;
-  height: 150px;
+  height: 85px;
   padding: 20px;
   color: white;
 }
@@ -38,23 +38,23 @@ body {
 
 .container {
   display: flex;
-  /* align-items: center; */
   justify-content: center;
-  height: 100%;
   padding: 5px;
 }
 
 .subBox {
+  position: relative;
   height: 35em;
   background-color: #4e9ef6;
   border-radius: 7px;
-  width: 28%;
+  width: 30%;
   margin-left: 10px;
   margin-right: 10px;
   color: white;
+  text-align: center;
 }
 
-.optOutBox {
+.go-back {
   width: 40%;
   padding: 10px;
   /* height: 5em; */
@@ -76,16 +76,95 @@ body {
   color: #09096e;
 }
 
-.subscribe {
+.button-container {
+  position: absolute;
+  width: 100%;
+  bottom: 30px;
+}
+.subscribe-button {
   border: none;
   height: 40px;
-  width: 60%;
+  width: 70%;
   border-radius: 5px;
   font-size: 20px;
   font-weight: bold;
   background-color: gold;
+  cursor: pointer;
+}
+
+.subscribe-button:active {
+  background-color: goldenrod;
 }
 
 .subscription-management {
   font-size: 20px;
+}
+
+.hash-outer {
+  border-radius: 7px;
+  background-color: #e7f3ff;
+  font-size: 15px;
+  height: 39px;
+  width: 78%;
+  margin: auto;
+  text-align: center;
+  display: flex;
+  align-items: center;
+}
+
+.hash {
+  float: left;
+  border-radius: 7px;
+  padding: 8px;
+  background-color: #63abf8;
+  font-size: 20px;
+  font-weight: 600;
+  width: 30%;
+}
+
+.txh {
+  text-align: center;
+  width: 100%;
+}
+
+.smaller {
+  margin: auto;
+  width: 70%;
+}
+
+.clipboard {
+  height: 30px;
+  cursor: pointer;
+}
+
+.clipboard:active {
+  transform: translateY(2px);
+}
+
+.tooltip-text {
+  opacity: 0;
+  width: 50px;
+  background-color: #63abf8;
+  position: absolute;
+  z-index: 1;
+  text-align: center;
+  padding: 5px;
+  left: 85%;
+  bottom: 66%;
+  border-radius: 6px;
+}
+
+.fadeout {
+  opacity: 1;
+  animation: fade 1.5s linear;
+}
+
+@keyframes fade {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-7px);
+  }
 }
