@@ -9,12 +9,16 @@ class AccountManagement extends React.Component {
     this.state = {
       amountEth: '',
       amountTime: '',
-      to: '',
+      transferTo: '',
       expiration: '',
       price: '',
       state: '',
       transactionHash: '',
       fade: false,
+      page: 0,
+      isLoading: false,
+      pageItems: [],
+      numTokens: 0,
     };
   }
 
@@ -77,26 +81,42 @@ class AccountManagement extends React.Component {
         return (
           <div className="subscription-management">
             <h1>Subscription Management</h1>
-            <br />
-            <b>Subscription Type: </b>Premium
-            <br />
-            <br />
-            <b>Expires on: </b>
-            {this.state.expiration}
-            <br />
-            <br />
-            <h3>Renew Subscription</h3>
+            {this.state.loading ? (
+              <div>Loading Tokens</div>
+            ) : (
+              <div>
+                You own {this.state.numTokens} premium subscription{this.state
+                  .numTokens > 1
+                  ? 's'
+                  : ''}
+                <br />
+                <b>Select account: </b>
+                <select onChange={this.onDropdownSelected}>
+                  {this.state.pageItems}
+                </select>
+              </div>
+            )}
+            <hr />
+            <p>
+              <b>Subscription Type: </b>Premium
+            </p>
+            <p>
+              <b>Expires on: </b>
+              {this.state.expiration}
+            </p>
+            <hr />
+            <h2>Renew Subscription</h2>
             <b>Add 1 year to your account: {this.state.price}ETH</b>
             <button onClick={this.renew}>Purchase!</button>
             <br />
             <br />
-            <h3>Transfer Subscription to Another User</h3>
+            <h2>Transfer Subscription to Another User</h2>
             Address of new account:{' '}
             <input
               type="text"
               placeholder="0x123..."
-              onChange={this.updateTo}
-              value={this.state.to}
+              onChange={this.updateTransferTo}
+              value={this.state.transferTo}
             />
             <button onClick={this.transferSub}>Transfer!</button>
           </div>
@@ -105,59 +125,80 @@ class AccountManagement extends React.Component {
   }
 
   componentDidMount() {
-    this.getPaidExpiration();
-    this.getPrice();
+    this.initToken();
+    this.createPageOptions();
   }
 
-  getPrice = async () => {
+  initToken = async () => {
+    const tokenId = await this.props.browseth.c.paidSubscription.f
+      .getTokenId(this.state.page)
+      .call();
+    const expiration = await this.props.browseth.c.paidSubscription.f
+      .expiresAt(tokenId.toNumber())
+      .call();
     const price = await this.props.browseth.c.paidSubscription.f
       .getMinimumPrice()
       .call();
+    const date = new Date(expiration * 1000);
     this.setState({
+      tokenId: tokenId.toNumber(),
+      expiration: date.toDateString(),
       price: parseFloat(Browseth.Units.convert(price, 'wei', 'ether')).toFixed(
         3,
       ),
     });
   };
 
-  getPaidExpiration = async () => {
-    const tokenId = await this.props.browseth.c.paidSubscription.f
-      .getTokenId(0)
-      .call();
-    console.log('tokenid', tokenId);
-    const expiration = await this.props.browseth.c.paidSubscription.f
-      .expiresAt(tokenId.toNumber())
-      .call();
-    console.log('expiration', expiration.toString());
-    const date = new Date(expiration * 1000);
-    console.log(date);
-    this.setState({expiration: date.toDateString()});
+  createPageOptions = () => {
+    this.setState({isLoading: true}, () => {
+      this.props.browseth.wallet.account().then(address => {
+        this.props.browseth.c.paidSubscription.f
+          .balanceOf(address)
+          .call()
+          .then(result => {
+            let pageItems = [];
+            const numTokens = result.toNumber();
+            for (let i = 0; i < numTokens; i++) {
+              pageItems.push(
+                <option key={i} value={i}>
+                  Subscription {i}
+                </option>,
+              );
+            }
+            this.setState({isLoading: false, pageItems, numTokens});
+          });
+      });
+    });
+  };
+
+  onDropdownSelected = e => {
+    this.setState({page: e.target.value}, () => {
+      this.initToken();
+    });
   };
 
   renew = async () => {
-    const tokenId = await this.props.browseth.c.paidSubscription.f
-      .getTokenId(0)
-      .call();
     const transactionHash = await this.props.browseth.c.paidSubscription.f
-      .renew(tokenId)
+      .renew(this.state.tokenId)
       .send({
         gasPrice: '0x1',
         value: Browseth.Units.etherToWei(this.state.price),
       });
-    console.log(transactionHash);
     this.setState({transactionHash, state: 'renewed'});
   };
 
-  transferSub = () => {
-    // logic for transferring a subscription
-    // NEED TOKEN ID
-    // safeTransferFrom vs TransferFrom?
-    // my private key or public address?
-    // this.beth.contract.subscription.function.transferFrom(
-    //   this.state.address,
-    //   this.state.to,
-    //   // TOKENID
-    // );
+  transferSub = async () => {
+    const address = await this.props.browseth.wallet.account();
+    this.props.browseth.c.paidSubscription.f
+      .transferFrom(address, this.state.transferTo, this.state.tokenId)
+      .send();
+
+    // temp
+    const temp = await this.props.browseth.c.paidSubscription.f
+      .balanceOf(this.state.transferTo)
+      .call();
+    console.log(temp.toString());
+    //
   };
 
   updateAmountEth = e => {
@@ -172,9 +213,9 @@ class AccountManagement extends React.Component {
     });
   };
 
-  updateTo = e => {
+  updateTransferTo = e => {
     this.setState({
-      to: e.target.value,
+      transferTo: e.target.value,
     });
   };
 

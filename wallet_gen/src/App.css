@@ -1,0 +1,75 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 80px;
+}
+
+.App-header {
+  background-color: #222;
+  height: 85px;
+  padding: 20px;
+  color: white;
+}
+
+.App-title {
+  font-size: 1.5em;
+}
+
+.App-intro {
+  font-size: large;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.tab {
+  background-color: #222;
+  color: white;
+  border-radius: 15px 15px 0 0;
+  width: 70%;
+  padding: 10px;
+  margin: auto;
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.options-container {
+  display: grid;
+  grid-template-columns: auto auto;
+  background-color: #222;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 10px;
+  grid-gap: 10px;
+  width: 70%;
+  margin: auto;
+}
+
+.wallet-option {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  border-radius: 4px;
+  background-color: #62adfd;
+  font-size: 30px;
+  padding: 10px;
+  height: 9em;
+  cursor: pointer;
+  box-shadow: 4px 4px 10px grey;
+}
+
+.wallet-option:hover {
+  transform: translateY(3px);
+  background-color: #3f98f7;
+  box-shadow: 2px 2px 10px grey;
+}

@@ -189,7 +189,6 @@ class SubscriptionBoxes extends React.Component {
         this.hasFreeSubscription();
       }
     });
-    console.log(this.state.fade);
   }
 
   componentWillUnmount() {
@@ -219,15 +218,11 @@ class SubscriptionBoxes extends React.Component {
       return;
     }
 
-    console.log('sending', Browseth.Units.etherToWei(this.state.ethPrice));
-
     const transactionHash = await this.props.browseth.wallet.send({
       to: '0x00c1619bb02b0bb0e2ca5dbc0aedabcf2489c997',
       gasPrice: '0x1',
       value: Browseth.Units.etherToWei(this.state.ethPrice),
     });
-    // const transactionHash =
-    //   '0x318c3a828a65bd20452064fbe1076dfd8efc2d9a67fa82c93b4941dfd887ad60'; // temp
     this.setState({transactionHash, paid: true});
 
     this.props.determineState();
