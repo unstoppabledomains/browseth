@@ -3,20 +3,100 @@ import Browseth from 'browseth';
 import '../App.css';
 import sapphire from '../assets/images/sapphire.png';
 import diamond from '../assets/images/diamond.png';
-import clipboard from '../assets/icons/clipboard.svg';
+import TransactionHash from './TransactionHash';
+import * as config from '../config.json';
 
 class SubscriptionBoxes extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      ethPrice: '',
-      interval: 0,
-      transactionHash: '',
-      subscription: '',
-      paid: false,
-      fade: false,
-    };
+  state = {
+    ethPrice: '',
+    interval: 0,
+    transactionHash: '',
+    subscription: '',
+    paid: false,
+  };
+
+  componentDidMount() {
+    // this.getPrice();
+    this.hasPaidSubscription().then(res => {
+      if (!res) {
+        this.hasFreeSubscription();
+      }
+    });
   }
+
+  componentWillUnmount() {
+    if (this.state.interval) {
+      clearInterval(this.state.interval);
+    }
+  }
+
+  freeSubscribe = async () => {
+    if (await this.hasPaidSubscription()) {
+      return;
+    } else if (await this.hasFreeSubscription()) {
+      return;
+    }
+    const transactionHash = await this.props.browseth.wallet.send({
+      to: config.freeAddress,
+      gasPrice: '0x1',
+      value: '0x0',
+    });
+    this.setState({transactionHash, paid: true});
+  };
+
+  premiumSubscribe = async () => {
+    if (await this.hasPaidSubscription()) {
+      return;
+    }
+
+    const transactionHash = await this.props.browseth.wallet.send({
+      to: config.paidAddress,
+      gasPrice: '0x1',
+      value: Browseth.Units.etherToWei(config.paidPrice),
+    });
+    this.setState({transactionHash, paid: true});
+  };
+
+  hasPaidSubscription = async () => {
+    if (
+      (await this.props.browseth.contract.paidSubscription.function
+        .balanceOf(await this.props.browseth.wallet.account())
+        .call()).toString() > '0'
+    ) {
+      this.setState({subscription: 'paid'});
+      return true;
+    }
+    return false;
+  };
+
+  hasFreeSubscription = async () => {
+    if (
+      (await this.props.browseth.contract.freeSubscription.function
+        .balanceOf(await this.props.browseth.wallet.account())
+        .call()).toString() > '0'
+    ) {
+      this.setState({subscription: 'free'});
+      return true;
+    }
+    return false;
+  };
+
+  // getPrice = () => {
+  //   this.fetchPrice();
+  //   const interval = setInterval(() => {
+  //     this.fetchPrice();
+  //   }, 30000);
+  //   this.setState({interval});
+  // };
+
+  // // Gets the current price of Eth and returns the Eth equivalent to $5.99
+  // fetchPrice = async () => {
+  //   const response = await fetch(
+  //     'https://api.coinmarketcap.com/v1/ticker/ethereum/',
+  //   );
+  //   const price = (await response.json())[0].price_usd;
+  //   this.setState({ethPrice: (5.99 / price).toFixed(3)});
+  // };
 
   render() {
     return (
@@ -24,53 +104,13 @@ class SubscriptionBoxes extends React.Component {
         {this.state.paid ? (
           <div>
             <h1>Thank you for subscribing!</h1>
-            <h3>
+            <h3 className="narrowerH3">
               We've submitted a transaction for your account to obtain a
               subscription token to the Ethereum Blockchain. Once your
               transaction has been mined, you will gain access to our content!
             </h3>
-            <div className="hash-outer">
-              <div className="hash">Transaction Hash</div>
-              <div className="txh">
-                <code>
-                  <a
-                    href={
-                      'https://etherscan.io/tx/' + this.state.transactionHash
-                    }
-                  >
-                    {this.state.transactionHash}
-                  </a>
-                </code>
-              </div>
-              <div className="tooltip">
-                <div
-                  className={
-                    'tooltip-text' + (this.state.fade ? ' fadeout' : '')
-                  }
-                >
-                  Copied!
-                </div>
-                <img
-                  className="clipboard"
-                  src={clipboard}
-                  onClick={this.copyToClipboard}
-                  alt="icon"
-                />
-              </div>
-            </div>
             <br />
-            <p className="smaller">
-              Please save this transaction hash while you wait for it to be
-              mined. Once you leave this page you won't be able to retrieve it.
-              You can check the status of your transaction at{' '}
-              <a href={'https://etherscan.io/tx/' + this.state.transactionHash}>
-                Etherscan
-              </a>.
-            </p>
-            <br />
-            <a className="go-back" href="http://localhost:3000">
-              Got it! Go Back.
-            </a>
+            <TransactionHash transactionHash={this.state.transactionHash} />
           </div>
         ) : (
           <div>
@@ -160,7 +200,7 @@ class SubscriptionBoxes extends React.Component {
                 <div className="price">$5.99/year</div>
                 or
                 <br />
-                <div className="price">{this.state.ethPrice}ETH/year</div>
+                <div className="price">0.012ETH/year</div>
                 <div className="button-container">
                   <button
                     onClick={this.premiumSubscribe}
@@ -181,111 +221,6 @@ class SubscriptionBoxes extends React.Component {
       </div>
     );
   }
-
-  componentDidMount() {
-    this.getPrice();
-    this.hasPaidSubscription().then(res => {
-      if (!res) {
-        this.hasFreeSubscription();
-      }
-    });
-  }
-
-  componentWillUnmount() {
-    if (this.state.interval) {
-      clearInterval(this.state.interval);
-    }
-  }
-
-  freeSubscribe = async () => {
-    if (await this.hasPaidSubscription()) {
-      return;
-    } else if (await this.hasFreeSubscription()) {
-      return;
-    }
-    const transactionHash = this.props.browseth.wallet.send({
-      to: '0xea75400bb9bf6629debfc4892199368358dbe637',
-      gasPrice: '0x1',
-      value: '0x0',
-    });
-    this.setState({transactionHash, paid: true});
-
-    this.props.determineState();
-  };
-
-  premiumSubscribe = async () => {
-    if (await this.hasPaidSubscription()) {
-      return;
-    }
-
-    const transactionHash = await this.props.browseth.wallet.send({
-      to: '0x00c1619bb02b0bb0e2ca5dbc0aedabcf2489c997',
-      gasPrice: '0x1',
-      value: Browseth.Units.etherToWei(this.state.ethPrice),
-    });
-    this.setState({transactionHash, paid: true});
-
-    this.props.determineState();
-  };
-
-  hasPaidSubscription = async () => {
-    if (
-      (await this.props.browseth.contract.paidSubscription.function
-        .balanceOf(await this.props.browseth.wallet.account())
-        .call()).toString() > '0'
-    ) {
-      // this person already owns a paid subscription
-      this.setState({subscription: 'paid'});
-      return true;
-    }
-    return false;
-  };
-
-  hasFreeSubscription = async () => {
-    if (
-      (await this.props.browseth.contract.freeSubscription.function
-        .balanceOf(await this.props.browseth.wallet.account())
-        .call()).toString() > '0'
-    ) {
-      // this person already owns a free subscription
-      this.setState({subscription: 'free'});
-      return true;
-    }
-    return false;
-  };
-
-  getPrice = () => {
-    this.fetchPrice();
-    const interval = setInterval(() => {
-      this.fetchPrice();
-    }, 30000);
-    this.setState({interval});
-  };
-
-  fetchPrice = async () => {
-    const response = await fetch(
-      'https://api.coinmarketcap.com/v1/ticker/ethereum/',
-    );
-    const price = (await response.json())[0].price_usd;
-    this.setState({ethPrice: (5.99 / price).toFixed(3)});
-  };
-
-  copyToClipboard = () => {
-    if (this.state.fade) {
-      return;
-    }
-    this.setState({fade: true});
-    setTimeout(() => {
-      this.setState({fade: false});
-    }, 1400);
-
-    const temp = document.createElement('textarea');
-    temp.innerText = this.state.transactionHash;
-    document.body.appendChild(temp);
-    temp.select();
-    document.execCommand('copy');
-    temp.remove();
-  };
 }
 
 export default SubscriptionBoxes;

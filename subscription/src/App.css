@@ -3,7 +3,7 @@
 }
 
 .App-logo {
-  animation: App-logo-spin infinite 20s linear;
+  animation: App-logo-spin infinite 15s linear;
   height: 80px;
 }
 
@@ -34,6 +34,11 @@
 html,
 body {
   height: 100%;
+}
+
+.narrowerH3 {
+  width: 80%;
+  margin: auto;
 }
 
 .container {
@@ -86,14 +91,23 @@ body {
   height: 40px;
   width: 70%;
   border-radius: 5px;
-  font-size: 20px;
+  font-size: 2.5vw;
   font-weight: bold;
-  background-color: gold;
+  background-color: #ffd700;
   cursor: pointer;
+}
+
+.subscribe-button:hover {
+  background-color: #fce876;
 }
 
 .subscribe-button:active {
   background-color: goldenrod;
+}
+
+.upgrade-button {
+  width: 30%;
+  padding: 5px;
 }
 
 .subscription-management {

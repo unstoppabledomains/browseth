@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import './App.css';
+import Flipper from './components/Flipper';
 
 class App extends Component {
   render() {
@@ -9,13 +10,7 @@ class App extends Component {
           <h1 className="App-title">Wallet Example</h1>
         </header>
         <br />
-        <div className="tab">Please Select a Wallet to use</div>
-        <div className="options-container">
-          <div className="wallet-option">Private Key</div>
-          <div className="wallet-option">Ledger Wallet</div>
-          <div className="wallet-option">Keystore</div>
-          <div className="wallet-option">Metamask</div>
-        </div>
+        <Flipper />
       </div>
     );
   }

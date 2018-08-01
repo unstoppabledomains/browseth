@@ -32,7 +32,11 @@ contract NFTSubscription is ERC721Token("SubscriptionToken", "SUB"), Pausable {
     }
 
     function () external payable whenNotPaused {
-        mint_(msg.sender, block.timestamp + priceCurve_.getTimeFromAmount(msg.value));
+        if (priceCurve_.getMinimumPrice() == 0) {
+            mint_(msg.sender, block.timestamp + priceCurve_.getMinimumTime());
+        } else {
+            mint_(msg.sender, block.timestamp + priceCurve_.getTimeFromAmount(msg.value));
+        }
     }
 
     function getMinimumPrice() external view returns (uint256) {

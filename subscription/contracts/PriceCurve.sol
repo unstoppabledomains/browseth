@@ -4,6 +4,7 @@ interface PriceCurveInterface {
     function getAmountFromTime(uint256 _subscriptionLength) external view returns (uint256 _amount);
     function getTimeFromAmount(uint256 _amount) external view returns (uint64 _subscriptionLength);
     function getMinimumPrice() external view returns(uint256);
+    function getMinimumTime() external view returns(uint256);
 }
 
 contract EthPriceCurve is PriceCurveInterface {

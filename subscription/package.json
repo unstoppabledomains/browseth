@@ -16,6 +16,8 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "compile": "solc -o build --gas --abi --bin contracts/**.sol ./=contracts --allow-paths contracts --overwrite --optimize",
-    "postcompile": "for old in ./build/*.abi; do mv $old ./build/`basename $old .abi`.json; done"
+    "postcompile": "for old in ./build/*.abi; do mv $old ./build/`basename $old .abi`.json; done",
+    "geth": "geth -datadir tmp/geth -dev -networkid 1 -gasprice 1 -rpc console  --rpccorsdomain='*'",
+    "deploy": "cd src && node deploytoken.js"
   }
 }
