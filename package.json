@@ -1,6 +1,6 @@
 {
   "name": "browseth",
-  "version": "0.0.54",
+  "version": "0.0.55",
   "description": "A library for interacting with ethereum, well suited for the browser.",
   "author": "Braden Pezeshki <braden.pezeshki@gmail.com>",
   "homepage": "https://github.com/buyethdomains/browseth",
@@ -14,7 +14,7 @@
   ],
   "dependencies": {
     "@ledgerhq/hw-app-eth": "^4.2.0",
-    "@ledgerhq/hw-transport-node-hid": "^4.2.0",
+    "@ledgerhq/hw-transport-node-hid": "^4.1.0",
     "@ledgerhq/hw-transport-u2f": "^4.2.0",
     "@types/event-emitter": "^0.3.2",
     "@types/fbemitter": "^2.0.32",
