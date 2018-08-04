@@ -3,6 +3,7 @@ import '../App.css';
 import PrivateKeyWallet from './PrivateKeyWallet';
 import MetaMaskWallet from './MetaMaskWallet';
 import KeystoreWallet from './KeystoreWallet';
+import LedgerWallet from './LedgerWallet';
 
 class Wallet extends React.Component {
   state = {
@@ -12,22 +13,7 @@ class Wallet extends React.Component {
     fade: false,
   };
 
-  componentDidMount() {
-    this.getAddress();
-  }
-
-  getAddress = async () => {
-    const publicAddress = await this.props.browseth.wallet.account();
-    let privateKey = '';
-    if (this.props.state === 'privateKey' || this.props.state === 'keystore') {
-      privateKey = '0x' + this.props.browseth.wallet.signer.toString();
-      console.log(privateKey);
-    }
-    this.setState({publicAddress, privateKey});
-  };
-
-  copyToClipboard = () => {
-    console.log('asdasdasdsad');
+  copyToClipboard = text => {
     if (this.state.fade) {
       return;
     }
@@ -37,7 +23,7 @@ class Wallet extends React.Component {
     }, 1400);
 
     const temp = document.createElement('textarea');
-    temp.innerText = this.state.publicAddress;
+    temp.innerText = text;
     document.body.appendChild(temp);
     temp.select();
     document.execCommand('copy');
@@ -52,18 +38,16 @@ class Wallet extends React.Component {
             browseth={this.props.browseth}
             copyToClipboard={this.copyToClipboard}
             fade={this.state.fade}
-            publicAddress={this.state.publicAddress}
-            privateKey={this.state.privateKey}
           />
         );
+      case 'ledger':
+        return <LedgerWallet browseth={this.props.browseth} />;
       case 'keystore':
         return (
           <KeystoreWallet
             browseth={this.props.browseth}
             copyToClipboard={this.copyToClipboard}
             fade={this.state.fade}
-            publicAddress={this.state.publicAddress}
-            privateKey={this.state.privateKey}
           />
         );
       case 'metamask':
@@ -72,7 +56,6 @@ class Wallet extends React.Component {
             browseth={this.props.browseth}
             copyToClipboard={this.copyToClipboard}
             fade={this.state.fade}
-            publicAddress={this.state.publicAddress}
           />
         );
       default:

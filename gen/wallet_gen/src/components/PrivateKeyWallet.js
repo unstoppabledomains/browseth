@@ -9,6 +9,18 @@ class PrivateKeyWallet extends React.Component {
   state = {
     activeTab: 0,
     isVisible: false,
+    publicAddress: '',
+    privateKey: '',
+  };
+
+  componentDidMount() {
+    this.getAddresses();
+  }
+
+  getAddresses = async () => {
+    const publicAddress = await this.props.browseth.wallet.account();
+    const privateKey = '0x' + this.props.browseth.wallet.signer.toString();
+    this.setState({publicAddress, privateKey});
   };
 
   toggleEye = () => {
@@ -57,7 +69,7 @@ class PrivateKeyWallet extends React.Component {
                   <h1>Your Public Address</h1>
                   <div className="public-address-box">
                     <div className="public-address-box-content">
-                      {this.props.publicAddress}
+                      {this.state.publicAddress}
                       <div className="tooltip">
                         <div
                           className={
@@ -70,7 +82,11 @@ class PrivateKeyWallet extends React.Component {
                         <img
                           className="clipboard"
                           src={Clipboard}
-                          onClick={this.props.copyToClipboard}
+                          onClick={() => {
+                            this.props.copyToClipboard(
+                              this.state.publicAddress,
+                            );
+                          }}
                           alt="icon"
                         />
                       </div>
@@ -84,7 +100,7 @@ class PrivateKeyWallet extends React.Component {
                       type="text"
                       value={
                         this.state.isVisible
-                          ? this.props.privateKey
+                          ? this.state.privateKey
                           : '••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••'
                       }
                       disabled

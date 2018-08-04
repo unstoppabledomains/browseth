@@ -4,6 +4,7 @@ import '../App.css';
 import * as Tokens from './tokens-eth.json';
 import Select from 'react-select';
 import '../react-select.css';
+import * as config from '../config.json';
 
 class SendMoney extends React.Component {
   state = {
@@ -11,7 +12,6 @@ class SendMoney extends React.Component {
     symbol: '',
     tokenBalance: '',
     ethBalance: '',
-    publicAddr: '',
     decimals: '',
     to: '',
     tokenAmount: '',
@@ -30,13 +30,22 @@ class SendMoney extends React.Component {
   };
 
   componentDidMount() {
-    this.enableWallet();
+    this.init();
+  }
+
+  init = () => {
+    if (this.props.isLoadingAddresses) {
+      setTimeout(() => {
+        this.init();
+      }, 200);
+      return;
+    }
     this.getEthBalance();
     this.getGasPrice().then(() => {
       this.setActiveGas(1);
     });
     this.fetchUsdPrice();
-  }
+  };
 
   getTokens = () => {
     return Tokens.map((token, i) => {
@@ -73,11 +82,7 @@ class SendMoney extends React.Component {
   // by to convert to user representation.
   getTokenBalance = async () => {
     const balance = await this.props.browseth.contract.ERC20.function
-      .balanceOf(
-        this.state.publicAddr === ''
-          ? await this.beth.wallet.account()
-          : this.state.publicAddr,
-      )
+      .balanceOf(this.props.publicAddress)
       .call({to: this.state.tokenAddr});
     let tokenBalance;
     if (!balance.isZero()) {
@@ -89,9 +94,15 @@ class SendMoney extends React.Component {
   };
 
   getEthBalance = async () => {
+    if (!this.props.publicAddress) {
+      setTimeout(() => {
+        this.getEthBalance();
+      }, 200);
+      return;
+    }
     const balance = await this.props.browseth.rpc.send(
       'eth_getBalance',
-      await this.props.browseth.wallet.account(),
+      this.props.publicAddress,
       'latest',
     );
     const ethBalance = Browseth.Units.weiToEther(balance);
@@ -99,12 +110,8 @@ class SendMoney extends React.Component {
   };
 
   enableWallet = async () => {
-    const publicAddr = await this.props.browseth.wallet.account();
     if (this.state.symbol !== '') {
-      this.setState({publicAddr});
       this.getTokenBalance();
-    } else {
-      this.setState({publicAddr});
     }
   };
 
@@ -174,7 +181,7 @@ class SendMoney extends React.Component {
         to: this.state.to,
         value: Browseth.Units.etherToWei(this.state.ethAmount),
         gasPrice: Browseth.Units.gweiToWei(this.state.gasPrice),
-        chainId: 1337,
+        chainId: config.chainId,
       });
       this.setState({transactionHash});
     } else {
@@ -183,7 +190,7 @@ class SendMoney extends React.Component {
         .send({
           to: this.state.tokenAddr,
           gasPrice: Browseth.Units.gweiToWei(this.state.gasPrice),
-          chainId: 1337,
+          chainId: config.chainId,
         });
       this.setState({transactionHash});
     }
@@ -222,7 +229,7 @@ class SendMoney extends React.Component {
       if (this.state.activeSender === 0 && this.state.ethAmount) {
         gasLimit = parseInt(
           await this.props.browseth.wallet.gas({
-            to: this.state.publicAddr,
+            to: this.props.publicAddress,
             value: Browseth.Units.etherToWei(this.state.ethAmount),
           }),
           16,
@@ -268,7 +275,6 @@ class SendMoney extends React.Component {
       'https://api.coinmarketcap.com/v1/ticker/ethereum/',
     );
     const price = (await response.json())[0].price_usd;
-    console.log(price);
     this.setState({ethPrice: parseFloat(price).toFixed(2)});
   };
 

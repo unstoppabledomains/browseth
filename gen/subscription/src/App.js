@@ -9,8 +9,7 @@ class App extends React.PureComponent {
   render() {
     const beth = new Browseth();
     beth.wallet = new Browseth.Wallets.Online(
-      beth.rpc,
-      // new Browseth.Rpcs.Web3(window.web3.currentProvider),
+      new Browseth.Rpcs.Web3(window.web3.currentProvider),
     );
     beth.addContract('freeSubscription', SubscriptionAbi, {
       address: config.freeAddress,
@@ -22,7 +21,6 @@ class App extends React.PureComponent {
     return (
       <div className="App">
         <header className="App-header">
-          {/* <img src={logo} className="App-logo" alt="logo" /> */}
           <h1>Example Subscription</h1>
         </header>
         {window.web3 ? (

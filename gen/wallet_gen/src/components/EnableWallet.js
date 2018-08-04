@@ -4,34 +4,13 @@ import EnablePrivateKey from './EnablePrivateKey';
 import EnableLedger from './EnableLedger';
 import EnableMetaMask from './EnableMetaMask';
 import EnableKeystore from './EnableKeystore';
-import Browseth from '../../node_modules/browseth';
 
 class EnableWallet extends React.Component {
   state = {
     privateKey: '',
   };
 
-  authPrivateKey = privateKey => {
-    this.props.browseth.wallet = new Browseth.Wallets.Offline(
-      this.props.browseth.rpc,
-      Browseth.Signers.PrivateKey.fromHex(privateKey),
-    );
-    this.props.enable();
-  };
-
-  authLedger = () => {
-    this.props.enable();
-  };
-
-  authMetaMask = () => {
-    this.props.enable();
-  };
-
-  authKeystore = privateKey => {
-    this.props.browseth.wallet = new Browseth.Wallets.Offline(
-      this.props.browseth.rpc,
-      privateKey,
-    );
+  auth = () => {
     this.props.enable();
   };
 
@@ -40,25 +19,34 @@ class EnableWallet extends React.Component {
       case 'privateKey':
         return (
           <EnablePrivateKey
-            auth={this.authPrivateKey}
+            auth={this.auth}
+            browseth={this.props.browseth}
             unflip={this.props.unflip}
           />
         );
       case 'ledger':
         return (
           <EnableLedger
-            auth={this.authLedger}
+            auth={this.auth}
             unflip={this.props.unflip}
             browseth={this.props.browseth}
           />
         );
       case 'keystore':
         return (
-          <EnableKeystore auth={this.authKeystore} unflip={this.props.unflip} />
+          <EnableKeystore
+            auth={this.auth}
+            unflip={this.props.unflip}
+            browseth={this.props.browseth}
+          />
         );
       case 'metamask':
         return (
-          <EnableMetaMask auth={this.authMetaMask} unflip={this.props.unflip} />
+          <EnableMetaMask
+            auth={this.auth}
+            unflip={this.props.unflip}
+            browseth={this.props.browseth}
+          />
         );
       default:
         return <div>Error!</div>;

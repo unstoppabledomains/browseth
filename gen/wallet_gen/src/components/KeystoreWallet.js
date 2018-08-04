@@ -2,11 +2,29 @@ import * as React from 'react';
 import '../App.css';
 import SendMoney from './SendMoney';
 import * as Clipboard from '../assets/clipboard.svg';
+import * as Invisible from '../assets/invisible.png';
+import * as Visible from '../assets/visible.png';
 
-class MetaMaskWallet extends React.Component {
+class KeystoreWallet extends React.Component {
   state = {
     activeTab: 0,
     isVisible: false,
+    publicKey: '',
+    privateKey: '',
+  };
+
+  componentDidMount() {
+    this.getAddresses();
+  }
+
+  getAddresses = async () => {
+    const publicAddress = await this.props.browseth.wallet.account();
+    const privateKey = '0x' + this.props.browseth.wallet.signer.toString();
+    this.setState({publicAddress, privateKey});
+  };
+
+  toggleEye = () => {
+    this.setState({isVisible: !this.state.isVisible});
   };
 
   activateTab = tab => {
@@ -51,11 +69,11 @@ class MetaMaskWallet extends React.Component {
                   <h1>Your Public Address</h1>
                   <div className="public-address-box">
                     <div className="public-address-box-content">
-                      {this.props.publicAddress}
+                      {this.state.publicAddress}
                       <div className="tooltip">
                         <div
                           className={
-                            'tooltip-text metamask-tooltip-position' +
+                            'tooltip-text privatekey-tooltip-position' +
                             (this.props.fade ? ' fadeout' : '')
                           }
                         >
@@ -71,9 +89,28 @@ class MetaMaskWallet extends React.Component {
                     </div>
                   </div>
                   <br />
-                  To use another account associated with your Metamask account
-                  go to the extension and choose an account there, then refresh
-                  this page.
+                  <h1>Your Private Key</h1>
+                  <div className="private-key-input-container">
+                    <input
+                      className="private-key-input"
+                      type="text"
+                      value={
+                        this.state.isVisible
+                          ? this.state.privateKey
+                          : '••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••'
+                      }
+                      disabled
+                    />
+                    <img
+                      onClick={this.toggleEye}
+                      src={this.state.isVisible ? Visible : Invisible}
+                      className="invisible-icon"
+                      alt="visibility-icon"
+                    />
+                  </div>
+                  <div className="dont-share">
+                    Do not share your private key with anyone!
+                  </div>
                 </div>
               </div>
               <div
@@ -92,4 +129,4 @@ class MetaMaskWallet extends React.Component {
   }
 }
 
-export default MetaMaskWallet;
+export default KeystoreWallet;

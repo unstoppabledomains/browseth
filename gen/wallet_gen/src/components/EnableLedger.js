@@ -26,7 +26,7 @@ class EnableLedger extends React.Component {
         this.props.browseth.rpc,
         new Browseth.Signers.Ledger(),
       );
-      await this.props.browseth.wallet.account();
+      await this.props.browseth.wallet.account(1);
     } catch (err) {
       console.log(err);
       if (err.toString().includes('HTTPS')) {
@@ -55,7 +55,7 @@ class EnableLedger extends React.Component {
       },
       async () => {
         try {
-          console.log(await this.props.browseth.wallet.account(1));
+          await this.props.browseth.wallet.account(0);
         } catch (err) {
           this.setState({
             title: 'Error!',

@@ -22,7 +22,6 @@ class EnableKeystore extends React.Component {
       privateKey: '0x' + privateKey.toString(),
       filename: privateKey.getKeyStoreFileName(),
       url: window.URL.createObjectURL(blob),
-      // address: await pk.account(),
     });
   };
 
@@ -60,12 +59,23 @@ class EnableKeystore extends React.Component {
           ? 'Incorrect Password!'
           : 'Not a valid keystore file!',
       });
+      return;
     }
-    this.props.auth(privateKey);
+    this.setState({privateKey: privateKey.toString()}, () => {
+      this.auth();
+    });
   };
 
   enable = () => {
     this.setState({isEnabled: true});
+  };
+
+  auth = () => {
+    this.props.browseth.wallet = new Browseth.Wallets.Offline(
+      this.props.browseth.rpc,
+      Browseth.Signers.PrivateKey.fromHex(this.state.privateKey),
+    );
+    this.props.auth();
   };
 
   render() {
@@ -106,7 +116,7 @@ class EnableKeystore extends React.Component {
                   />
                   <h1>Enter your Password</h1>
                   <input
-                    type="text"
+                    type="password"
                     value={this.state.password}
                     onChange={this.updatePassword}
                     placeholder="YOUR_PASSWORD"
@@ -131,7 +141,7 @@ class EnableKeystore extends React.Component {
                 <div>
                   <h1>Enter a new password</h1>
                   <input
-                    type="text"
+                    type="password"
                     onChange={this.updateNewPassword}
                     placeholder="YOUR_PASSWORD"
                     className="password"
@@ -157,11 +167,7 @@ class EnableKeystore extends React.Component {
                 onClick={() => {
                   this.state.uploading
                     ? this.checkPassword()
-                    : this.props.auth(
-                        Browseth.Signers.PrivateKey.fromHex(
-                          this.state.privateKey,
-                        ),
-                      );
+                    : this.props.auth();
                 }}
                 className="auth-button"
                 disabled={!this.state.isEnabled}

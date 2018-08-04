@@ -575,3 +575,9 @@
 .password {
   width: 40%;
 }
+
+.table td {
+  border: 1px solid;
+  border-radius: 3px;
+  padding: 1%;
+}

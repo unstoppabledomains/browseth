@@ -5,9 +5,10 @@ import EnableWallet from './EnableWallet';
 import Wallet from './Wallet';
 import Browseth from 'browseth';
 import * as ERC20 from './erc20.json';
+import * as config from '../config.json';
 
 class Flipper extends React.Component {
-  browseth = new Browseth();
+  browseth = new Browseth(config.url);
 
   state = {
     clicked: '',

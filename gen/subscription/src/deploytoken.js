@@ -3,15 +3,16 @@ const Browseth = require('browseth').default;
 const {XMLHttpRequest} = require('xmlhttprequest');
 const subabi = require('../build/NFTSubscription.json');
 const curveabi = require('../build/EthPriceCurve.json');
+const config = require('./config.json');
 
 const subbin = fs.readFileSync('../build/NFTSubscription.bin', 'utf8');
 const curvebin = fs.readFileSync('../build/EthPriceCurve.bin', 'utf8');
 
 global.XMLHttpRequest = XMLHttpRequest;
 
-const subscriptionPrice = 0.012;
+const subscriptionPrice = config.paidPrice;
 const SECONDS_PER_YEAR = 31540000;
-const COST_PER_SECOND = 380469245;
+const COST_PER_SECOND = config.costPerSecond;
 
 const b = new Browseth();
 

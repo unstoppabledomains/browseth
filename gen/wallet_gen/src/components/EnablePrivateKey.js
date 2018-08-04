@@ -32,6 +32,14 @@ class EnablePrivateKey extends React.Component {
     }
   };
 
+  auth = () => {
+    this.props.browseth.wallet = new Browseth.Wallets.Offline(
+      this.props.browseth.rpc,
+      Browseth.Signers.PrivateKey.fromHex(this.state.privateKey),
+    );
+    this.props.auth();
+  };
+
   render() {
     return (
       <div>
@@ -64,9 +72,7 @@ class EnablePrivateKey extends React.Component {
               />
               <br />
               <button
-                onClick={() => {
-                  this.props.auth(this.state.privateKey);
-                }}
+                onClick={this.auth}
                 className="auth-button"
                 disabled={!this.state.isEnabled}
               >
