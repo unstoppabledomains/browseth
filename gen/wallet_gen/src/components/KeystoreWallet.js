@@ -9,7 +9,7 @@ class KeystoreWallet extends React.Component {
   state = {
     activeTab: 0,
     isVisible: false,
-    publicKey: '',
+    publicAddress: '',
     privateKey: '',
   };
 
@@ -82,7 +82,11 @@ class KeystoreWallet extends React.Component {
                         <img
                           className="clipboard"
                           src={Clipboard}
-                          onClick={this.props.copyToClipboard}
+                          onClick={() => {
+                            this.props.copyToClipboard(
+                              this.state.publicAddress,
+                            );
+                          }}
                           alt="icon"
                         />
                       </div>

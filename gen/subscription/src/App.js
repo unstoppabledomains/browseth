@@ -9,7 +9,8 @@ class App extends React.PureComponent {
   render() {
     const beth = new Browseth();
     beth.wallet = new Browseth.Wallets.Online(
-      new Browseth.Rpcs.Web3(window.web3.currentProvider),
+      // new Browseth.Rpcs.Web3(window.web3.currentProvider),
+      beth.rpc,
     );
     beth.addContract('freeSubscription', SubscriptionAbi, {
       address: config.freeAddress,

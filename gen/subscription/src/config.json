@@ -1,5 +1,6 @@
 {
-    "paidAddress": "0x09c1ccd0234b6eb21a3fc967f9856839576ad995",
-    "freeAddress": "0x537d7b184bbb1b31336dd1ffce6ad4b4e4bcf14b",
-    "paidPrice": "0.012"
-  }
+  "paidAddress": "0x09c1ccd0234b6eb21a3fc967f9856839576ad995",
+  "freeAddress": "0x537d7b184bbb1b31336dd1ffce6ad4b4e4bcf14b",
+  "paidPrice": "0.012",
+  "costPerSecond": 380469245
+}

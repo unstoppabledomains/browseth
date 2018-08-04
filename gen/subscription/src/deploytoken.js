@@ -65,7 +65,8 @@ const a = async () => {
   const json = `{
     "paidAddress": "${transaction3.contractAddress}",
     "freeAddress": "${transaction4.contractAddress}",
-    "paidPrice": "${subscriptionPrice}"
+    "paidPrice": "${subscriptionPrice}",
+    "costPerSecond": ${COST_PER_SECOND}
   }`;
 
   fs.writeFileSync('./config.json', json);

@@ -74,9 +74,11 @@ class MetaMaskWallet extends React.Component {
                         <img
                           className="clipboard"
                           src={Clipboard}
-                          onClick={this.props.copyToClipboard(
-                            this.state.publicAddress,
-                          )}
+                          onClick={() => {
+                            this.props.copyToClipboard(
+                              this.state.publicAddress,
+                            );
+                          }}
                           alt="icon"
                         />
                       </div>
