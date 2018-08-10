@@ -57,18 +57,16 @@ class SendMoney extends React.Component {
   };
 
   selectToken = async token => {
-    if (token.length > 0) {
-      const symbol = token.label.match(/\[(.*?)\]/)[1];
-      const decimals = (await this.props.browseth.contract.ERC20.function
-        .decimals()
-        .call({to: token.value})).toString();
-        this.setState({
-          tokenAddr: token.value,
-          symbol,
-          decimals,
-        });
-      this.getTokenBalance();
-    }
+    const symbol = token.label.match(/\[(.*?)\]/)[1];
+    const decimals = (await this.props.browseth.contract.ERC20.function
+      .decimals()
+      .call({to: token.value})).toString();
+      this.setState({
+        tokenAddr: token.value,
+        symbol,
+        decimals,
+      });
+    this.getTokenBalance();
   };
 
   // Note: Since we used the generic ERC20 contract abi it's
@@ -83,7 +81,6 @@ class SendMoney extends React.Component {
       .balanceOf(this.props.publicAddress)
       .call({to: this.state.tokenAddr});
     let tokenBalance;
-    console.log(balance.toString());
     if (!balance.isZero()) {
       tokenBalance = this.toDecimal(balance);
     } else {
@@ -422,7 +419,7 @@ class SendMoney extends React.Component {
               ''
             ) : (
               <div>
-                Transaction Hash:<br /> ${this.state.transactionHash}
+                Transaction Hash:<br /> <a href={`https://etherscan.io/tx/${this.state.transactionHash}`} target="_blank">{this.state.transactionHash}</a>
               </div>
             )}
           </div>
