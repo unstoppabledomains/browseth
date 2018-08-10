@@ -123,7 +123,7 @@ class PrivateKeyWallet extends React.Component {
                 }`}
               >
                 <div className="blue-container">
-                  <SendMoney browseth={this.props.browseth} />
+                  <SendMoney browseth={this.props.browseth} publicAddress={this.state.publicAddress}/>
                 </div>
               </div>
             </div>

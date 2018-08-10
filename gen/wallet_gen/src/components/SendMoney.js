@@ -57,19 +57,17 @@ class SendMoney extends React.Component {
   };
 
   selectToken = async token => {
-    const symbol = token.label.match(/\[(.*?)\]/)[1];
-    const decimals = (await this.props.browseth.contract.ERC20.function
-      .decimals()
-      .call({to: token.value})).toString();
-    if (this.state.publicAddr !== '') {
-      this.setState({
-        tokenAddr: token.value,
-        symbol,
-        decimals,
-      });
+    if (token.length > 0) {
+      const symbol = token.label.match(/\[(.*?)\]/)[1];
+      const decimals = (await this.props.browseth.contract.ERC20.function
+        .decimals()
+        .call({to: token.value})).toString();
+        this.setState({
+          tokenAddr: token.value,
+          symbol,
+          decimals,
+        });
       this.getTokenBalance();
-    } else {
-      this.setState({tokenAddr: token.value, symbol});
     }
   };
 
@@ -85,6 +83,7 @@ class SendMoney extends React.Component {
       .balanceOf(this.props.publicAddress)
       .call({to: this.state.tokenAddr});
     let tokenBalance;
+    console.log(balance.toString());
     if (!balance.isZero()) {
       tokenBalance = this.toDecimal(balance);
     } else {
@@ -264,8 +263,8 @@ class SendMoney extends React.Component {
     );
     const gasInfo = await response.json();
     this.setState({
+      // safeSlowGas: (gasInfo.safeLowWait / 10).toFixed(2),
       safeLowGas: (gasInfo.safeLow / 10).toFixed(2),
-      safeSlowGas: (gasInfo.safeLowWait / 10).toFixed(2),
       safeFastGas: (gasInfo.fast / 10).toFixed(2),
     });
   };
@@ -291,7 +290,7 @@ class SendMoney extends React.Component {
         />
         <br />
         <div className="gas-price-container">
-          <div
+          {/* <div
             className={`gas-price-option ${
               this.state.activeGas === 0 ? 'selected' : 'deselected'
             }`}
@@ -302,7 +301,7 @@ class SendMoney extends React.Component {
             <b>Safe Slow Gas</b>
             <br />
             {this.state.safeSlowGas} Gwei
-          </div>
+          </div> */}
           <div
             className={`gas-price-option ${
               this.state.activeGas === 1 ? 'selected' : 'deselected'
