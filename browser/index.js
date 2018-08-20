@@ -1,0 +1,244 @@
+import * as utils from '@browseth/utils'
+import * as signerUtils from '@browseth/signer-utils'
+// import * as units from '@browseth/units'
+import { JsonRpcRequestBatchQueue } from '@browseth/jsonrpc-request-queue'
+import { Explorer } from '@browseth/explorer'
+import Contract from '@browseth/contract'
+import { AbiCodec } from '@browseth/abi'
+import { AccountReadonly } from '@browseth/account-readonly'
+
+export { BrowserClient as default, BrowserClient }
+
+function keccak256() {}
+function tightlyPackedKeccak256() {}
+
+class BrowserClient {
+  // Keccak
+
+  static keccak256 = keccak256
+  static keccak = keccak256
+  static sha3 = keccak256
+  static sha256 = keccak256
+
+  keccak256 = this.constructor.keccak256
+  keccak = this.constructor.keccak256
+  sha3 = this.constructor.keccak256
+  sha256 = this.constructor.keccak256
+
+  // Keccak with speacial abi packing
+
+  static tightlyPackedKeccak256 = tightlyPackedKeccak256
+  static tightlyPackedKeccak = tightlyPackedKeccak256
+  static tightlyPackedSha3 = tightlyPackedKeccak256
+  static tightlyPackedSha256 = tightlyPackedKeccak256
+  static soliditySha3 = tightlyPackedKeccak256
+
+  tightlyPackedKeccak256 = this.constructor.tightlyPackedKeccak256
+  tightlyPackedKeccak = this.constructor.tightlyPackedKeccak256
+  tightlyPackedSha3 = this.constructor.tightlyPackedKeccak256
+  tightlyPackedSha256 = this.constructor.tightlyPackedKeccak256
+  soliditySha3 = this.constructor.tightlyPackedKeccak256
+
+  // Unit Conversion
+
+  // static convert = units.convert
+  // static toWei = units.toWei
+  // static gweiToWei = units.gweiToWei
+  // static etherToWei = units.etherToWei
+
+  convert = this.constructor.convert
+  toWei = this.constructor.toWei
+  gweiToWei = this.constructor.gweiToWei
+  etherToWei = this.constructor.etherToWei
+
+  // Address Utils
+
+  static checksum = utils.address.from
+  static isValidAddress = utils.address.isValid
+
+  checksum = this.constructor.checksum
+  isValidAddress = this.constructor.isValidAddress
+
+  // Account Recovery
+
+  static recover = signerUtils.recover
+  static recoverTransaction = signerUtils.recoverTransaction
+
+  recover = this.constructor.recover
+  recoverTransaction = this.constructor.recoverTransaction
+
+  // Rlp Codec
+
+  static rlp = utils.rlp
+
+  rlp = this.constructor.rlp
+
+  // simple serializing utils
+
+  static data = utils.param.toData
+  static tag = utils.param.toTag
+  static quantity = utils.param.toQuantity
+
+  data = this.constructor.data
+  tag = this.constructor.tag
+  quantity = this.constructor.quantity
+
+  //
+
+  static abi = (abiJsonInterface, options) =>
+    new AbiCodec(abiJsonInterface, options)
+
+  abi = this.constructor.abi
+
+  // Explorer
+
+  fallbackAccount = new AccountReadonly(this)
+
+  find = new Explorer(this)
+  block = new utils.BlockTracker(this)
+
+  request = (...args) => this.jsonrpc.request(...args)
+
+  constructor(url, options = {}) {
+    this.url = url
+    this.jsonrpc = new JsonRpcRequestBatchQueue(url, options)
+  }
+
+  accounts = []
+
+  addAccount = newAccount => {
+    if (accounts.findIndex(account => account.id === newAccount.id) === -1)
+      this.accounts.push(newAccount)
+  }
+
+  useAccount = account => {
+    const from =
+      typeof account === 'string'
+        ? this.accounts.findIndex(account => account.id === account)
+        : this.accounts.findIndex(account => account === account)
+
+    if (from !== -1) {
+      this.accounts.splice(0, 0, this.accounts.splice(from, 1)[0])
+      return true
+    } else if (this.accounts.length < 1 && typeof account !== 'string') {
+      this.accounts.unshift(account)
+      return true
+    }
+    return false
+  }
+
+  simulate = transaction => this.gas(transaction)
+  gas = transaction => {
+    if (this.accounts.length > 0) return this.accounts[0].gas(transaction)
+    return this.fallbackAccount.gas(transaction)
+  }
+
+  vm = (transaction, block) => this.call(transaction, block)
+  call = (transaction, block) => {
+    if (this.accounts.length > 0)
+      return this.accounts[0].call(transaction, block)
+    return this.fallbackAccount.call(transaction, block)
+  }
+
+  send = params => {
+    if (this.accounts.length > 0) return this.accounts[0].send(params)
+    return Promise.reject(
+      new Error('an account is required in order to send transactions'),
+    )
+  }
+
+  contract = (abiJsonInterface, options) =>
+    new Contract(this, abiJsonInterface, options)
+}
+
+// const eth = new BrowserClient().etherToWei
+// // eth.convert(fromUnit, value, toUnit)
+// // eth.toWei(unit, value)
+// // eth.gweiToWei(value)
+// // eth.etherToWei(value)
+
+// eth.abi([])
+
+// // claimed
+// // fill(.start)
+// // fill.success/full
+// // fill.gracefulFailure // prolly not any
+// // fill.criticalFailure
+// // brodcast(.start)
+// // brodcast.success/brodcasted
+// // brodcast.criticalFailure
+// // brodcast.gracefulFailure
+// // mined
+// // canceled
+// // dropped
+// // expired
+// // criticalFailure
+
+// const txId = eth.transaction()
+
+// eth.tx.enqueue(txId)
+// eth.tx.track(txId)
+// eth.tx.get(txId)
+// eth.tx.cancel(txId)
+// eth.tx.drop(txId)
+// eth.tx.setPriority(txId, 1)
+// eth.tx.get(txId).attempts
+// eth.tx.resolveHash(txId, attempt /* ? */)
+// eth.tx.resolve(txId, attempt /* ? */)
+
+// const addresses = await eth.addresses()
+// eth.accounts[0].address()
+
+// const c = eth.contract([], opts)
+
+// eth.signerAccount(new SignerPrivateKey())
+// // eth.privateKeyAccount('0x123456789...')
+// eth.onlineAccount('http://localhost:8545')
+// eth.readonlyAccount('0x1234...')
+
+// const account = eth.addAccount(new SignerAccount(new SignerPrivateKey()))
+// const account = eth.addAccount(
+//   new OnlineAccount('http://localhost:8545' || web3),
+// )
+// const account = eth.addAccount(
+//   new ReadonlyAccount('0x0000000000000000000000000000000000000000'),
+// )
+
+// eth.useAccount(account || account.id || address)
+
+// const contract = new Contract(eth, [], {
+//   bin: '0000',
+//   address: '0x12341234123412341234123412341234',
+// })
+
+// contract.fallback().send()
+// contract.construct().send()
+
+// const txId = contract.fn.a().send({
+//   UNSAFE_nonce,
+//   UNSAFE_gasPrice,
+//   UNSAFE_gas,
+//   UNSAFE_from,
+//   UNSAFE_data,
+//   UNSAFE_chainId,
+//   to, // account || ensname
+//   value,
+//   expiresAt,
+//   ttl,
+//   attempts: 1,
+//   priority: 100,
+// })
+
+// const { on, off, dispose } = eth.tx.track(txId)
+
+// contract.fn.a().abi
+// contract.fn.a().gas()
+// contract.fn.a().call()
+
+// const { on, off, dispose } = contract.ev.Bla().subscription()
+
+// on(console.log)
+// off(console.log)
+// dispose()
+
+// const logs = contract.ev.Bla().logs()
