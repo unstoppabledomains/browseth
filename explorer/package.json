@@ -1,6 +1,7 @@
 {
   "name": "@browseth/explorer",
   "version": "0.0.0",
+  "license": "MIT",
   "browser": "build/browser.js",
   "main": "build/index.js",
   "module": "build/module.js",

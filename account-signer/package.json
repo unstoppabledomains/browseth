@@ -1,9 +1,11 @@
 {
   "name": "@browseth/account-signer",
   "version": "0.0.0",
+  "license": "MIT",
   "browser": "build/browser.js",
   "main": "build/index.js",
   "module": "build/module.js",
+  "types": "index.d.ts",
   "scripts": {
     "build-browser": "rollup -c workspace/rollup.browser-config.js",
     "build-node": "rollup -c workspace/rollup.node-config.js",

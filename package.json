@@ -1,6 +1,7 @@
 {
   "name": "@browseth/workspace",
   "version": "0.0.0",
+  "license": "MIT",
   "private": true,
   "workspaces": [
     "*"
@@ -17,6 +18,7 @@
     "babel-preset-env": "^1.7.0",
     "isomorphic-fetch": "^2.2.1",
     "lerna": "^3.0.0-rc.0",
+    "prettier": "^1.14.2",
     "rollup": "^0.63.4",
     "rollup-plugin-babel": "^3.0.7",
     "rollup-plugin-commonjs": "^9.1.4",
@@ -24,6 +26,7 @@
     "rollup-plugin-node-resolve": "^3.3.0"
   },
   "scripts": {
+    "format": "prettier --write -l **/*.{js,json,d.ts}",
     "postinstall": "lerna link",
     "prebuild-safe": "yarn --force",
     "build-safe": "lerna exec --concurrency 1 'yarn build-node' && lerna exec --concurrency 1 'yarn build-browser'",

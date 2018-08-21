@@ -1,11 +1,19 @@
-export = SignerUtils
-export as namespace SignerUtils
+export = AccountReadonlyNamespace
+export as namespace AccountReadonlyNamespace
 
-declare namespace SignerUtils {
-  function recover(object: {
-    hash: string | ArrayBuffer | ArrayBufferView
-    r: string | ArrayBuffer | ArrayBufferView
-    s: string | ArrayBuffer | ArrayBufferView
-    v: string | ArrayBuffer | ArrayBufferView
-  }): string
+declare namespace AccountReadonlyNamespace {
+  class AccountReadonly {
+    id: string
+
+    constructor(
+      ethRef,
+      options: { from: string | ArrayBuffer | ArrayBufferView },
+    )
+
+    address(): Promise<string>
+    gas(params: any): Promise<any>
+    call(params: any, block: any): Promise<any>
+    send(params: any): Promise<never>
+    sign(message: string): Promise<never>
+  }
 }

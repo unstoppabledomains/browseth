@@ -1,10 +1,14 @@
 export { AccountReadonly as default, AccountReadonly }
 
 class AccountReadonly {
+  id = crypto.uuid()
+
   constructor(ethRef, { from } = {}) {
     this.ethRef = ethRef
     this.from = from
   }
+
+  address = () => Promise.resolve(this.from)
 
   gas = async ({ UNSAFE_gasPrice, UNSAFE_from, UNSAFE_data, to, value }) =>
     this.ethRef.request('eth_estimateGas', {
@@ -61,5 +65,6 @@ class AccountReadonly {
       this.ethRef.tag(block),
     )
 
-  send = async () => Promise.reject("can't send from a readonly account")
+  send = () => Promise.reject("can't send from a readonly account")
+  sign = () => Promise.reject("can't sign message with a readonly account")
 }

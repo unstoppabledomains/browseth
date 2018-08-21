@@ -1,53 +1,38 @@
-// export = Abi
+export = Abi
 export as namespace Abi
 
 declare namespace Abi {
-  class AbiFunction {}
-  class AbiEvent {}
+  class AbiFunction {
+    meta: object
+    fullName?: string
+    sig?: ArrayBuffer
+    canUseNamedInput: boolean
+    canUseNamedOutput: boolean
 
-  namespace Param {
-    abstract class AbiParam<InputT = any, OutputT = any> {
-      meta: any
-      constructor(object: any)
-      enc(value: InputT): ArrayBuffer
-      dec(value: AB): OutputT
-    }
+    enc(): string
+    dec(): any
+  }
 
-    class AbiParamBoolean extends AbiParam<boolean, boolean> {}
-    class AbiParamNumber extends AbiParam<number | AB, BigInt> {}
-    class AbiParamFixedBytes extends AbiParam<string | AB, Uint8Array> {}
-    class AbiParamAddress extends AbiParam<
-      undefined | null | string | AB,
-      string
-    > {}
-    class AbiParamDynamicBytes extends AbiParam<string | AB, Uint8Array> {}
-    class AbiParamString extends AbiParam<string | AB, Uint8Array> {}
-    // class AbiParamFixedPoint {}
-    class AbiParamFunction extends AbiParam<
-      {
-        address: undefined | null | string | AB
-        selector: string | AB
-      },
-      { address: null | string | AB; selector: string | AB }
-    > {}
-    class AbiParamArray extends AbiParam<any[], any[]> {}
-    class AbiParamTuple extends AbiParam {}
+  class AbiEvent {
+    meta: object
+    isAnonymous: boolean
+    fullName?: string
+    sig?: string
+    canUseNamedInput: boolean
+    canUseNamedOutput: boolean
 
-    function parse(
-      object: object,
-    ):
-      | AbiParamBoolean
-      | AbiParamNumber
-      | AbiParamFixedBytes
-      | AbiParamAddress
-      | AbiParamDynamicBytes
-      | AbiParamString
-      // | AbiParamFixedPoint
-      | AbiParamFunction
-      | AbiParamArray
-      | AbiParamTuple
+    enc(): Array<string | string[]>
+    dec(): any
+  }
+
+  class AbiCodec {
+    constructor(
+      abiJsonInterface: object[],
+      options?: { bin: string | ArrayBuffer | ArrayBufferView },
+    )
+
+    construct(...args): string
+    fn: { [key: string]: (...args) => string }
+    ev: { [key: string]: (...args) => Array<string | string[]> }
   }
 }
-
-type AB = ArrayBuffer | ArrayBufferView
-type BigInt = any

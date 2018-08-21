@@ -1,7 +1,9 @@
 export = Utils
-// export as namespace Utils
+export as namespace Utils
 
 declare namespace Utils {
+  export { ab, address, crypto, param, Association, rlp }
+
   const ab: {
     fromView(value: ArrayBuffer | ArrayBufferView): ArrayBuffer
     fromBytes(value: string | ArrayBuffer | ArrayBufferView): ArrayBuffer

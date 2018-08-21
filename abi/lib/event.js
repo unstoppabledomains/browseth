@@ -12,17 +12,24 @@ class AbiEvent {
 
     this.indexedCodecs = object.inputs.filter(input => input.indexed).map(parse)
 
-    this.unindexedCodecs = parse({
+    this.unindexedCodec = parse({
       type: 'tuple',
       components: object.inputs.filter(input => !input.indexed),
     })
 
-    const names = this.indexedCodecs.map(param => param.meta.name)
+    const iNames = this.indexedCodecs.map(param => param.meta.name)
     this.canUseNamedInput =
       // all are unique
-      new Set(names).size === this.indexedCodecs.length &&
+      new Set(iNames).size === this.indexedCodecs.length &&
       // all are non null strings
-      names.every(name => name && typeof name === 'string')
+      iNames.every(name => name && typeof name === 'string')
+
+    const uINames = this.unindexedCodec.components.map(param => param.meta.name)
+
+    this.canUseNamedOutput =
+      this.canUseNamedInput &&
+      iNames.concat(uINames).map(name => !(name in Array.prototype)) &&
+      uINames.every(name => iNames.findIndex(name) === -1)
 
     this.isAnonymous = object.anonymous === true
 

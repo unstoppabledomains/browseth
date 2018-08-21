@@ -1,6 +1,7 @@
 {
   "name": "@browseth/light",
   "version": "0.0.0",
+  "license": "MIT",
   "scripts": {
     "build-browser": " ",
     "build-node": " ",

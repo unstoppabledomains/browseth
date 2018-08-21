@@ -22,12 +22,16 @@ class AbiFunction {
       components: object.inputs,
     })
 
+    this.canUseNamedInput = this.inputCodec.canUseNamedInput
+
     this.outputCodec = object.outputs
       ? parse({
           type: 'tuple',
           components: object.outputs,
         })
       : null
+
+    this.canUseNamedOutput = this.outputCodec.canUseNamedOutput
   }
 
   enc = (...values) => {

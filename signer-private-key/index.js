@@ -12,7 +12,7 @@ class SignerPrivateKey {
     this.pair = secp256k1.keyFromPrivate(new Uint8Array(this.privateKey))
   }
 
-  signTransaction({
+  signTransaction = ({
     nonce = 0,
     gasPrice = 1,
     gas = 21000,
@@ -20,7 +20,7 @@ class SignerPrivateKey {
     value = 0,
     data = new ArrayBuffer(0),
     chainId = 1,
-  }) {
+  }) => {
     const raw = [
       ab.stripStart(ab.fromUInt(nonce)),
       ab.stripStart(ab.fromUInt(gasPrice)),
@@ -58,7 +58,7 @@ class SignerPrivateKey {
     )
   }
 
-  signMessage(message, shouldConcat = true) {
+  signMessage = (message, shouldConcat = true) => {
     const hash = crypto.keccak256(
       ab.fromUtf8(
         '\u0019Ethereum Signed Message:\n' +
@@ -83,7 +83,7 @@ class SignerPrivateKey {
         }
   }
 
-  toAddress() {
+  address = () => {
     const pubKey = new Uint8Array(this.pair.getPublic(false, true).slice(1))
 
     if (pubKey.length !== 64)

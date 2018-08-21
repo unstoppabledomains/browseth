@@ -3,7 +3,6 @@ import * as utils from '@browseth/utils'
 export { Explorer as default, Explorer }
 
 function parseBlock(value, full = false, param = utils.param) {
-  console.log(value)
   return value == null
     ? null
     : {
@@ -102,10 +101,25 @@ function parseLog(value, param = utils.param) {
 }
 
 class Explorer {
-  constructor(requestor, param = utils.param) {
+  constructor(requestor, param = {}) {
     this.requestor = requestor
-    this.param = param
+    this.param = { ...utils.param, ...param }
   }
+
+  logs = ({ fromBlock, toBlock, address, topics = [] }) =>
+    this.requestor('eth_getLogs', {
+      fromBlock: this.param.toQuantity(fromBlock),
+      toBlock: this.param.toQuantity(toBlock),
+      address: Array.isArray(address)
+        ? address.map(v => this.param.toData(v, 20))
+        : this.param.toData(address, 20),
+      topics: topics.map(
+        topic =>
+          Array.isArray(topic)
+            ? topic.map(v => this.param.toData(v))
+            : this.param.toData(topic),
+      ),
+    }).then(logs => logs.map(log => parseLog(log, this.param)))
 
   block = {
     count: () => this.requestor.request('eth_blockNumber'),
@@ -236,7 +250,7 @@ class Explorer {
           ),
         ]).then(
           ([txCount, balance, code]) =>
-            txCount == 0 && balance == 0 && code === '0x',
+            txCount === '0x0' && balance === '0x0' && code === '0x',
         ),
       nonce: (tag = 'latest') =>
         this.requestor

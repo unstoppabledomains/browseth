@@ -159,8 +159,6 @@ class Contract {
                 const handler = latest => {
                   const tracker = this.ethRef.block.trackers.get(symbol)
 
-                  console.log('tick', tracker)
-
                   if (tracker.isSyncing) return
                   tracker.isSyncing = true
 
@@ -174,7 +172,6 @@ class Contract {
                         ([fromBlock, toBlock]) =>
                           logs(fromBlock, toBlock, concatedAddresses).then(
                             v => {
-                              console.log(v)
                               v.forEach(vv => {
                                 this.emitter.emit(symbol, vv)
                               })
@@ -186,7 +183,6 @@ class Contract {
                         tracker.synced = synced
                       })
                       .then(() => {
-                        console.log('done')
                         tracker.isSyncing = false
                       })
                   }

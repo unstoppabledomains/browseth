@@ -27,7 +27,7 @@ class SignerLedger {
     this.dPath = dPath
   }
 
-  async initialize() {
+  initialize = async () => {
     if (!Ledger.allowParallel && Ledger.initialized)
       throw new Error('another ledger wallet call is already initialized')
 
@@ -44,7 +44,7 @@ class SignerLedger {
     }
   }
 
-  async signTransaction(
+  signTransaction = async (
     {
       nonce = 0,
       gasPrice = 1,
@@ -55,7 +55,7 @@ class SignerLedger {
       chainId = 1,
     },
     index = this.defaultIndex,
-  ) {
+  ) => {
     const { app, close } = await this.initialize()
     try {
       const raw = [
@@ -91,7 +91,11 @@ class SignerLedger {
     }
   }
 
-  async signMessage(message, shouldConcat = true, index = this.defaultIndex) {
+  signMessage = async (
+    message,
+    shouldConcat = true,
+    index = this.defaultIndex,
+  ) => {
     const { app, close } = await this.initialize()
 
     try {
@@ -121,7 +125,7 @@ class SignerLedger {
     }
   }
 
-  async toAddress(index = this.defaultIndex) {
+  address = async (index = this.defaultIndex) => {
     const { app, close } = await this.initialize()
     try {
       if (this.addressCache[index]) {

@@ -1,11 +1,22 @@
-export = SignerUtils
-export as namespace SignerUtils
+export = AccountOnlineNamespace
+export as namespace AccountOnlineNamespace
 
-declare namespace SignerUtils {
-  function recover(object: {
-    hash: string | ArrayBuffer | ArrayBufferView
-    r: string | ArrayBuffer | ArrayBufferView
-    s: string | ArrayBuffer | ArrayBufferView
-    v: string | ArrayBuffer | ArrayBufferView
-  }): string
+declare namespace AccountOnlineNamespace {
+  class AccountOnline {
+    id: string
+    cachedAddresses: {
+      timestamp: number
+      values: null | string[]
+    }
+
+    constructor(ethRef, options: { addressTtl: number })
+
+    addresses(): Promise<string[]>
+
+    address(): Promise<string>
+    gas(params: any): Promise<any>
+    call(params: any, block: any): Promise<any>
+    send(params: any): Promise<any>
+    sign(message: string): Promise<any>
+  }
 }

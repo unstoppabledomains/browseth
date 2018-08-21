@@ -1,9 +1,9 @@
 import * as utils from '@browseth/utils'
 import * as signerUtils from '@browseth/signer-utils'
-// import * as units from '@browseth/units'
+import * as units from '@browseth/units'
 import { JsonRpcRequestBatchQueue } from '@browseth/jsonrpc-request-queue'
 import { Explorer } from '@browseth/explorer'
-import Contract from '@browseth/contract'
+import { Contract } from '@browseth/contract'
 import { AbiCodec } from '@browseth/abi'
 import { AccountReadonly } from '@browseth/account-readonly'
 
@@ -41,15 +41,19 @@ class BrowserClient {
 
   // Unit Conversion
 
-  // static convert = units.convert
-  // static toWei = units.toWei
-  // static gweiToWei = units.gweiToWei
-  // static etherToWei = units.etherToWei
+  static convert = units.convert
+  static toEther = units.toEther
+  static toWei = units.toWei
+  static gweiToWei = units.gweiToWei
+  static etherToWei = units.etherToWei
+  static weiToEther = units.weiToEther
 
   convert = this.constructor.convert
+  toEther = this.constructor.toEther
   toWei = this.constructor.toWei
   gweiToWei = this.constructor.gweiToWei
   etherToWei = this.constructor.etherToWei
+  weiToEther = this.constructor.weiToEther
 
   // Address Utils
 
@@ -95,20 +99,29 @@ class BrowserClient {
   fallbackAccount = new AccountReadonly(this)
 
   find = new Explorer(this)
+
+  tx = new TransactionQueue(this)
+
   block = new utils.BlockTracker(this)
 
   request = (...args) => this.jsonrpc.request(...args)
 
-  constructor(url, options = {}) {
-    this.url = url
-    this.jsonrpc = new JsonRpcRequestBatchQueue(url, options)
+  constructor(urlOrWeb3, options = {}) {
+    this.jsonrpc = new JsonRpcRequestBatchQueue(urlOrWeb3, options)
   }
 
   accounts = []
 
+  useOnlineAccount = () => {}
+  useSignerAccount = () => {}
+  useReadonlyAccount = () => {}
+
+  useJsonRpc = () => {}
+
   addAccount = newAccount => {
     if (accounts.findIndex(account => account.id === newAccount.id) === -1)
       this.accounts.push(newAccount)
+    return newAccount.id
   }
 
   useAccount = account => {
@@ -140,6 +153,13 @@ class BrowserClient {
     return this.fallbackAccount.call(transaction, block)
   }
 
+  sign = message => {
+    if (this.accounts.length > 0) return this.accounts[0].sign(message)
+    return Promise.reject(
+      new Error('an account is required in order to sign messages'),
+    )
+  }
+
   send = params => {
     if (this.accounts.length > 0) return this.accounts[0].send(params)
     return Promise.reject(
@@ -150,14 +170,7 @@ class BrowserClient {
   contract = (abiJsonInterface, options) =>
     new Contract(this, abiJsonInterface, options)
 }
-
-// const eth = new BrowserClient().etherToWei
-// // eth.convert(fromUnit, value, toUnit)
-// // eth.toWei(unit, value)
-// // eth.gweiToWei(value)
-// // eth.etherToWei(value)
-
-// eth.abi([])
+// const eth = new BrowserClient()
 
 // // claimed
 // // fill(.start)
@@ -205,14 +218,6 @@ class BrowserClient {
 // )
 
 // eth.useAccount(account || account.id || address)
-
-// const contract = new Contract(eth, [], {
-//   bin: '0000',
-//   address: '0x12341234123412341234123412341234',
-// })
-
-// contract.fallback().send()
-// contract.construct().send()
 
 // const txId = contract.fn.a().send({
 //   UNSAFE_nonce,

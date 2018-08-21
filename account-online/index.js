@@ -1,43 +1,10 @@
+import { ab, crypto } from '@browseth/utils'
+
 export { AccountOnline as default, AccountOnline }
 
-const transaction = {
-  UNSAFE_nonce,
-  UNSAFE_gasPrice,
-  UNSAFE_gas,
-  UNSAFE_gasLimit,
-  UNSAFE_from,
-  UNSAFE_data,
-  UNSAFE_chainId,
-  to, // account || ensname
-  value,
-  expiresAt, // || ttl,
-
-  attempts,
-  priority,
-}
-
-const call = {
-  UNSAFE_nonce,
-  UNSAFE_gasPrice,
-  UNSAFE_gas,
-  UNSAFE_gasLimit,
-  UNSAFE_from,
-  UNSAFE_data,
-  UNSAFE_chainId,
-  to, // account || ensname
-  value,
-}
-
-const gasEstimate = {
-  UNSAFE_gasPrice,
-  UNSAFE_from,
-  UNSAFE_data,
-  UNSAFE_chainId,
-  to, // account || ensname || function
-  value,
-}
-
 class AccountOnline {
+  id = crypto.uuid()
+
   cachedAddresses = {
     timestamp: -Infinity,
     values: null,
@@ -155,4 +122,11 @@ class AccountOnline {
         ? this.ethRef.data(UNSAFE_from, 20)
         : await this.address(),
     })
+
+  sign = async message =>
+    this.ethRef.request(
+      'eth_sign',
+      await this.address(),
+      ab.toHex(ab.fromUtf8(message)),
+    )
 }

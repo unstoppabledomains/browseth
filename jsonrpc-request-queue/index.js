@@ -12,10 +12,24 @@ class JsonRpcRequestBatchQueue {
     url = 'http://localhost:8545',
     { timeout = 100, maxBufferSize = 25, headers = {} } = {},
   ) {
-    this.url = url
-    this.timeout = timeout
+    if (typeof url === 'string') {
+      this.url = url
+      this.headers = headers
+    } else {
+      this.send =
+        typeof url.currentProvider.sendAsync === 'function'
+          ? url.currentProvider.sendAsync.bind(url.currentProvider)
+          : (payload, fn) => {
+              try {
+                fn(null, url.currentProvider.send(payload))
+              } catch (error) {
+                fn(error)
+              }
+            }
+    }
+
     this.maxBufferSize = maxBufferSize
-    this.headers = headers
+    this.timeout = timeout
 
     this.interval = setInterval(this.flush, this.timeout)
     if (typeof this.interval.unref === 'function') this.interval.unref()
@@ -23,7 +37,6 @@ class JsonRpcRequestBatchQueue {
 
   request = (method, ...params) =>
     new Promise((resolve, reject) => {
-      console.log(method, params)
       this.requestCb({ method, params }, (error, result) => {
         if (error) reject(error)
         else resolve(result)
@@ -101,13 +114,9 @@ class JsonRpcRequestBatchQueue {
     )
   }
 
-  sendBatch = (payloads, fns) => {
-    const requestM = new Map(
-      payloads.map((payload, i) => [payload.id, { payload, fn: fns[i] }]),
-    )
-
-    return fetch(this.url, {
-      body: JSON.stringify(payloads),
+  send = (payload, fn) =>
+    fetch(this.url, {
+      body: JSON.stringify(payload),
       headers: new Headers({
         'Content-Type': 'application/json',
         ...this.headers,
@@ -122,6 +131,20 @@ class JsonRpcRequestBatchQueue {
         }
         return resp.json()
       })
+      .then(result => fn(null, result))
+      .catch(fn)
+
+  sendBatch = (payloads, fns) => {
+    const requestM = new Map(
+      payloads.map((payload, i) => [payload.id, { payload, fn: fns[i] }]),
+    )
+
+    return new Promise((resolve, reject) => {
+      this.send(payloads, (error, result) => {
+        if (error) reject(error)
+        else resolve(result)
+      })
+    })
       .then(responses => {
         responses.forEach(response => {
           if (requestM.has(response.id)) {
@@ -175,8 +198,21 @@ class JsonRpcRequestQueue {
   id = 0
 
   constructor(url = 'http://localhost:8545', { headers = {} } = {}) {
-    this.url = url
-    this.headers = headers
+    if (typeof url === 'string') {
+      this.url = url
+      this.headers = headers
+    } else {
+      this.send =
+        typeof url.currentProvider.sendAsync === 'function'
+          ? url.currentProvider.sendAsync.bind(url.currentProvider)
+          : (payload, fn) => {
+              try {
+                fn(null, url.currentProvider.send(payload))
+              } catch (error) {
+                fn(error)
+              }
+            }
+    }
   }
 
   request = (method, ...params) =>
@@ -196,22 +232,12 @@ class JsonRpcRequestQueue {
       jsonrpc: '2.0',
     }
 
-    fetch(this.url, {
-      body: JSON.stringify(payload),
-      headers: new Headers({
-        'Content-Type': 'application/json',
-        ...this.headers,
-      }),
-      method: 'POST',
-    })
-      .then(resp => {
-        if (!resp.ok) {
-          const error = new Error('invalid jsonrpc response')
-          error.resp = resp
-          throw error
-        }
-        return resp.json()
+    new Promise((resolve, reject) => {
+      this.send(payloads, (error, result) => {
+        if (error) reject(error)
+        else resolve(result)
       })
+    })
       .then(response => {
         if (response.jsonrpc !== '2.0') {
           const error = new Error('invalid jsonrpc response')
@@ -239,6 +265,26 @@ class JsonRpcRequestQueue {
 
     return payload.id
   }
+
+  send = (payload, fn) =>
+    fetch(this.url, {
+      body: JSON.stringify(payload),
+      headers: new Headers({
+        'Content-Type': 'application/json',
+        ...this.headers,
+      }),
+      method: 'POST',
+    })
+      .then(resp => {
+        if (!resp.ok) {
+          const error = new Error('invalid jsonrpc response')
+          error.resp = resp
+          throw error
+        }
+        return resp.json()
+      })
+      .then(result => fn(null, result))
+      .catch(fn)
 
   cleanup = () => {
     clearInterval(this.interval)
