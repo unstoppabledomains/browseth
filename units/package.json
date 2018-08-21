@@ -1,0 +1,21 @@
+{
+  "name": "@browseth/units",
+  "version": "0.0.0",
+  "license": "MIT",
+  "browser": "build/browser.js",
+  "main": "build/index.js",
+  "module": "build/module.js",
+  "types": "index.d.ts",
+  "scripts": {
+    "build-browser": "rollup -c workspace/rollup.browser-config.js",
+    "build-node": "rollup -c workspace/rollup.node-config.js",
+    "build": "rollup -c workspace/rollup.config.js",
+    "start": "rollup -c workspace/rollup.node-config.js -w",
+    "pretest": "yarn build-node",
+    "test": "node test",
+    "postinstall": "lerna link"
+  },
+  "dependencies": {
+    "bignumber.js": "^7.2.1"
+  }
+}
