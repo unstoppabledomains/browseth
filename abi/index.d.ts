@@ -32,7 +32,17 @@ declare namespace Abi {
     )
 
     construct(...args): string
-    fn: { [key: string]: (...args) => string }
-    ev: { [key: string]: (...args) => Array<string | string[]> }
+    fn: {
+      [key: string]: {
+        enc(...args): string
+        dec: (data: string) => any
+      }
+    }
+    ev: {
+      [key: string]: {
+        enc: (...args) => Array<string | string[]>
+        dec: (topics: string[], data: string) => any
+      }
+    }
   }
 }

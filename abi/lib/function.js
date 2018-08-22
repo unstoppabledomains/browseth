@@ -31,7 +31,8 @@ class AbiFunction {
         })
       : null
 
-    this.canUseNamedOutput = this.outputCodec.canUseNamedOutput
+    this.canUseNamedOutput =
+      this.outputCodec && this.outputCodec.canUseNamedOutput
   }
 
   enc = (...values) => {

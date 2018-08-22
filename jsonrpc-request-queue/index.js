@@ -233,7 +233,7 @@ class JsonRpcRequestQueue {
     }
 
     new Promise((resolve, reject) => {
-      this.send(payloads, (error, result) => {
+      this.send(payload, (error, result) => {
         if (error) reject(error)
         else resolve(result)
       })

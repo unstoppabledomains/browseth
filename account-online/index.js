@@ -17,22 +17,17 @@ class AccountOnline {
 
   address = noCache => this.addresses(noCache).then(([coinbase]) => coinbase)
   addresses = noCache => {
-    const now = Date.now()
-
-    if (
-      noCache === true ||
+    return noCache === true ||
       this.cachedAddresses.values == null ||
-      this.cachedAddresses.timestamp + this.addressTtl < now
-    )
-      return this.ethRef.request('eth_accounts').then(addresses => {
-        this.cachedAddresses = {
-          timestamp: now,
-          values: addresses,
-        }
-        return addresses
-      })
-
-    return Promise.resolve(this.cachedAddresses.values)
+      this.cachedAddresses.timestamp + this.addressTtl < Date.now()
+      ? this.ethRef.request('eth_accounts').then(addresses => {
+          this.cachedAddresses = {
+            timestamp: Date.now(),
+            values: addresses,
+          }
+          return addresses
+        })
+      : Promise.resolve(this.cachedAddresses.values)
   }
 
   gas = async ({ UNSAFE_gasPrice, UNSAFE_from, UNSAFE_data, to, value }) =>

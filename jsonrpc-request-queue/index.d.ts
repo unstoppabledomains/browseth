@@ -5,11 +5,11 @@ export as namespace Queue
 
 declare namespace Queue {
   export {
-    BufferedJsonRpcRequestQueue as default,
-    BufferedJsonRpcRequestQueue,
+    JsonRpcRequestBatchQueue as default,
+    JsonRpcRequestBatchQueue,
     JsonRpcRequestQueue,
   }
-  class BufferedJsonRpcRequestQueue {
+  class JsonRpcRequestBatchQueue {
     id: number
     url?: string
     headers?: { [key: string]: string | string[] }

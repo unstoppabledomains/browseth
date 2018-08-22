@@ -31,27 +31,35 @@ class AbiCodec {
         case 'constructor': {
           const abi = new AbiFunction(element)
 
-          this.construct = (...values) => {
-            if (this.bin == null) {
-              throw new Error(
-                "must include 'bin' in options in order to use the constructor",
-              )
-            }
+          this.construct = {
+            enc: (...values) => {
+              if (this.bin == null) {
+                throw new Error(
+                  "must include 'bin' in options in order to use the constructor",
+                )
+              }
 
-            return ab.toHex(ab.concat([this.bin, abi.enc(...values)]))
+              return ab.toHex(ab.concat([this.bin, abi.enc(...values)]))
+            },
+            dec: abi.dec,
           }
           break
         }
         case 'event': {
           const abi = new AbiEvent(element)
 
-          const codec = (...topics) =>
-            abi
-              .enc(...topics)
-              .map(
-                topic =>
-                  Array.isArray(topic) ? topic.map(ab.toHex) : ab.toHex(topic),
-              )
+          const codec = {
+            enc: (...topics) =>
+              abi
+                .enc(...topics)
+                .map(
+                  topic =>
+                    Array.isArray(topic)
+                      ? topic.map(ab.toHex)
+                      : ab.toHex(topic),
+                ),
+            dec: abi.dec,
+          }
 
           if (abi.meta.name) this.ev[abi.meta.name] = codec
           this.ev[abi.fullName] = codec
@@ -67,9 +75,11 @@ class AbiCodec {
         case 'function': {
           const abi = new AbiFunction(element)
 
-          const codec = (...values) =>
-            ab.toHex(ab.concat([abi.sig, abi.enc(...values)]))
-
+          const codec = {
+            enc: (...values) =>
+              ab.toHex(ab.concat([abi.sig, abi.enc(...values)])),
+            dec: abi.dec,
+          }
           this.fn[abi.meta.name] = codec
           this.fn[abi.fullName] = codec
           const stringSig = ab.toHex(abi.sig)

@@ -8,7 +8,11 @@ class AccountReadonly {
     this.from = from
   }
 
-  address = () => Promise.resolve(this.from)
+  address = () =>
+    /*  this.from == null
+      ? Promise.reject(new Error('no address specified'))
+      :  */
+    Promise.resolve(this.from)
 
   gas = async ({ UNSAFE_gasPrice, UNSAFE_from, UNSAFE_data, to, value }) =>
     this.ethRef.request('eth_estimateGas', {
