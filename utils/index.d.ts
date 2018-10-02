@@ -2,7 +2,7 @@ export = Utils
 export as namespace Utils
 
 declare namespace Utils {
-  export { ab, address, crypto, param, Association, rlp }
+  export { ab, address, crypto, param, interval, Association, rlp }
 
   const ab: {
     fromView(value: ArrayBuffer | ArrayBufferView): ArrayBuffer
@@ -39,6 +39,10 @@ declare namespace Utils {
     /** Implicitly supports hex string */
     keccak256(value: string | ArrayBuffer | ArrayBufferView): ArrayBuffer
   }
+  const interval: {
+    setUnrefedInterval(fn: () => any, delay: number, args: any[]): any
+    setUnrefedTimeout(fn: () => any, delay: number, args: any[]): any
+  }
   const param: {
     data(): void
     quantity(): void
@@ -50,6 +54,12 @@ declare namespace Utils {
     set(a, b): void
     delete(aOrB): void
     has(aOrB): boolean
+  }
+
+  class Observable {
+    get(): any
+    set(value): void
+    subscribe(fn: () => any): () => void
   }
 
   const rlp: {

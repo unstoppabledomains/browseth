@@ -3,7 +3,7 @@ import { fromBytes, toHex, fromUInt } from './ab'
 import { encode } from './rlp'
 // // import * as rlp from './rlp'
 
-export { isValid, from, fromAdderssAndNonce }
+export { isValid, from, fromAddressAndNonce }
 
 const addressLowerRegex = /^0x[\da-f]{40}$/
 const addressUpperRegex = /^0x[\dA-F]{40}$/
@@ -42,7 +42,7 @@ function from(value) {
   return ret
 }
 
-function fromAdderssAndNonce(address, nonce) {
+function fromAddressAndNonce(address, nonce) {
   return from(
     keccak256(encode([fromBytes(address), fromUInt(nonce)]).slice(12)),
   )
