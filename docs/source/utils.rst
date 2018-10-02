@@ -1,14 +1,17 @@
 Utilities
 *********
 
-The utility functions exposed in both the *ethers* umbrella package and the *ethers-utils*::
+The utility functions exposed in both the *ethers* umbrella package and the *ethers-utils*:
+
+.. code-block:: javascript
 
     const utils = require('@browseth/utils');
 
-    // or
-    
-    import utils from ('@browseth/utils');
+or
 
+.. code-block:: javascript
+
+    import utils from ('@browseth/utils');
 
 -----
 
@@ -76,10 +79,9 @@ Crypto
 :sup:`utils.crypto` . keccak256 ( value )
     returns the keccak256 of a string
 
-TODO: uuid is meant for internal use. Not working externally yet.
 :sup:`utils.crypto` . uuid ( value )
+    TODO: uuid is meant for internal use. Not working externally yet.
     returns the uuid of a string
-
 
 .. _interval:
 
@@ -143,6 +145,7 @@ Poll for blocks every 5 seconds until a block number is confirmed.
 Use this class to keep track of block(s).
 
 Creating instances
+------------------
 
 :sup:`new Browseth.utils` . BlockTracker ( requestQueue [, confirmationDelay = 0] )
     Request queue is ... TODO. The confirmation delay is the minimum number 
@@ -155,11 +158,13 @@ Observable
 Subscribe to value changes with callbacks
 
 Creating instances
+------------------
 
 :sup:`new Browseth.utils` . Observable ( value )
     Create new Observable object with the value to watch. 
 
 Prototype
+---------
 
 :sup:`prototype` . subscribe ( fn )
     Add function to list of callbacks on value change.
@@ -168,10 +173,12 @@ Prototype
 :sup:`prototype` . set ( newValue )
     Set the new value to watch. Triggers subscribed functions
 
-:sup:`prototype` . get ()
+:sup:`prototype` . get (  )
     Gets the current watched value.
 
-Example
+
+.. code-block:: javascript
+    :caption: *Example*
 
     const observable = new Observable('123');
     
@@ -185,6 +192,8 @@ Example
     
     observable.get(); // returns '78'
 
+-----
+
 .. _emitter: 
 
 Emitter
@@ -192,11 +201,13 @@ Emitter
 Add events with callbacks and trigger those callbacks by emitting events.
 
 Creating instances
+------------------
 
 :sup:`new Browseth.utils` . Emitter ( )
     Create new Emitter object. 
 
 Prototype
+---------
 
 :sup:`prototype` . on ( event, fn )
     Add event label and provide callback
