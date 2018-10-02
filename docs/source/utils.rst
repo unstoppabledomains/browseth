@@ -172,7 +172,7 @@ Prototype
     Gets the current watched value.
 
 Example
-```
+
     const observable = new Observable('123');
     
     const unsubscribe = observable.subscribe(() => console.log('This is an example'));
@@ -184,8 +184,6 @@ Example
     observable.set('78'); // Will set new value with no callbacks
     
     observable.get(); // returns '78'
-
-```
 
 .. _emitter: 
 
