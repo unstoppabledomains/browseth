@@ -2,6 +2,8 @@
 
 A library for interacting with ethereum, well suited for the browser.
 
+##### [Browseth documentation](https://browseth.readthedocs.io/en/public/index.html)
+
 ## Installation
 
 You can use Browseth in a `<script>` tag from a
