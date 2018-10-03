@@ -1,3 +1,4 @@
+import { crypto, ab } from '@browseth/utils'
 export { AccountSigner as default, AccountSigner }
 
 class AccountSigner {
@@ -22,38 +23,40 @@ class AccountSigner {
     value,
   }) => {
     const from = await this.address()
-    if (UNSAFE_from !== from)
+    if (UNSAFE_from && UNSAFE_from !== from)
       throw new Error(
         "UNSAFE_from and this signer don't match you probably sent to the wrong account",
       )
 
     return this.ethRef.request(
       'eth_sendRawTransaction',
-      this.signer.signTransaction({
-        gas:
-          UNSAFE_gas || UNSAFE_gasLimit
-            ? this.ethRef.quantity(UNSAFE_gas || UNSAFE_gasLimit)
-            : await this.gas({
-                UNSAFE_gasPrice,
-                UNSAFE_from: from,
-                UNSAFE_data,
-                to,
-                value,
-              }),
-        nonce:
-          UNSAFE_nonce ||
-          (await this.ethRef.request(
-            'eth_getTransactionCount',
-            from,
-            'latest',
-          )),
-        gasPrice: UNSAFE_gasPrice,
-        from,
-        data: UNSAFE_data,
-        chainId: UNSAFE_chainId,
-        to: to,
-        value: value,
-      }),
+      ab.toHex(
+        this.signer.signTransaction({
+          gas:
+            UNSAFE_gas || UNSAFE_gasLimit
+              ? this.ethRef.quantity(UNSAFE_gas || UNSAFE_gasLimit)
+              : await this.gas({
+                  UNSAFE_gasPrice,
+                  UNSAFE_from: from,
+                  UNSAFE_data,
+                  to,
+                  value,
+                }),
+          nonce:
+            UNSAFE_nonce ||
+            (await this.ethRef.request(
+              'eth_getTransactionCount',
+              from,
+              'latest',
+            )),
+          gasPrice: UNSAFE_gasPrice,
+          from,
+          data: UNSAFE_data,
+          chainId: UNSAFE_chainId,
+          to: to,
+          value: value,
+        }),
+      ),
     )
   }
 

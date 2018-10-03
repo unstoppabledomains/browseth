@@ -49,8 +49,10 @@ class SignerPrivateKey {
 
     return rlp.encode(
       raw.concat(
-        ab.fromUInt(
-          sig.recoveryParam + 27 + (chainId > 0 ? chainId * 2 + 8 : 0),
+        ab.stripStart(
+          ab.fromUInt(
+            sig.recoveryParam + 27 + (chainId > 0 ? chainId * 2 + 8 : 0),
+          ),
         ),
         ab.padStart(sig.r.toArray(), 32),
         ab.padStart(sig.s.toArray(), 32),

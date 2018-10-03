@@ -39,7 +39,7 @@ class Contract {
 
   emitter = new Emitter()
 
-  constructor(ethRef, abiJsonInterface, options) {
+  constructor(ethRef, abiJsonInterface, options = {}) {
     this.ethRef = ethRef
     this.abiJsonInterface = [...abiJsonInterface]
 

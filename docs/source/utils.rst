@@ -213,7 +213,7 @@ Prototype
     Add event label and provide callback
 
 :sup:`prototype` . off ( event, fn )
-    Remove function from an event
+    Remove callback from an event
 
 :sup:`prototype` . onEvery ( fn )
     Provide callback for every emit

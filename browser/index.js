@@ -6,6 +6,7 @@ import { Explorer } from '@browseth/explorer'
 import { Contract } from '@browseth/contract'
 import { AbiCodec } from '@browseth/abi'
 import { AccountReadonly } from '@browseth/account-readonly'
+import { AccountSigner } from '../account-signer'
 
 export { BrowserClient as default, BrowserClient }
 
@@ -100,7 +101,7 @@ class BrowserClient {
 
   find = new Explorer(this)
 
-  tx = new TransactionQueue(this)
+  // tx = new TransactionQueue(this)
 
   block = new utils.BlockTracker(this)
 
