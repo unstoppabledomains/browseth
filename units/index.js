@@ -1,6 +1,6 @@
 import { BigNumber } from 'bignumber.js'
 
-export { convert, etherToWei, gweiToWei, toWei, toEther, weiToEther }
+export { unitToPow, convert, etherToWei, gweiToWei, toWei, toEther, weiToEther }
 
 BigNumber.config({ DECIMAL_PLACES: 1000, EXPONENTIAL_AT: [-1000, 1000] })
 

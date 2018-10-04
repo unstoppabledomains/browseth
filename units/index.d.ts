@@ -1,7 +1,7 @@
-export = Utils
-export as namespace Utils
+export = Units
+export as namespace Units
 
-declare namespace Utils {
+declare namespace Units {
   export { convert, etherToWei, gweiToWei, toWei, toEther, weiToEther }
 
   type Unit =
