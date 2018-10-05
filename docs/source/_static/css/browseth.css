@@ -1,0 +1,25 @@
+dt sup {
+  font-weight: normal;
+  font-style: italic;
+  opacity: 0.8;
+  vertical-align: baseline;
+  top: auto;
+  font-size: medium;
+}
+
+dt {
+  padding-bottom: 5px;
+}
+
+.rst-content dl dd {
+  margin-bottom: 20px;
+}
+
+.code-block-caption {
+  text-align: right;
+  margin-bottom: 4px;
+}
+
+.code-block-caption .headerlink {
+  display: none;
+}

@@ -147,7 +147,7 @@ Use this class to keep track of block(s).
 Creating instances
 ------------------
 
-:sup:`new Browseth.utils` . BlockTracker ( requestQueue [, confirmationDelay = 0] )
+new :sup:`Browseth.utils` . BlockTracker ( requestQueue [, confirmationDelay = 0] )
     Request queue is ... TODO. The confirmation delay is the minimum number 
     of confirmed blocks until the block is considered confirmed.
 
@@ -160,7 +160,7 @@ Subscribe to value changes with callbacks
 Creating instances
 ------------------
 
-:sup:`new Browseth.utils` . Observable ( value )
+new :sup:`Browseth.utils` . Observable ( value )
     Create new Observable object with the value to watch. 
 
 Prototype
@@ -203,7 +203,7 @@ Add events with callbacks and trigger those callbacks by emitting events.
 Creating instances
 ------------------
 
-:sup:`new Browseth.utils` . Emitter ( )
+new :sup:`Browseth.utils` . Emitter ( )
     Create new Emitter object. 
 
 Prototype
