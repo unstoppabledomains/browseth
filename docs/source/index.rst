@@ -10,14 +10,6 @@ Welcome to Browseth's documentation!
    :maxdepth: 2
    :caption: Developer Documentation
 
+   units
    utils
 
-
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`

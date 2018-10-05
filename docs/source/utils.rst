@@ -1,7 +1,7 @@
+.. _utilities:
+
 Utilities
 *********
-
-The utility functions exposed in both the *ethers* umbrella package and the *ethers-utils*:
 
 .. code-block:: javascript
 
@@ -74,7 +74,7 @@ Utilities for manipulating addresses
 .. _crypto:
 
 Crypto
-=============
+======
 
 :sup:`utils.crypto` . keccak256 ( value )
     returns the keccak256 of a string
@@ -86,7 +86,7 @@ Crypto
 .. _interval:
 
 Interval
-=============
+========
 
 :sup:`utils.interval` . setUnrefedInterval ( fn, delay [, args] )
     Sets an interval that dies when the function it's wrapped in is finished
@@ -97,7 +97,7 @@ Interval
 .. _param: 
 
 Param
-=============
+=====
 
 :sup:`utils.param` . toData ( value, length )
     Converts parameters to hex
@@ -129,7 +129,7 @@ Param
 .. _rlp: 
 
 Rlp
-=============
+====
 
 :sup:`utils.param` . encode ( value )
     Encodes value to Array Buffer
@@ -154,7 +154,7 @@ Creating instances
 .. _observable:
 
 Observable
-=============
+==========
 Subscribe to value changes with callbacks
 
 Creating instances
@@ -197,7 +197,7 @@ Prototype
 .. _emitter: 
 
 Emitter
-=============
+=======
 Add events with callbacks and trigger those callbacks by emitting events.
 
 Creating instances
