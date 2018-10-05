@@ -180,7 +180,7 @@ Prototype
 .. code-block:: javascript
     :caption: *Example*
 
-    const observable = new Observable('123');
+    const observable = new Browseth.utils.Observable('123');
     
     const unsubscribe = observable.subscribe(() => console.log('This is an example'));
     
@@ -220,3 +220,14 @@ Prototype
 
 :sup:`prototype` . emit ( event [, params] )
     Emit an event and pass parameters to the callbacks
+
+.. code-block:: javascript
+    :caption: *Example*
+
+    const emitter = new Browseth.utils.Emitter('123');
+    
+    emitter.on('test', () => console.log('example'));
+
+    emitter.onEvery(() => console.log('example2'));
+
+    emitter.emit('test') // Console logs 'example' and 'example2'
