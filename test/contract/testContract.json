@@ -1,0 +1,41 @@
+{
+  "bin": "608060405234801561001057600080fd5b5060405160408061012b83398101604052805160209091015160009190915560015560eb806100406000396000f30060806040526004361060525763ffffffff7c0100000000000000000000000000000000000000000000000000000000600035041663a1c5191581146057578063d46300fd14607b578063f4a7582b14608d575b600080fd5b348015606257600080fd5b506069609f565b60408051918252519081900360200190f35b348015608657600080fd5b50606960a5565b348015609857600080fd5b50606960ab565b60015490565b60005490565b600060b3609f565b60b960a5565b029050905600a165627a7a723058202031c3f9047a183774bfdc65a734bfb681b50bdcdd97e39b5637cd7b31c176230029",
+  "abi": [
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "getB",
+      "outputs": [{ "name": "", "type": "uint256" }],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "getA",
+      "outputs": [{ "name": "", "type": "uint256" }],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "getATimesB",
+      "outputs": [{ "name": "", "type": "uint256" }],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        { "name": "_a", "type": "uint256" },
+        { "name": "_b", "type": "uint256" }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    }
+  ]
+}
