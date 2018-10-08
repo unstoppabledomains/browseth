@@ -14,4 +14,5 @@ Welcome to Browseth's documentation!
    utils
    contracts
    ens
+   signers
 

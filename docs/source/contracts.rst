@@ -48,7 +48,7 @@ Deploying Contracts
 
     - **chainId** --- set contract binary for contract deployment
 
-    - **gasPrice** --- set address to already deployed contract
+    - **gasPrice** --- set gas price in wei for transaction
    
     - **gas** --- sets the max amount of gas for the transaction
     
