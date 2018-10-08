@@ -13,4 +13,5 @@ Welcome to Browseth's documentation!
    units
    utils
    contracts
+   ens
 
