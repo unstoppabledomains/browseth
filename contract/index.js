@@ -92,9 +92,9 @@ class Contract {
                 transactionPreflightCheck(transaction, abi)
 
                 return this.ethRef.send({
-                  ...transaction,
-                  to: new ArrayBuffer(0),
+                  to: new ArrayBuffer(20),
                   UNSAFE_data: encoded,
+                  ...transaction,
                 })
               },
               call: () =>
@@ -103,9 +103,9 @@ class Contract {
                 transactionPreflightCheck(transaction, abi)
 
                 return this.ethRef.gas({
-                  ...transaction,
-                  to: new ArrayBuffer(0),
+                  to: new ArrayBuffer(20),
                   UNSAFE_data: encoded,
+                  ...transaction,
                 })
               },
               abi: encoded,

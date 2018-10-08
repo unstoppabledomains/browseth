@@ -5,13 +5,24 @@ import { JsonRpcRequestBatchQueue } from '@browseth/jsonrpc-request-queue'
 import { Explorer } from '@browseth/explorer'
 import { Contract } from '@browseth/contract'
 import { AbiCodec } from '@browseth/abi'
-import { AccountReadonly } from '@browseth/account-readonly'
-import { AccountSigner } from '../account-signer'
+import AccountReadonly from '@browseth/account-readonly'
+import AccountSigner from '@browseth/account-signer'
 
 export { BrowserClient as default, BrowserClient }
 
-function keccak256() {}
-function tightlyPackedKeccak256() {}
+function keccak256(value) {
+  if (utils.ab.isBytes(value)) {
+    return utils.crypto.keccak256(value)
+  } else if (typeof value === 'string') {
+    return utils.crypto.keccak256(utils.ab.fromUtf8(value))
+  } else {
+    throw new TypeError('Value must be bytes or string')
+  }
+}
+
+function tightlyPackedKeccak256() {
+  throw new Error('Not available')
+}
 
 class BrowserClient {
   // Keccak
@@ -114,8 +125,38 @@ class BrowserClient {
   accounts = []
 
   useOnlineAccount = () => {}
-  useSignerAccount = () => {}
+
+  useSignerAccount = signer => {
+    const newSignerAccount = new AccountSigner(this, signer)
+    const from =
+      typeof account === 'string'
+        ? this.accounts.findIndex(account => account.id === account)
+        : this.accounts.findIndex(account => account === account)
+
+    if (from !== -1) {
+      this.accounts.splice(0, 0, this.accounts.splice(from, 1)[0])
+      return true
+    } else if (this.accounts.length < 1 && typeof account !== 'string') {
+      this.accounts.unshift(account)
+      return true
+    }
+    return false
+  }
+
   useReadonlyAccount = () => {}
+
+  addOnlineAccount = () => {}
+
+  addSignerAccount = signer => {
+    const newSignerAccount = new AccountSigner(this, signer)
+    if (
+      accounts.findIndex(account => account.id === newSignerAccount.id) === -1
+    )
+      this.accounts.push(newSignerAccount)
+    return newSignerAccount.id
+  }
+
+  addReadonlyAccount = () => {}
 
   useJsonRpc = () => {}
 
@@ -162,7 +203,17 @@ class BrowserClient {
   }
 
   send = params => {
-    if (this.accounts.length > 0) return this.accounts[0].send(params)
+    if (this.accounts.length > 0)
+      return this.accounts[0].send({
+        ...params,
+        UNSAFE_nonce: params.nonce,
+        UNSAFE_gasPrice: params.gasPrice,
+        UNSAFE_gas: params.gas,
+        UNSAFE_gasLimit: params.gasLimit,
+        UNSAFE_from: params.from,
+        UNSAFE_data: params.data,
+        UNSAFE_chainId: params.chainId,
+      })
     return Promise.reject(
       new Error('an account is required in order to send transactions'),
     )

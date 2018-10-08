@@ -1,3 +1,5 @@
+import 'isomorphic-fetch'
+
 export {
   JsonRpcRequestBatchQueue as default,
   JsonRpcRequestBatchQueue,
@@ -177,7 +179,7 @@ class JsonRpcRequestBatchQueue {
           requestM.delete(key)
           setImmediate(
             fn,
-            new Error("buffer did't contain a matching request id"),
+            new Error("buffer didn't contain a matching request id"),
           )
         })
       })
@@ -217,7 +219,6 @@ class JsonRpcRequestQueue {
 
   request = (method, ...params) =>
     new Promise((resolve, reject) => {
-      console.log(method, params)
       this.requestCb({ method, params }, (error, result) => {
         if (error) reject(error)
         else resolve(result)
