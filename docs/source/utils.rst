@@ -11,7 +11,7 @@ or
 
 .. code-block:: javascript
 
-    import utils from ('@browseth/utils');
+    import utils from '@browseth/utils';
 
 -----
 
@@ -128,13 +128,14 @@ Param
 
 .. _rlp: 
 
-Rlp
-====
+RLP
+===
+RLP (Recursive Length Prefix) is the main encoding method used to serialize objects in Ethereum
 
-:sup:`utils.param` . encode ( value )
+:sup:`utils.rlp` . encode ( value )
     Encodes value to Array Buffer
 
-:sup:`utils.param` . encodeLength ( len, offset )
+:sup:`utils.rlp` . encodeLength ( len, offset )
     Encodes length to Array Buffer with offset
 
 .. _block-tracker:
@@ -144,7 +145,7 @@ Block Tracker
 Poll for blocks every 5 seconds until a block number is confirmed. 
 Use this class to keep track of block(s).
 
-Creating instances
+Creating Instances
 ------------------
 
 new :sup:`Browseth.utils` . BlockTracker ( requestQueue [, confirmationDelay = 0] )
@@ -157,7 +158,7 @@ Observable
 ==========
 Subscribe to value changes with callbacks
 
-Creating instances
+Creating Instances
 ------------------
 
 new :sup:`Browseth.utils` . Observable ( value )
@@ -200,7 +201,7 @@ Emitter
 =======
 Add events with callbacks and trigger those callbacks by emitting events.
 
-Creating instances
+Creating Instances
 ------------------
 
 new :sup:`Browseth.utils` . Emitter ( )

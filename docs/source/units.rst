@@ -13,13 +13,13 @@ or
 
 .. code-block:: javascript
 
-    import * as units from ('@browseth/units');
+    import * as units from '@browseth/units';
 
 You can also import specific functions
 
 .. code-block:: javascript
 
-    import {etherToWei, conversion} from ('@browseth/units');
+    import {etherToWei, conversion} from '@browseth/units';
 
 -----
 

@@ -1,4 +1,4 @@
-import { assert, expect } from 'chai'
+import { expect } from 'chai'
 import { crypto } from '@browseth/utils'
 
 describe('keccak256', () => {

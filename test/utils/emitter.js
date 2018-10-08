@@ -1,4 +1,4 @@
-import { assert, expect } from 'chai'
+import { expect } from 'chai'
 import { Emitter } from '@browseth/utils'
 import sinon from 'sinon'
 
