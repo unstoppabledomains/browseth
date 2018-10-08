@@ -8,6 +8,6 @@ declare namespace SignerPrivatekey {
     constructor(privateKey: string | ArrayBuffer | ArrayBufferView)
     signTransaction(transaction: any): ArrayBuffer
     signMessage(message: string, shouldConcat: boolean): ArrayBuffer
-    toAddress(): string
+    address(): string
   }
 }
