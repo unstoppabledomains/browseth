@@ -143,14 +143,40 @@ RLP (Recursive Length Prefix) is the main encoding method used to serialize obje
 Block Tracker
 =============
 Poll for blocks every 5 seconds until a block number is confirmed. 
-Use this class to keep track of block(s).
+Use this class to keep track of block(s). Contains #emitter.
 
 Creating Instances
 ------------------
 
 new :sup:`Browseth.utils` . BlockTracker ( requestQueue [, confirmationDelay = 0] )
-    Request queue is ... TODO. The confirmation delay is the minimum number 
+    Request queue is an eth reference. The confirmation delay is the minimum number 
     of confirmed blocks until the block is considered confirmed.
+
+Prototype
+---------
+
+:sup:`prototype` . addTracker ( key [, options] )
+    Track a block.
+
+    Options may have the following properties:
+        
+    - **synced** -- 'latest', 'earliest', or block # to track (defaults to 'latest')
+    
+    - **confirmationDelay** -- minimum # of confirmed blocks until tracked block is considered confirmed
+
+:sup:`prototype` . syncBlockNumber ( )
+    Sets the latest block number
+    
+    emits 'block.number' with block # passed to the event callback
+    
+    See #emitter
+
+:sup:`prototype` . syncBlocks ( )
+    Syncs blocks to latest block
+
+    emits 'block' for every synced block - block is passed to the event callback
+
+    See #emitter
 
 .. _observable:
 
@@ -174,7 +200,7 @@ Prototype
 :sup:`prototype` . set ( newValue )
     Set the new value to watch. Triggers subscribed functions
 
-:sup:`prototype` . get (  )
+:sup:`prototype` . get ( )
     Gets the current watched value.
 
 
