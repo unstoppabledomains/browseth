@@ -29,7 +29,7 @@ class AbiEvent {
     this.canUseNamedOutput =
       this.canUseNamedInput &&
       iNames.concat(uINames).map(name => !(name in Array.prototype)) &&
-      uINames.every(name => iNames.findIndex(name) === -1)
+      uINames.every(name => iNames.findIndex(n => n === name) === -1)
 
     this.isAnonymous = object.anonymous === true
 
