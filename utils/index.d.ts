@@ -2,7 +2,7 @@ export = Utils
 export as namespace Utils
 
 declare namespace Utils {
-  export { ab, address, crypto, param, interval, Association, rlp }
+  export { ab, address, crypto, param, interval, Association, rlp, TxListener }
 
   const ab: {
     fromView(value: ArrayBuffer | ArrayBufferView): ArrayBuffer
@@ -54,6 +54,10 @@ declare namespace Utils {
     set(a, b): void
     delete(aOrB): void
     has(aOrB): boolean
+  }
+
+  class TxListener {
+    listen(txHash): Promise
   }
 
   class Observable {
