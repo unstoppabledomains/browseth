@@ -49,7 +49,7 @@ class SignerLedger {
       nonce = 0,
       gasPrice = 1,
       gas = 21000,
-      to = new ArrayBuffer(0), // ??? new ArrayBuffer(20)
+      to = new ArrayBuffer(0),
       value = 0,
       data = new ArrayBuffer(0),
       chainId = 1,

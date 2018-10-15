@@ -10,7 +10,7 @@ class AccountOnline {
     values: null,
   }
 
-  constructor(ethRef, { addressTtl = 0 }) {
+  constructor(ethRef, { addressTtl = 0 } = {}) {
     this.ethRef = ethRef
     this.addressTtl = addressTtl
   }
@@ -36,12 +36,7 @@ class AccountOnline {
         ? this.ethRef.quantity(UNSAFE_gasPrice)
         : undefined,
       data: UNSAFE_data ? this.ethRef.data(UNSAFE_data) : undefined,
-      to: to
-        ? this.ethRef.data(
-            eth.isValidAddress(to) ? to : await this.ethRef.ens.resolveTo(to),
-            20,
-          )
-        : undefined,
+      to: to ? this.ethRef.data(to, 20) : undefined,
       value: value ? this.ethRef.quantity(value) : undefined,
       from: UNSAFE_from
         ? this.ethRef.data(UNSAFE_from, 20)
@@ -71,9 +66,7 @@ class AccountOnline {
             ? this.ethRef.quantity(UNSAFE_gas || UNSAFE_gasLimit)
             : undefined,
         data: UNSAFE_data ? this.ethRef.data(UNSAFE_data) : undefined,
-        to: to
-          ? this.ethRef.data(await this.ethRef.tx.resolveTo(to), 20)
-          : undefined,
+        to: to ? this.ethRef.data(to, 20) : undefined,
         value: value ? this.ethRef.quantity(value) : undefined,
         from: UNSAFE_from
           ? this.ethRef.data(UNSAFE_from, 20)
@@ -86,6 +79,7 @@ class AccountOnline {
     UNSAFE_nonce,
     UNSAFE_gasPrice,
     UNSAFE_gas,
+    UNSAFE_chainId,
     UNSAFE_gasLimit,
     UNSAFE_from,
     UNSAFE_data,
@@ -97,8 +91,10 @@ class AccountOnline {
     priority,
   }) =>
     this.ethRef.request('eth_sendTransaction', {
-      nonce: this.ethRef.quantity(UNSAFE_nonce),
-      gasPrice: this.ethRef.quantity(UNSAFE_gasPrice),
+      nonce: UNSAFE_nonce ? this.ethRef.quantity(UNSAFE_nonce) : undefined,
+      gasPrice: UNSAFE_gasPrice
+        ? this.ethRef.quantity(UNSAFE_gasPrice)
+        : undefined,
       gas:
         UNSAFE_gas || UNSAFE_gasLimit
           ? this.ethRef.quantity(UNSAFE_gas || UNSAFE_gasLimit)
@@ -110,9 +106,10 @@ class AccountOnline {
               to,
               value,
             }),
-      data: this.ethRef.data(UNSAFE_data),
-      to: this.ethRef.data(to, 20),
-      value: this.ethRef.quantity(value),
+      data: UNSAFE_data ? this.ethRef.data(UNSAFE_data) : undefined,
+      chainId: UNSAFE_chainId ? UNSAFE_chainId : undefined,
+      to: to ? this.ethRef.data(to, 20) : undefined,
+      value: value ? this.ethRef.quantity(value) : undefined,
       from: UNSAFE_from
         ? this.ethRef.data(UNSAFE_from, 20)
         : await this.address(),

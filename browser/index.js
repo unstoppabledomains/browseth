@@ -113,7 +113,7 @@ class BrowserClient {
 
   find = new Explorer(this)
 
-  // tx = new TransactionQueue(this)
+  tx = new utils.TxListener(this)
 
   block = new utils.BlockTracker(this)
 
@@ -190,17 +190,7 @@ class BrowserClient {
   }
 
   send = params => {
-    if (this.accounts.length > 0)
-      return this.accounts[0].send({
-        ...params,
-        UNSAFE_nonce: params.nonce,
-        UNSAFE_gasPrice: params.gasPrice,
-        UNSAFE_gas: params.gas,
-        UNSAFE_gasLimit: params.gasLimit,
-        UNSAFE_from: params.from,
-        UNSAFE_data: params.data,
-        UNSAFE_chainId: params.chainId,
-      })
+    if (this.accounts.length > 0) return this.accounts[0].send(params)
     return Promise.reject(
       new Error('an account is required in order to send transactions'),
     )

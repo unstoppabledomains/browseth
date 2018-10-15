@@ -86,13 +86,12 @@ class Contract {
             }
 
             const encoded = ab.concat([this.bin, abi.enc(...values)])
-
             return {
               send: (transaction = {}) => {
                 transactionPreflightCheck(transaction, abi)
 
                 return this.ethRef.send({
-                  to: new ArrayBuffer(20),
+                  to: null,
                   UNSAFE_data: encoded,
                   ...transaction,
                 })
@@ -103,7 +102,7 @@ class Contract {
                 transactionPreflightCheck(transaction, abi)
 
                 return this.ethRef.gas({
-                  to: new ArrayBuffer(20),
+                  to: null,
                   UNSAFE_data: encoded,
                   ...transaction,
                 })
