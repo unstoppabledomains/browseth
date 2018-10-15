@@ -7,6 +7,7 @@ import { Contract } from '@browseth/contract'
 import { AbiCodec } from '@browseth/abi'
 import AccountReadonly from '@browseth/account-readonly'
 import AccountSigner from '@browseth/account-signer'
+import { AccountOnline } from '@browseth/account-online'
 
 export { BrowserClient as default, BrowserClient }
 
@@ -124,28 +125,15 @@ class BrowserClient {
 
   accounts = []
 
-  useOnlineAccount = () => {}
+  useOnlineAccount = options =>
+    this.useAccount(new AccountOnline(this, options))
 
-  useSignerAccount = signer => {
-    const newSignerAccount = new AccountSigner(this, signer)
-    const from =
-      typeof account === 'string'
-        ? this.accounts.findIndex(account => account.id === account)
-        : this.accounts.findIndex(account => account === account)
-
-    if (from !== -1) {
-      this.accounts.splice(0, 0, this.accounts.splice(from, 1)[0])
-      return true
-    } else if (this.accounts.length < 1 && typeof account !== 'string') {
-      this.accounts.unshift(account)
-      return true
-    }
-    return false
-  }
+  useSignerAccount = signer => this.useAccount(new AccountSigner(this, signer))
 
   useReadonlyAccount = () => {}
 
-  addOnlineAccount = () => {}
+  addOnlineAccount = options =>
+    this.addAccount(new AccountOnline(this, options))
 
   addSignerAccount = signer => {
     const newSignerAccount = new AccountSigner(this, signer)
@@ -174,12 +162,11 @@ class BrowserClient {
 
     if (from !== -1) {
       this.accounts.splice(0, 0, this.accounts.splice(from, 1)[0])
-      return true
+      return account.id
     } else if (this.accounts.length < 1 && typeof account !== 'string') {
       this.accounts.unshift(account)
-      return true
+      return account.id
     }
-    return false
   }
 
   simulate = transaction => this.gas(transaction)
