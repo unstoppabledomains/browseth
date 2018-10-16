@@ -178,6 +178,41 @@ Prototype
 
     See #emitter
 
+.. _tx-listener:
+
+Transaction Listener
+====================
+Monitor transactions
+
+Creating Instances
+------------------
+
+new :sup:`Browseth.utils` . TxListener ( ethRef )
+    Create new TxListener object with eth reference. 
+
+Prototype
+---------
+
+:sup:`prototype` . listen ( txHash ): <Promise>
+    Listen for a transaction until it is mined. Returns a promise that resolves to a transaction receipt.
+
+    **If the listener does not see a receipt after 30 minutes it throws assuming the transaction has been dropped from the network**
+
+.. code-block:: javascript
+    :caption: *Example*
+
+    import Browseth from '@browseth/browser'
+
+    const beth = new Browseth('https://mainnet.infura.io');
+    beth.useOnlineAccount();
+
+    const txListener = new Browseth.utils.TxListener(beth);
+
+    txListener.listen(txHash)
+        .then(receipt => console.log(receipt))
+        .catch(e => console.log('Transaction dropped!'))
+
+
 .. _observable:
 
 Observable
