@@ -70,7 +70,7 @@ class AbiEvent {
 
       flattened = mapped
     } else {
-      if (values.length > this.indexedCodecs.length)
+      if (values[0].length > this.indexedCodecs.length)
         throw new RangeError('too many topics')
 
       flattened = values

@@ -5,11 +5,10 @@ import Browseth from '@browseth/browser'
 import PrivateKeySigner from '@browseth/signer-private-key'
 import AccountSigner from '@browseth/account-signer'
 import * as units from '@browseth/units'
+import { TxListener } from '@browseth/utils'
 
-const beth = new Browseth('https://ropsten.infura.io/mew')
-const privateKey =
-  '72307ba0c2225b6ad2f307f1c9449478a358589b83e19dcc562de189518e102d'
-beth.useAccount(new AccountSigner(beth, new PrivateKeySigner(privateKey)))
+const beth = new Browseth()
+beth.useOnlineAccount()
 
 let testContractInstance = null
 let contractAddress = ''
@@ -37,38 +36,65 @@ describe('construct()', () => {
     it('should estimate gas', async function() {
       expect(
         await testContractInstance.construct(12, 12).gas({
-          chainId: 3,
           gasPrice: units.gweiToWei(10),
         }),
-      ).to.equal('0x97b4')
+      ).to.match(/^0x[\da-f]+/)
     })
   })
 
-  // describe('send()', () => {
-  //   it('should create and send transaction', async function() {
-  //     this.timeout(105300)
-  //     expect(
-  //       await testContractInstance
-  //         .construct(12, 12)
-  //         .send({
-  //           chainId: 3,
-  //           gasPrice: units.gweiToWei(40),
-  //         })
-  //         .then(txHash => txHash),
-  //     ).to.match(/^0x[\da-f]{64}$/)
-  //   })
-  // })
+  describe('send()', () => {
+    it('should deploy contract', async function() {
+      this.timeout(205300)
 
-  // need to get contractAddress from txHash
+      expect(
+        await testContractInstance
+          .construct(10, 12)
+          .send({
+            UNSAFE_gasPrice: units.gweiToWei(30),
+          })
+          .then(async txHash => {
+            const txListener = new TxListener(beth)
+            const receipt = await txListener.listen(txHash)
+            contractAddress = receipt.contractAddress
+            return txHash
+          }),
+      ).to.match(/^0x[\da-f]{64}$/)
+    })
+  })
 })
 
-// describe('call()', () => {
-//   it('should h=', async function() {
-//     console.log(
-//       await testContractInstance.fn.getA().call({
-//         to:
-//           '0x7c17738bb674157a449f3328ae6c9e1bbe1b6a40028aa6a6499ef0c46994b46f',
-//       }),
-//     )
-//   })
-// })
+describe('call()', () => {
+  it('should read value in contract', async function() {
+    const val = await testContractInstance.fn.getA().call({
+      to: contractAddress,
+    })
+    expect(val).to.be.equal(BigInt(10))
+  })
+})
+
+describe('send()', () => {
+  it('should write to contract', async function() {
+    this.timeout(30000)
+    const newVal = 123123123
+    const txHash = await testContractInstance.fn.setA(newVal).send({
+      to: contractAddress,
+    })
+    const txListener = new TxListener(beth)
+    const receipt = await txListener.listen(txHash)
+    const val = await testContractInstance.fn.getA().call({
+      to: contractAddress,
+    })
+    expect(val).to.be.equal(BigInt(newVal))
+  })
+})
+
+describe('event()', () => {
+  it('should read event from contract', async function() {
+    const eventLog = await testContractInstance.ev
+      .ASet()
+      .logs('earliest', 'latest', contractAddress)
+    expect(eventLog[0].data).to.be.equal(
+      '0x000000000000000000000000000000000000000000000000000000000756b5b3',
+    )
+  })
+})

@@ -127,12 +127,14 @@ class Contract {
                 .request('eth_getLogs', {
                   fromBlock: this.ethRef.tag(from),
                   toBlock: this.ethRef.tag(to),
-                  topics: encodedTopics.map(
-                    topic =>
-                      Array.isArray(topic)
-                        ? topic.map(v => this.ethRef.data(v))
-                        : this.ethRef.data(topic),
-                  ),
+                  topics: encodedTopics
+                    .map(
+                      topic =>
+                        Array.isArray(topic)
+                          ? topic.map(v => this.ethRef.data(v))
+                          : this.ethRef.data(topic),
+                    )
+                    .filter(topic => topic.length),
                   address: (address
                     ? addresses.concat(address)
                     : addresses

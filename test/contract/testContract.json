@@ -1,31 +1,61 @@
 {
-  "bin": "608060405234801561001057600080fd5b5060405160408061012b83398101604052805160209091015160009190915560015560eb806100406000396000f30060806040526004361060525763ffffffff7c0100000000000000000000000000000000000000000000000000000000600035041663a1c5191581146057578063d46300fd14607b578063f4a7582b14608d575b600080fd5b348015606257600080fd5b506069609f565b60408051918252519081900360200190f35b348015608657600080fd5b50606960a5565b348015609857600080fd5b50606960ab565b60015490565b60005490565b600060b3609f565b60b960a5565b029050905600a165627a7a723058202031c3f9047a183774bfdc65a734bfb681b50bdcdd97e39b5637cd7b31c176230029",
+  "bin": "608060405234801561001057600080fd5b50604051604080610297833981016040528051602090910151600091909155600155610256806100416000396000f3006080604052600436106100775763ffffffff7c0100000000000000000000000000000000000000000000000000000000600035041663016aa20b811461007c57806309cdcf9b14610099578063a1c51915146100b1578063d46300fd146100d8578063ee919d50146100ed578063f4a7582b14610105575b600080fd5b34801561008857600080fd5b5061009760043560243561011a565b005b3480156100a557600080fd5b50610097600435610190565b3480156100bd57600080fd5b506100c66101cb565b60408051918252519081900360200190f35b3480156100e457600080fd5b506100c66101d1565b3480156100f957600080fd5b506100976004356101d7565b34801561011157600080fd5b506100c6610212565b600082905560018190556040805183815290517fb800da52ab9b645480fcd8e9a731e1057fe702f78d9cfa65dffac7b6e7d9da0b9181900360200190a160015460408051918252517f4b489b7126060378b079bb0c8a8d6d8d73495950fe2216447ff682934f92ae0f9181900360200190a15050565b60018190556040805182815290517f4b489b7126060378b079bb0c8a8d6d8d73495950fe2216447ff682934f92ae0f9181900360200190a150565b60015490565b60005490565b60008190556040805182815290517fb800da52ab9b645480fcd8e9a731e1057fe702f78d9cfa65dffac7b6e7d9da0b9181900360200190a150565b600061021c6101cb565b6102246101d1565b029050905600a165627a7a723058200dd19cbfdd796f2f51be065de7da70ec0cc927657448ac9d8ff02296c47ecff50029",
   "abi": [
     {
       "constant": false,
+      "inputs": [
+        { "name": "_a", "type": "uint256" },
+        { "name": "_b", "type": "uint256" }
+      ],
+      "name": "setAB",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [{ "name": "_b", "type": "uint256" }],
+      "name": "setB",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
       "inputs": [],
       "name": "getB",
       "outputs": [{ "name": "", "type": "uint256" }],
       "payable": false,
-      "stateMutability": "nonpayable",
+      "stateMutability": "view",
       "type": "function"
     },
     {
-      "constant": false,
+      "constant": true,
       "inputs": [],
       "name": "getA",
       "outputs": [{ "name": "", "type": "uint256" }],
       "payable": false,
-      "stateMutability": "nonpayable",
+      "stateMutability": "view",
       "type": "function"
     },
     {
       "constant": false,
+      "inputs": [{ "name": "_a", "type": "uint256" }],
+      "name": "setA",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
       "inputs": [],
       "name": "getATimesB",
       "outputs": [{ "name": "", "type": "uint256" }],
       "payable": false,
-      "stateMutability": "nonpayable",
+      "stateMutability": "view",
       "type": "function"
     },
     {
@@ -36,6 +66,18 @@
       "payable": false,
       "stateMutability": "nonpayable",
       "type": "constructor"
+    },
+    {
+      "anonymous": false,
+      "inputs": [{ "indexed": false, "name": "a", "type": "uint256" }],
+      "name": "ASet",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [{ "indexed": false, "name": "b", "type": "uint256" }],
+      "name": "BSet",
+      "type": "event"
     }
   ]
 }
