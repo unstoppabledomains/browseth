@@ -18,5 +18,8 @@
   "dependencies": {
     "@browseth/utils": "^0.0.1-alpha.0",
     "babel-runtime": "^6.26.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
