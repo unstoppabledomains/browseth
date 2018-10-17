@@ -17,12 +17,9 @@ class SignerLedger {
   static allowParallel = false
 
   addressCache = {}
-  defaultIndex = 0
 
-  constructor(privateKey, dPath = this.constructor.dPaths.mainnet) {
-    this.privateKey = ab.fromBytes(privateKey, 32)
-    this.pair = secp256k1.keyFromPrivate(new Uint8Array(this.privateKey))
-
+  constructor(defaultIndex = 0, dPath = this.constructor.dPaths.mainnet) {
+    this.defaultIndex = defaultIndex
     if (!isValidDPath(dPath)) throw new TypeError('invalid dPath ' + dPath)
     this.dPath = dPath
   }

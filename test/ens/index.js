@@ -34,7 +34,8 @@ describe('resolverAddress()', () => {
 //     this.timeout(20000)
 
 //     console.log(await ensLookup.allTexts(node, 'twitter'))
-//     // events is broken in @browseth/ens
+//     // ens events not working
+//     // abi codec for events is broken in @browseth/ens
 //   })
 // })
 

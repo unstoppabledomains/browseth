@@ -3,29 +3,29 @@ import { address } from '@browseth/utils'
 import { BlockTracker } from '@browseth/utils'
 import Browseth from '@browseth/browser'
 
-// describe('syncBlockNumber', function() {
-//   it('should get latest block', function(done) {
-//     const beth = new Browseth('https://ropsten.infura.io/mew')
-//     beth.useOnlineAccount()
-//     const blockTracker = new BlockTracker(beth)
-//     clearInterval(blockTracker.blockNumberInterval)
-//     clearInterval(blockTracker.blocksInterval)
-//     blockTracker.emitter.on('block.number', function(blockNumber) {
-//       try {
-//         expect(blockNumber).to.be.greaterThan(4226205)
-//         done()
-//       } catch (e) {
-//         done(e)
-//       }
-//     })
-//     blockTracker.syncBlockNumber()
-//   })
-// })  // chai is waiting for this test even though it's calling done().
+describe('syncBlockNumber', function() {
+  it('should get latest block', function(done) {
+    const beth = new Browseth()
+    beth.useOnlineAccount()
+    const blockTracker = new BlockTracker(beth)
+    clearInterval(blockTracker.blockNumberInterval)
+    clearInterval(blockTracker.blocksInterval)
+    blockTracker.emitter.on('block.number', function(blockNumber) {
+      try {
+        expect(blockNumber).to.be.greaterThan(4226205)
+        done()
+      } catch (e) {
+        done(e)
+      }
+    })
+    blockTracker.syncBlockNumber()
+  })
+}) // chai is waiting for this test even though it's calling done().
 // Must be a binding issue with how the Emitter calls the callback
 
 describe('addTracker', () => {
   it('should add tracker', () => {
-    const beth = new Browseth('https://ropsten.infura.io/mew')
+    const beth = new Browseth()
     beth.useOnlineAccount()
     const blockTracker = new BlockTracker(beth)
     const tracker = { confirmationDelay: 0, synced: 4226220, isSyncing: false }
@@ -38,7 +38,7 @@ describe('addTracker', () => {
 describe('syncBlocks', () => {
   it('should get block', function(done) {
     this.timeout(2000000)
-    const beth = new Browseth('https://ropsten.infura.io/mew')
+    const beth = new Browseth()
     beth.useOnlineAccount()
     const block = 0x408ee5
     const blockTracker = new BlockTracker(beth)

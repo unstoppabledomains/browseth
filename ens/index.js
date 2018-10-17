@@ -1,6 +1,5 @@
 // import * as utils from '@browseth/utils'
 import { AbiCodec } from '@browseth/abi'
-
 export { EnsLookup as default, EnsLookup }
 
 class EnsLookup {
@@ -93,71 +92,71 @@ class EnsLookup {
       payable: false,
       type: 'function',
     },
-    // {
-    //   anonymous: false,
-    //   inputs: [
-    //     { indexed: true, name: 'node', type: 'bytes32' },
-    //     { indexed: false, name: 'a', type: 'address' },
-    //   ],
-    //   name: 'AddrChanged',
-    //   type: 'event',
-    // },
-    // {
-    //   anonymous: false,
-    //   inputs: [
-    //     { indexed: true, name: 'node', type: 'bytes32' },
-    //     { indexed: false, name: 'hash', type: 'bytes32' },
-    //   ],
-    //   name: 'ContentChanged',
-    //   type: 'event',
-    // },
-    // {
-    //   anonymous: false,
-    //   inputs: [
-    //     { indexed: true, name: 'node', type: 'bytes32' },
-    //     { indexed: false, name: 'multihash', type: 'bytes' },
-    //   ],
-    //   name: 'MultihashChanged',
-    //   type: 'event',
-    // },
-    // {
-    //   anonymous: false,
-    //   inputs: [
-    //     { indexed: true, name: 'node', type: 'bytes32' },
-    //     { indexed: false, name: 'name', type: 'string' },
-    //   ],
-    //   name: 'NameChanged',
-    //   type: 'event',
-    // },
-    // {
-    //   anonymous: false,
-    //   inputs: [
-    //     { indexed: true, name: 'node', type: 'bytes32' },
-    //     { indexed: true, name: 'contentType', type: 'uint256' },
-    //   ],
-    //   name: 'ABIChanged',
-    //   type: 'event',
-    // },
-    // {
-    //   anonymous: false,
-    //   inputs: [
-    //     { indexed: true, name: 'node', type: 'bytes32' },
-    //     { indexed: false, name: 'x', type: 'bytes32' },
-    //     { indexed: false, name: 'y', type: 'bytes32' },
-    //   ],
-    //   name: 'PubkeyChanged',
-    //   type: 'event',
-    // },
-    // {
-    //   anonymous: false,
-    //   inputs: [
-    //     { indexed: true, name: 'node', type: 'bytes32' },
-    //     { indexed: true, name: 'indexedKey', type: 'string' },
-    //     { indexed: false, name: 'key', type: 'string' },
-    //   ],
-    //   name: 'TextChanged',
-    //   type: 'event',
-    // },
+    {
+      anonymous: false,
+      inputs: [
+        { indexed: true, name: 'node', type: 'bytes32' },
+        { indexed: false, name: 'a', type: 'address' },
+      ],
+      name: 'AddrChanged',
+      type: 'event',
+    },
+    {
+      anonymous: false,
+      inputs: [
+        { indexed: true, name: 'node', type: 'bytes32' },
+        { indexed: false, name: 'hash', type: 'bytes32' },
+      ],
+      name: 'ContentChanged',
+      type: 'event',
+    },
+    {
+      anonymous: false,
+      inputs: [
+        { indexed: true, name: 'node', type: 'bytes32' },
+        { indexed: false, name: 'multihash', type: 'bytes' },
+      ],
+      name: 'MultihashChanged',
+      type: 'event',
+    },
+    {
+      anonymous: false,
+      inputs: [
+        { indexed: true, name: 'node', type: 'bytes32' },
+        { indexed: false, name: 'name', type: 'string' },
+      ],
+      name: 'NameChanged',
+      type: 'event',
+    },
+    {
+      anonymous: false,
+      inputs: [
+        { indexed: true, name: 'node', type: 'bytes32' },
+        { indexed: true, name: 'contentType', type: 'uint256' },
+      ],
+      name: 'ABIChanged',
+      type: 'event',
+    },
+    {
+      anonymous: false,
+      inputs: [
+        { indexed: true, name: 'node', type: 'bytes32' },
+        { indexed: false, name: 'x', type: 'bytes32' },
+        { indexed: false, name: 'y', type: 'bytes32' },
+      ],
+      name: 'PubkeyChanged',
+      type: 'event',
+    },
+    {
+      anonymous: false,
+      inputs: [
+        { indexed: true, name: 'node', type: 'bytes32' },
+        { indexed: true, name: 'indexedKey', type: 'string' },
+        { indexed: false, name: 'key', type: 'string' },
+      ],
+      name: 'TextChanged',
+      type: 'event',
+    },
   ])
 
   static ens = new AbiCodec([
@@ -326,7 +325,6 @@ class EnsLookup {
         key,
       })
       .logs('earliest')
-
   info = node =>
     Promise.all([
       this.pubkey(node),
