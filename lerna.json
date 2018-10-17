@@ -1,6 +1,9 @@
 {
   "npmClient": "yarn",
-  "npmClientArgs": ["--production", "--no-optional"],
+  "npmClientArgs": [
+    "--production",
+    "--no-optional"
+  ],
   "useWorkspaces": true,
-  "version": "0.0.0"
+  "version": "0.0.1-alpha.0"
 }

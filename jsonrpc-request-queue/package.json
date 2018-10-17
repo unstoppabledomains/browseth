@@ -1,6 +1,6 @@
 {
   "name": "@browseth/jsonrpc-request-queue",
-  "version": "0.0.0",
+  "version": "0.0.1-alpha.0",
   "license": "MIT",
   "browser": "build/browser.js",
   "main": "build/index.js",
