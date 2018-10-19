@@ -1,12 +1,12 @@
 {
   "name": "@browseth/cli",
-  "version": "0.0.0",
-  "license": "MIT",
-  "scripts": {
-    "build-browser": " ",
-    "build-node": " ",
-    "build": " ",
-    "start": " ",
-    "postinstall": "lerna link"
-  }
+  "version": "0.0.19",
+  "bin": {
+    "browseth-cli": "./bin/browseth-cli.js"
+  },
+  "dependencies": {
+    "commander": "^2.15.1",
+    "fs-extra": "^6.0.1"
+  },
+  "postinstall": "lerna link"
 }
