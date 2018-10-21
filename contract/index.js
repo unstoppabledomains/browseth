@@ -116,7 +116,7 @@ class Contract {
           const abi = new AbiEvent(element)
 
           const codec = (...topics) => {
-            const encodedTopics = abi.enc(topics)
+            const encodedTopics = abi.enc(...topics)
             const logs = (
               from = 'latest',
               to = 'latest',
