@@ -17,6 +17,8 @@
   },
   "dependencies": {
     "@browseth/utils": "^0.0.1-y.0",
+    "@ledgerhq/hw-app-eth": "^4.24.0",
+    "@ledgerhq/hw-transport-node-hid": "^4.24.0",
     "babel-runtime": "^6.26.0"
   },
   "publishConfig": {

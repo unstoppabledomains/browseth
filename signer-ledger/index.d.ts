@@ -1,11 +1,11 @@
-export = SignerPrivatekey
-export as namespace SignerPrivatekey
+export = SignerLedger
+export as namespace SignerLedger
 
-declare namespace SignerPrivatekey {
-  export { SignerPrivatekey as default, SignerPrivatekey }
+declare namespace SignerLedger {
+  export { SignerLedger as default, SignerLedger }
 
-  class SignerPrivatekey {
-    constructor(privateKey: string | ArrayBuffer | ArrayBufferView)
+  class SignerLedger {
+    constructor()
     signTransaction(transaction: any): ArrayBuffer
     signMessage(message: string, shouldConcat: boolean): ArrayBuffer
     toAddress(): string

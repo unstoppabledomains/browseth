@@ -1,5 +1,6 @@
 import { ab, crypto, rlp, address } from '@browseth/utils'
-
+import AppEth from '@ledgerhq/hw-app-eth'
+import TransportNodeHid from '@ledgerhq/hw-transport-node-hid'
 export { SignerLedger as default, SignerLedger }
 
 function isValidDPath(v) {
@@ -25,17 +26,17 @@ class SignerLedger {
   }
 
   initialize = async () => {
-    if (!Ledger.allowParallel && Ledger.initialized)
-      throw new Error('another ledger wallet call is already initialized')
+    if (!SignerLedger.allowParallel && SignerLedger.initialized)
+      throw new Error('another SignerLedger wallet call is already initialized')
 
     this.constructor.initialized = true
-    const transport = await Ledger.Transport.create().then(transport => {})
+    const transport = await TransportNodeHid.create().then(transport => {})
 
     // transport.setDebugMode(true);
     return {
       app: new AppEth(transport),
       close: () => {
-        Ledger.initialized = false
+        SignerLedger.initialized = false
         transport.close()
       },
     }
