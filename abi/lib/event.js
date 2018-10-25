@@ -5,6 +5,8 @@ import { getFullName } from './util'
 export { AbiEvent as default, AbiEvent }
 
 class AbiEvent {
+  static LOG = Symbol('LOG')
+
   constructor(object) {
     // asssert object.inputs.indexed < 4
     if ((object.inputs.length + object.anonymous === true ? 0 : 1) > 4)
@@ -104,16 +106,24 @@ class AbiEvent {
           : codec.dec(log.topics[i]),
     )
     const decodedData = this.unindexedCodec.dec(log.data)
+
+    const decodedParams = []
     this.meta.inputs
       .filter(input => input.indexed)
-      .map((input, i) => (decoded[input.name] = decodedTopics[i]))
+      .map((input, i) => (decodedParams[input.name] = decodedTopics[i]))
+
     Object.keys(decodedData)
       .splice(Object.keys(decodedData).length / 2)
-      .map(key => (decoded[key] = decodedData[key]))
+      .map(key => (decodedParams[key] = decodedData[key]))
+
     this.meta.inputs.map(input => {
-      decoded.push(decoded[input.name])
+      decoded.push(decodedParams[input.name])
+      if (this.canUseNamedOutput) {
+        decoded[input.name] = decodedParams[input.name]
+      }
     })
-    decoded[Symbol('log')] = log
+
+    decoded[AbiEvent.LOG] = log
     return decoded
   }
 }
