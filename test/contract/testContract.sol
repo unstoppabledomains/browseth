@@ -4,7 +4,7 @@ contract Test {
     uint256 a;
     uint256 b;
 
-    event ASet(uint256 a);
+    event ASet(uint256 indexed a, uint256 b, uint256 aPlusB, uint256 indexed aTimesB);
     event BSet(uint256 b);
 
     constructor(uint256 _a, uint256 _b) public {
@@ -26,7 +26,7 @@ contract Test {
 
     function setA(uint256 _a) public {
         a = _a;
-        emit ASet(a);
+        emit ASet(a, b, a + b, a * b);
     }
 
     function setB(uint256 _b) public {
@@ -37,7 +37,7 @@ contract Test {
     function setAB(uint256 _a, uint256 _b) public {
         a = _a;
         b = _b;
-        emit ASet(a);
+        emit ASet(a, b, a + b, a * b);
         emit BSet(b);
     }
 }

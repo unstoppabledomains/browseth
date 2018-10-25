@@ -70,7 +70,7 @@ class AbiEvent {
 
       flattened = mapped
     } else {
-      if (values[0].length > this.indexedCodecs.length)
+      if (values[0] && values[0].length > this.indexedCodecs.length)
         throw new RangeError('too many topics')
 
       flattened = values
@@ -92,5 +92,28 @@ class AbiEvent {
     return encoded
   }
 
-  dec = log => log
+  dec = log => {
+    const decoded = []
+    if (!this.isAnonymous) {
+      log.topics.shift()
+    }
+    const decodedTopics = this.indexedCodecs.map(
+      (codec, i) =>
+        codec.isDynamic
+          ? parse({ type: 'bytes32' }).dec(log.topics[i])
+          : codec.dec(log.topics[i]),
+    )
+    const decodedData = this.unindexedCodec.dec(log.data)
+    this.meta.inputs
+      .filter(input => input.indexed)
+      .map((input, i) => (decoded[input.name] = decodedTopics[i]))
+    Object.keys(decodedData)
+      .splice(Object.keys(decodedData).length / 2)
+      .map(key => (decoded[key] = decodedData[key]))
+    this.meta.inputs.map(input => {
+      decoded.push(decoded[input.name])
+    })
+    decoded[Symbol('log')] = log
+    return decoded
+  }
 }

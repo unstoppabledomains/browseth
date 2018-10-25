@@ -41,7 +41,6 @@ class AbiParamNumber {
 
   constructor(object) {
     const match = object.type.match(this.constructor.regex)
-
     if (match == null) {
       throw new TypeError("invalid type '" + object.type + "'")
     }
@@ -90,7 +89,11 @@ class AbiParamNumber {
         ab.toHex(ab.toTwos(value.slice(32 - this.length, 32), this.length)),
       )
     }
-    return BigInt(ab.toHex(value.slice(32 - this.length, 32)))
+    if (value instanceof ArrayBuffer) {
+      return BigInt(ab.toHex(value))
+    } else {
+      return BigInt(value, '16')
+    }
   }
 }
 

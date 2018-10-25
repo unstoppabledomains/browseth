@@ -75,8 +75,9 @@ describe('call()', () => {
 describe('send()', () => {
   it('should write to contract', async function() {
     this.timeout(30000)
-    const newVal = 123123123
-    const txHash = await testContractInstance.fn.setA(newVal).send({
+    const newA = 0x123123123
+    const newB = 0x80000085
+    const txHash = await testContractInstance.fn.setAB(newA, newB).send({
       to: contractAddress,
     })
     const txListener = new TxListener(beth)
@@ -84,17 +85,29 @@ describe('send()', () => {
     const val = await testContractInstance.fn.getA().call({
       to: contractAddress,
     })
-    expect(val).to.be.equal(BigInt(newVal))
+    expect(val).to.be.equal(BigInt(newA))
   })
 })
 
 describe('event()', () => {
   it('should read event from contract', async function() {
-    const eventLog = await testContractInstance.ev
+    const eventLog = (await testContractInstance.ev
+      .ASet({ a: 0x123123123 })
+      .logs('earliest', 'latest', contractAddress))[0]
+    expect(eventLog[0].toString()).to.be.equal('4883362083')
+    expect(eventLog[1].toString()).to.be.equal('2147483781')
+    expect(eventLog[3].toString()).to.be.equal('10486940869992875823')
+    expect(eventLog.aTimesB.toString()).to.be.equal('10486940869992875823')
+    expect(eventLog['aPlusB'].toString()).to.be.equal('7030845864')
+  })
+  it('should read event from contract', async function() {
+    const eventLog = (await testContractInstance.ev
       .ASet()
-      .logs('earliest', 'latest', contractAddress)
-    expect(eventLog[0].data).to.be.equal(
-      '0x000000000000000000000000000000000000000000000000000000000756b5b3',
-    )
+      .logs('earliest', 'latest', contractAddress))[0]
+    expect(eventLog[0].toString()).to.be.equal('4883362083')
+    expect(eventLog[1].toString()).to.be.equal('2147483781')
+    expect(eventLog[3].toString()).to.be.equal('10486940869992875823')
+    expect(eventLog.aTimesB.toString()).to.be.equal('10486940869992875823')
+    expect(eventLog['aPlusB'].toString()).to.be.equal('7030845864')
   })
 })
