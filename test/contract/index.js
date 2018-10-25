@@ -1,5 +1,6 @@
 import { expect } from 'chai'
 import testContractJson from './testContract'
+import { AbiEvent } from '@browseth/abi'
 import Contract from '@browseth/contract'
 import Browseth from '@browseth/browser'
 import PrivateKeySigner from '@browseth/signer-private-key'
@@ -109,5 +110,19 @@ describe('event()', () => {
     expect(eventLog[3].toString()).to.be.equal('10486940869992875823')
     expect(eventLog.aTimesB.toString()).to.be.equal('10486940869992875823')
     expect(eventLog['aPlusB'].toString()).to.be.equal('7030845864')
+  })
+  it('should get event log from symbol', async function() {
+    const eventLog = (await testContractInstance.ev
+      .ASet()
+      .logs('earliest', 'latest', contractAddress))[0]
+    expect(eventLog[AbiEvent.LOG].topics[0]).to.be.equal(
+      '0x0000000000000000000000000000000000000000000000000000000123123123',
+    )
+    expect(eventLog[AbiEvent.LOG].topics[1]).to.be.equal(
+      '0x00000000000000000000000000000000000000000000000091891928b873872f',
+    )
+    expect(eventLog[AbiEvent.LOG].data).to.be.equal(
+      '0x000000000000000000000000000000000000000000000000000000008000008500000000000000000000000000000000000000000000000000000001a31231a8',
+    )
   })
 })
