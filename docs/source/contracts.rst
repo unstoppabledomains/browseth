@@ -14,10 +14,6 @@ mined before any changes to the state are made. Therefore, these methods are
 subject to fluctuating gas prices, network congestion, and miner heuristics.
 
 .. code-block:: javascript
-
-    const Contract = require('@browseth/contract');
-    
-.. code-block:: javascript
  
     import Contract from '@browseth/contract';
 
@@ -58,7 +54,7 @@ Deploying Contracts
     import Contract from '@browseth/contract'
     import PrivateKeySigner from '@browseth/signer-private-key'
 
-    const beth = new Browseth('https://mainnet.infura.io');
+    const beth = new Browseth(eth_rpc);
     beth.useSignerAccount(new PrivateKeySigner(PRIVATE_KEY));
 
     const contractInstance = new Contract(beth, contract.abi, {bin: contract.bin});

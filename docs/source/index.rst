@@ -10,6 +10,8 @@ Welcome to Browseth's documentation!
    :maxdepth: 2
    :caption: Developer Documentation
 
+   quickstart
+   getting-started
    units
    utils
    contracts

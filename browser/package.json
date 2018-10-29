@@ -12,8 +12,8 @@
     "build": "rollup -c workspace/rollup.config.js",
     "start": "rollup -c workspace/rollup.node-config.js -w",
     "pretest": "yarn build-node",
-    "test": "node test",
-    "postinstall": "lerna link"
+    "test": "node test"
+   
   },
   "dependencies": {
     "@browseth/abi": "^1.0.1",

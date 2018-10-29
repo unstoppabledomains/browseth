@@ -8,12 +8,6 @@ resolver interface reading.
 
 .. code-block:: javascript
 
-    const EnsLookup = require('@browseth/ens');
-
-or
-
-.. code-block:: javascript
-
     import EnsLookup from '@browseth/units';
 
 

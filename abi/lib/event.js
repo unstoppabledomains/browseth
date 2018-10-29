@@ -43,14 +43,16 @@ class AbiEvent {
   }
 
   encTopic = (param, value) => {
-    const encoded = ab[param.isPaddedStart ? 'padStart' : 'padEnd'](
-      param.enc(value),
+    const encoded = param.enc(value)
+
+    const paddedEncode = ab[param.isPaddedStart ? 'padStart' : 'padEnd'](
+      encoded.value ? encoded.value : encoded,
       32,
     )
 
-    return param.isDynamic || encoded.byteLength > 32
-      ? crypto.keccak256(encoded)
-      : encoded
+    return param.isDynamic || paddedEncode.byteLength > 32
+      ? crypto.keccak256(paddedEncode)
+      : paddedEncode
   }
 
   enc = (...values) => {
@@ -72,16 +74,17 @@ class AbiEvent {
 
       flattened = mapped
     } else {
-      if (values[0] && values[0].length > this.indexedCodecs.length)
+      if (
+        Array.isArray(values[0]) &&
+        values[0].length > this.indexedCodecs.length
+      )
         throw new RangeError('too many topics')
 
       flattened = values
     }
-
     const lioDefined = [...flattened].reverse().findIndex(v => v != null)
     flattened =
       lioDefined === -1 ? [] : flattened.slice(0, flattened.length - lioDefined)
-
     const encoded = flattened.map((v, i) => {
       if (v == null) return null
       else if (Array.isArray(v))

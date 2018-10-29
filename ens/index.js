@@ -1,5 +1,5 @@
 // import * as utils from '@browseth/utils'
-import { AbiCodec } from '@browseth/abi'
+import { AbiCodec, AbiEvent } from '@browseth/abi'
 export { EnsLookup as default, EnsLookup }
 
 class EnsLookup {
@@ -318,13 +318,38 @@ class EnsLookup {
       })
       .logs('earliest')
 
-  allTexts = (node, key) =>
-    this.constructor.resolver.e
-      .textChanged({
-        node,
-        key,
-      })
-      .logs('earliest')
+  allTexts = (node, key) => {
+    const abi = new AbiEvent({
+      anonymous: false,
+      inputs: [
+        { indexed: true, name: 'node', type: 'bytes32' },
+        { indexed: true, name: 'indexedKey', type: 'string' },
+        { indexed: false, name: 'key', type: 'string' },
+      ],
+      name: 'TextChanged',
+      type: 'event',
+    })
+    return this.resolverAddress(node).then(resolverAddress => {
+      return this.ethRef
+        .request('eth_getLogs', {
+          fromBlock: '0x32C5B9',
+          toBlock: 'latest',
+          topics: abi
+            .enc(node, key)
+            .map(
+              topic =>
+                Array.isArray(topic)
+                  ? topic.map(v => this.ethRef.data(v))
+                  : this.ethRef.data(topic),
+            )
+            .filter(topic => topic.length)
+            .slice(0, 2),
+          address: resolverAddress,
+        })
+        .then(logs => logs.map(abi.dec))
+    })
+  }
+
   info = node =>
     Promise.all([
       this.pubkey(node),

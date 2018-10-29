@@ -7,8 +7,8 @@
     "build-node": " ",
     "build": " ",
     "start": " ",
-    "pretest": "yarn build-node",
-    "postinstall": "lerna link"
+    "pretest": "yarn build-node"
+   
   },
   "dependencies": {
     "babel-runtime": "^6.26.0"

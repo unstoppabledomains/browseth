@@ -29,15 +29,15 @@ describe('resolverAddress()', () => {
   })
 })
 
-// describe('allTexts()', () => {
-//   it('should return all text changes on key', async function() {
-//     this.timeout(20000)
+describe('allTexts()', () => {
+  it('should return all text changes on key', async function() {
+    this.timeout(20000)
 
-//     console.log(await ensLookup.allTexts(node, 'twitter'))
-//     // ens events not working
-//     // abi codec for events is broken in @browseth/ens
-//   })
-// })
+    console.log(await ensLookup.allTexts(node, 'twitter'))
+    // ens events not working
+    // abi codec for events is broken in @browseth/ens
+  })
+})
 
 describe('text()', () => {
   it('should return current twitter text', async function() {

@@ -33,7 +33,6 @@
   },
   "scripts": {
     "format": "prettier --write -l **/*.{js,json,d.ts}",
-    "postinstall": "lerna link",
     "prebuild-safe": "yarn --force",
     "build-safe": "lerna exec --concurrency 1 'yarn build-node' && lerna exec --concurrency 1 'yarn build-browser'",
     "build": "lerna exec --concurrency 100 'yarn build'",

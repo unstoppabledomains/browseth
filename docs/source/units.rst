@@ -7,12 +7,6 @@ Unit conversion library
 
 .. code-block:: javascript
 
-    const units = require('@browseth/units');
-
-or
-
-.. code-block:: javascript
-
     import * as units from '@browseth/units';
 
 You can also import specific functions
