@@ -34,7 +34,6 @@ class JsonRpcRequestBatchQueue {
     this.timeout = timeout
 
     this.interval = setInterval(this.flush, this.timeout)
-    if (typeof this.interval.unref === 'function') this.interval.unref()
   }
 
   request = (method, ...params) =>
