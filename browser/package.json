@@ -1,6 +1,6 @@
 {
   "name": "@browseth/browser",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "license": "MIT",
   "browser": "build/browser.js",
   "main": "build/index.js",
@@ -21,7 +21,7 @@
     "@browseth/account-signer": "^1.0.2",
     "@browseth/contract": "^1.0.2",
     "@browseth/explorer": "^1.0.2",
-    "@browseth/jsonrpc-request-queue": "^1.0.2",
+    "@browseth/jsonrpc-request-queue": "^1.0.5",
     "@browseth/signer-utils": "^1.0.2",
     "@browseth/units": "^1.0.2",
     "@browseth/utils": "^1.0.2",
