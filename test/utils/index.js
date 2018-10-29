@@ -4,14 +4,14 @@ function importTest(name, path) {
   })
 }
 
-// importTest('ab', './ab')
-// importTest('address', './address')
-// importTest('crypto', './crypto')
-// importTest('observable', './observable')
-// importTest('emitter', './emitter')
-// importTest('block-tracker', './block-tracker')
+importTest('ab', './ab')
+importTest('address', './address')
+importTest('crypto', './crypto')
+importTest('observable', './observable')
+importTest('emitter', './emitter')
+importTest('block-tracker', './block-tracker')
 // importTest('interval', './interval')
-// importTest('observable', './observable')
+importTest('observable', './observable')
 // importTest('param', './param')
 // importTest('rlp', './rlp')
 
