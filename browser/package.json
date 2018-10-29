@@ -23,6 +23,8 @@
     "@browseth/signer-utils": "^1.0.2",
     "@browseth/units": "^1.0.2",
     "@browseth/utils": "^1.0.2",
+    "@browseth/account-signer": "^1.0.2",
+    "@browseth/account-online": "^1.0.2",
     "babel-runtime": "^6.26.0"
   },
   "publishConfig": {
