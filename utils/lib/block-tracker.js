@@ -91,6 +91,7 @@ class BlockTracker {
   }
 
   cleanup = () => {
-    this.requestQueue.request('eth_blockNumber')
+    clearInterval(this.blockNumberInterval)
+    clearInterval(this.blocksInterval)
   }
 }

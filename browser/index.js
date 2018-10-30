@@ -198,6 +198,12 @@ class BrowserClient {
 
   contract = (abiJsonInterface, options) =>
     new Contract(this, abiJsonInterface, options)
+
+  cleanup = () => {
+    this.jsonrpc.cleanup()
+    this.tx.cleanup()
+    this.block.cleanup()
+  }
 }
 // const eth = new BrowserClient()
 

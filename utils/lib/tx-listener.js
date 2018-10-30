@@ -8,7 +8,7 @@ class TxListener {
 
   listen = txHash =>
     new Promise((resolve, reject) => {
-      const interval = setUnrefedInterval(() => {
+      this.interval = setUnrefedInterval(() => {
         this.ethRef
           .request('eth_getTransactionReceipt', txHash)
           .then(receipt => {
@@ -28,4 +28,6 @@ class TxListener {
         18000000,
       )
     })
+
+  cleanup = () => clearInterval(this.interval)
 }
