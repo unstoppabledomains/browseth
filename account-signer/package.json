@@ -1,6 +1,6 @@
 {
   "name": "@browseth/account-signer",
-  "version": "1.0.2",
+  "version": "1.0.6",
   "license": "MIT",
   "browser": "build/browser.js",
   "main": "build/index.js",
@@ -15,7 +15,7 @@
     "test": "node test"
   },
   "dependencies": {
-    "@browseth/utils": "^1.0.2",
+    "@browseth/utils": "^1.0.6",
     "babel-runtime": "^6.26.0"
   },
   "publishConfig": {
