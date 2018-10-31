@@ -38,6 +38,7 @@ declare namespace Utils {
   const crypto: {
     /** Implicitly supports hex string */
     keccak256(value: string | ArrayBuffer | ArrayBufferView): ArrayBuffer
+    namehash(value: string): string
   }
   const interval: {
     setUnrefedInterval(fn: () => any, delay: number, args: any[]): any

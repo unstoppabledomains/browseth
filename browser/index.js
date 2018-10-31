@@ -8,7 +8,6 @@ import { AbiCodec } from '@browseth/abi'
 import AccountReadonly from '@browseth/account-readonly'
 import AccountSigner from '@browseth/account-signer'
 import { AccountOnline } from '@browseth/account-online'
-
 export { BrowserClient as default, BrowserClient }
 
 function keccak256(value) {
@@ -37,6 +36,11 @@ class BrowserClient {
   keccak = this.constructor.keccak256
   sha3 = this.constructor.keccak256
   sha256 = this.constructor.keccak256
+
+  // namehash
+  static namehash = utils.crypto.namehash
+
+  namehash = this.constructor.namehash
 
   // Keccak with speacial abi packing
 
