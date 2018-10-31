@@ -1,6 +1,8 @@
 import { ab, crypto, rlp, address } from '@browseth/utils'
 import AppEth from '@ledgerhq/hw-app-eth'
 import TransportNodeHid from '@ledgerhq/hw-transport-node-hid'
+// import TransportU2F from '@ledgerhq/hw-transport-u2f'
+
 export { SignerLedger as default, SignerLedger }
 
 function isValidDPath(v) {
@@ -30,7 +32,8 @@ class SignerLedger {
       throw new Error('another SignerLedger wallet call is already initialized')
 
     this.constructor.initialized = true
-    const transport = await TransportNodeHid.create().then(transport => {})
+    const transport = await TransportNodeHid.create()
+    // const transport = await TransportU2F.create()
 
     // transport.setDebugMode(true);
     return {

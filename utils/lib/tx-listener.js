@@ -15,7 +15,7 @@ class TxListener {
             if (!receipt) {
               return
             }
-            clearInterval(interval)
+            clearInterval(this.interval)
             if (receipt.status === 0) {
               reject('Transaction not found')
             } else {
