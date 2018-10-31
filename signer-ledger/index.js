@@ -21,10 +21,28 @@ class SignerLedger {
 
   addressCache = {}
 
-  constructor(defaultIndex = 0, dPath = this.constructor.dPaths.mainnet) {
+  constructor(
+    defaultIndex = 0,
+    dPathOrChainId = this.constructor.dPaths.mainnet,
+  ) {
     this.defaultIndex = defaultIndex
-    if (!isValidDPath(dPath)) throw new TypeError('invalid dPath ' + dPath)
-    this.dPath = dPath
+    if (!isValidDPath(dPathOrChainId)) {
+      switch (dPathOrChainId) {
+        case 1:
+          this.dPath = this.constructor.dPaths.mainnet
+          break
+        case 3:
+          this.dPath = this.constructor.dPaths.ropsten
+          break
+        case 61:
+          this.dPath = this.constructor.dPaths.ethClassic
+          break
+        default:
+          throw new TypeError('invalid dPath or chainId: ' + dPathOrChainId)
+      }
+    } else {
+      this.dPath = dPathOrChainId
+    }
   }
 
   initialize = async () => {

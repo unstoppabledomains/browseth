@@ -24,6 +24,10 @@ declare namespace BrowserNamespace {
     sha3: crypto.keccak256
     sha256: crypto.keccak256
 
+    static namehash: crypto.namehash
+
+    namehash: crypto.namehash
+
     static tightlyPackedKeccak256: tightlyPackedKeccak256
     static tightlyPackedKeccak: tightlyPackedKeccak256
     static tightlyPackedSha3: tightlyPackedKeccak256

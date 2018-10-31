@@ -6,7 +6,7 @@ import ETx from 'ethereumjs-tx'
 describe('address()', () => {
   it('should return address', async function() {
     this.timeout(20000000)
-    const signer = new SignerLedger()
+    const signer = new SignerLedger(0, 1)
     const address = (await signer.address()).address
     expect(address).to.equal('0xc3c482d9579C7cce15A9BCcCD7F2A8148Ad0109A')
   })
