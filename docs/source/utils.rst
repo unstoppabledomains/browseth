@@ -58,7 +58,7 @@ An Array Buffer is an Array Buffer.
 .. _address:
 
 Address
-=============
+=======
 
 Utilities for manipulating addresses
 
@@ -79,9 +79,8 @@ Crypto
 :sup:`utils.crypto` . keccak256 ( value )
     returns the keccak256 of a string
 
-:sup:`utils.crypto` . uuid ( value )
-    TODO: uuid is meant for internal use. Not working externally yet.
-    returns the uuid of a string
+:sup:`utils.crypto` . namehash ( name )
+    returns the node of a '.eth' domain string
 
 .. _interval:
 

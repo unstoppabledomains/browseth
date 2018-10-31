@@ -14,15 +14,15 @@ Installation
 
 From your project directory:
 
-.. code-block:: javascript
+.. code-block:: bash
 
-    yarn add browseth
+    yarn add @browseth/browser
   
 Import inside relevant project files:
 
 .. code-block:: javascript
 
-    import Browseth from 'browseth'
+    import Browseth from '@browseth/browser'
 
 .. _qs_initializing:
 

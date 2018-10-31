@@ -12,6 +12,7 @@ Welcome to Browseth's documentation!
 
    quickstart
    getting-started
+   browser
    units
    utils
    contracts

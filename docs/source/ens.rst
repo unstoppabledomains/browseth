@@ -32,6 +32,9 @@ Prototype
 :sup:`prototype` . text ( node, key )
     Returns the text of a key in the node's resolver
 
+:sup:`prototype` . allTexts ( node, key )
+    Returns all the text changes of a key in the node's resolver
+
 :sup:`prototype` . supportsInterface ( node, interfaceId )
     Checks if the interfaceId is supported by the node's resolver
 

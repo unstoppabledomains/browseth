@@ -13,15 +13,15 @@ Installation
 
 From your project directory:
 
-.. code-block:: javascript
+.. code-block:: bash
 
-    yarn add browseth
+    yarn add @browseth/browser
   
 Import inside relevant project files:
 
 .. code-block:: javascript
 
-    import Browseth from 'browseth'
+    import Browseth from '@browseth/browser'
 
 Choosing an Ethereum RPC (Remote Procedure Call)
 ================================================
@@ -63,13 +63,13 @@ These methods must be made by a transaction and mined before any changes to the 
 are made. So these methods are subject to fluctuating gas prices, network congestion, 
 and miner heuristics.
 
-.. _gs-signers:
+.. _gs-accounts:
 
-Signers
-=======
-Signers are required to make send requests. 
+Accounts
+========
+Accounts are required to make send requests. 
 
-The following signer types are supported: private key, ledger, and online.
+The following account types are supported: private key, ledger, and online.
 
 
 .. code-block:: javascript
@@ -79,7 +79,4 @@ The following signer types are supported: private key, ledger, and online.
 
     beth.useSignerAccount(new PrivateKeySigner(PRIVATE_KEY));
     beth.useSignerAccount(new SignerLedger());
-
-
-
-
+    beth.useOnlineAccount();

@@ -1,7 +1,7 @@
 .. _contracts:
 
-Contract
-********
+Contracts
+*********
 
 There are two types of methods that can be called on a Contract:
 
@@ -35,7 +35,7 @@ Deploying Contracts
     returns send() and gas() methods
 
 . send ( [options] )
-    deploys contract and returns transaction hash
+    deploys contract and returns promise resolving transaction hash
 
 . gas ( [options] )
     returns the estimated gas for deploying the contract
@@ -59,3 +59,30 @@ Deploying Contracts
 
     const contractInstance = new Contract(beth, contract.abi, {bin: contract.bin});
     const txHash = await contractInstance.construct().send({ gasPrice: 10000000000});
+
+Contract Functions
+------------------
+
+:sup:`prototype` . fn . functionName ( [params] )
+    Takes in parameters for calling contract function.
+
+    returns send() and call() methods.
+
+. send ( [options] )
+    makes write call to contract function.
+
+    returns promise resolving transaction hash.
+
+. call ( [options] )
+    makes readonly call to contract function
+
+    Options may have the properties:
+
+    - **chainId** --- set contract binary for contract deployment
+
+    - **gasPrice** --- set gas price in wei for transaction
+   
+    - **gas** --- sets the max amount of gas for the transaction
+   
+    - **to** --- sets the address of where to send call to (defaults to 'address' in initialization)
+   
