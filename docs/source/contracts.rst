@@ -85,4 +85,44 @@ Contract Functions
     - **gas** --- sets the max amount of gas for the transaction
    
     - **to** --- sets the address of where to send call to (defaults to 'address' in initialization)
+
+.. code-block:: javascript
+
+    const txHash = testContractInstance.fn
+        .setA(0x123123123)
+        .send();
+
+
+Contract Events
+---------------
+
+:sup:`prototype` . ev . eventName ( [indexed params] )
+    Optional indexed parameter values that event log must match.
+
+    returns logs() and subscribe() methods.
+
+    .logs(fromBlock, toBlock, contractAddress)
+        Get logs of contract with block range.
+        
+    - **fromBlock** --- blockNumber (defaults to 'earliest')
+    - **toBlock** --- blockNumber (defaults to 'latest')
+
+    .subscribe(fromBlock, contractAddress).on(cb)
+        Subscribe to contract events with callback. Calls callback on event.
+
+        fromBlock: blockNumber defaults to 'latest'
+
+.. code-block:: javascript
+
+    contractInstance.ev
+        .ASet({ a: 0x123123123 })
+        .logs('earliest', 'latest', contractAddress)
+        .then(console.log)
+
+    contractInstance.ev
+        .ASet()
+        .subscribe('earliest', contractAddress)
+        .on(console.log)
+
+
    
