@@ -118,7 +118,7 @@ class Contract {
           const codec = (...topics) => {
             const encodedTopics = abi.enc(...topics)
             const logs = (
-              from = 'latest',
+              from = 'earliest',
               to = 'latest',
               address = this.address,
               ...addresses
@@ -186,6 +186,8 @@ class Contract {
                       .then(() => {
                         tracker.isSyncing = false
                       })
+                  } else {
+                    tracker.isSyncing = false
                   }
                 }
 
