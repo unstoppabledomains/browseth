@@ -101,16 +101,22 @@ Contract Events
 
     returns logs() and subscribe() methods.
 
-    .logs(fromBlock, toBlock, contractAddress)
+    . logs ( fromBlock, toBlock, contractAddress )
         Get logs of contract with block range.
         
     - **fromBlock** --- blockNumber (defaults to 'earliest')
     - **toBlock** --- blockNumber (defaults to 'latest')
 
-    .subscribe(fromBlock, contractAddress).on(cb)
-        Subscribe to contract events with callback. Calls callback on event.
+    . subscribe ( fromBlock, contractAddress )
+        Subscribe to contract events with callback. 
+        
+        - **fromBlock** --- blockNumber (defaults to 'latest')
+        
+        returns .on() method
+        
+        .on ( callback ) 
+            Calls callback function when event occurs.
 
-        fromBlock: blockNumber defaults to 'latest'
 
 .. code-block:: javascript
 
