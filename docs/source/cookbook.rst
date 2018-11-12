@@ -83,7 +83,7 @@ Read event logs
     .logs('earliest', 'latest')
     .then(console.log)
 
-Subscribe Events
+Subscribe to Events
 
 ::
 

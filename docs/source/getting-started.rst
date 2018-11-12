@@ -80,3 +80,33 @@ The following account types are supported: private key, ledger, and online.
     beth.useSignerAccount(new PrivateKeySigner(PRIVATE_KEY));
     beth.useSignerAccount(new SignerLedger());
     beth.useOnlineAccount();
+
+.. _gs-sending-ether:
+
+Sending Ether
+=============
+Once an account is connected to Browseth, you can make send requests.
+
+.. code-block:: javascript
+
+    beth.send({ to: ADDRESS, value: beth.etherToWei('.01') });
+
+.. _gs-contract-instances:
+
+Contract Instances
+==================
+To interact with contracts, we use contract instances made from our Browseth instance.
+
+.. code-block:: javascript
+
+    const contractInstance = beth.contract(contract.abi, {address: contract.address});
+
+    contractInstance.fn.functionName(params).call().then(console.log); // function call
+
+    contractInstance.fn.functionName(params)
+        .send({ value: beth.etherToWei('1') })
+        .then(txHash => {
+            beth.tx.listen(txHash).then(console.log)
+        }); // send then log receipt
+
+
