@@ -74,9 +74,13 @@ Contract Instances
 
     contractInstance.construct(params).send(); // deploying contract
 
-    contractInstance.fn.functionName(params).call().then(console.log); // function call
+    contractInstance.fn
+        .functionName(params)
+        .call()
+        .then(console.log); // function call
 
-    contractInstance.fn.functionName(params)
+    contractInstance.fn
+        .functionName(params)
         .send({ value: beth.etherToWei('1') })
         .then(txHash => {
             beth.tx.listen(txHash).then(console.log)

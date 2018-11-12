@@ -111,7 +111,7 @@ Contract Events
         Subscribe to contract events with callback. 
         
         - **fromBlock** --- blockNumber (defaults to 'latest')
-        
+
         returns .on() method
         
         .on ( callback ) 
@@ -129,6 +129,3 @@ Contract Events
         .ASet()
         .subscribe('earliest', contractAddress)
         .on(console.log)
-
-
-   
