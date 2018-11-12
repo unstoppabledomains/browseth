@@ -1,6 +1,6 @@
 To run tests:
 
-1. Run geth locally: geth -dev --rpc -gasprice 1 dev.period
+1. Run geth locally: geth -dev --rpc -gasprice 1 --dev.period 1
 
 2. yarn test in /test
 
