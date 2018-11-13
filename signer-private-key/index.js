@@ -16,11 +16,12 @@ class SignerPrivateKey {
     nonce = 0,
     gasPrice = 1,
     gas = 21000,
-    to = new ArrayBuffer(0),
+    to,
     value = 0,
     data = new ArrayBuffer(0),
-    chainId = undefined,
+    chainId,
   }) => {
+    to = to ? to : new ArrayBuffer(0)
     const raw = [
       ab.stripStart(ab.fromUInt(nonce)),
       ab.stripStart(ab.fromUInt(gasPrice)),
