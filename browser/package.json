@@ -1,6 +1,6 @@
 {
   "name": "@browseth/browser",
-  "version": "1.0.8",
+  "version": "2.0.0",
   "license": "MIT",
   "browser": "build/browser.js",
   "main": "build/index.js",
@@ -15,16 +15,16 @@
     "test": "node test"
   },
   "dependencies": {
-    "@browseth/abi": "^1.0.7",
-    "@browseth/account-online": "^1.0.7",
-    "@browseth/account-readonly": "^1.0.7",
-    "@browseth/account-signer": "^1.0.7",
-    "@browseth/contract": "^1.0.7",
-    "@browseth/explorer": "^1.0.7",
-    "@browseth/jsonrpc-request-queue": "^1.0.5",
-    "@browseth/signer-utils": "^1.0.7",
-    "@browseth/units": "^1.0.2",
-    "@browseth/utils": "^1.0.7",
+    "@browseth/abi": "^2.0.0",
+    "@browseth/account-online": "^2.0.0",
+    "@browseth/account-readonly": "^2.0.0",
+    "@browseth/account-signer": "^2.0.0",
+    "@browseth/contract": "^2.0.0",
+    "@browseth/explorer": "^2.0.0",
+    "@browseth/jsonrpc-request-queue": "^2.0.0",
+    "@browseth/signer-utils": "^2.0.0",
+    "@browseth/units": "^2.0.0",
+    "@browseth/utils": "^2.0.0",
     "babel-runtime": "^6.26.0"
   },
   "publishConfig": {
