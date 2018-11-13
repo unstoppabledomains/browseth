@@ -8,6 +8,7 @@ import { AbiCodec } from '@browseth/abi'
 import AccountReadonly from '@browseth/account-readonly'
 import AccountSigner from '@browseth/account-signer'
 import { AccountOnline } from '@browseth/account-online'
+import SignerPrivateKey from '@browseth/signer-private-key'
 export { BrowserClient as default, BrowserClient }
 
 function keccak256(value) {
@@ -134,6 +135,9 @@ class BrowserClient {
 
   useSignerAccount = signer => this.useAccount(new AccountSigner(this, signer))
 
+  usePrivateKey = privateKey =>
+    this.useAccount(new AccountSigner(this, new SignerPrivateKey(privateKey)))
+
   useReadonlyAccount = () => {}
 
   addOnlineAccount = options =>
@@ -161,13 +165,13 @@ class BrowserClient {
   useAccount = account => {
     const from =
       typeof account === 'string'
-        ? this.accounts.findIndex(account => account.id === account)
-        : this.accounts.findIndex(account => account === account)
+        ? this.accounts.findIndex(a => a.id === account)
+        : this.accounts.findIndex(a => a === account)
 
     if (from !== -1) {
       this.accounts.splice(0, 0, this.accounts.splice(from, 1)[0])
       return account.id
-    } else if (this.accounts.length < 1 && typeof account !== 'string') {
+    } else if (typeof account !== 'string') {
       this.accounts.unshift(account)
       return account.id
     }

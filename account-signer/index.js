@@ -27,7 +27,7 @@ class AccountSigner {
       throw new Error(
         "UNSAFE_from and this signer don't match you probably sent to the wrong account",
       )
-      
+
     return this.ethRef.request(
       'eth_sendRawTransaction',
       ab.toHex(
@@ -52,7 +52,7 @@ class AccountSigner {
           gasPrice: UNSAFE_gasPrice,
           from,
           data: UNSAFE_data,
-          chainId: UNSAFE_chainId,
+          chainId: UNSAFE_chainId ? UNSAFE_chainId : undefined,
           to,
           value,
         }),

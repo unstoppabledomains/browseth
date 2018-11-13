@@ -19,7 +19,7 @@ class SignerPrivateKey {
     to = new ArrayBuffer(0),
     value = 0,
     data = new ArrayBuffer(0),
-    chainId = 1,
+    chainId = undefined,
   }) => {
     const raw = [
       ab.stripStart(ab.fromUInt(nonce)),
