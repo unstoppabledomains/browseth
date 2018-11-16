@@ -1,6 +1,6 @@
 {
   "name": "@browseth/units",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "license": "MIT",
   "browser": "build/browser.js",
   "main": "build/index.js",

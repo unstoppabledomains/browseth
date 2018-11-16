@@ -1,6 +1,6 @@
 {
   "name": "@browseth/signer-private-key",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "license": "MIT",
   "browser": "build/browser.js",
   "main": "build/index.js",
@@ -15,7 +15,7 @@
     "test": "node test"
   },
   "dependencies": {
-    "@browseth/utils": "^2.0.0",
+    "@browseth/utils": "^2.1.0",
     "babel-runtime": "^6.26.0",
     "elliptic": "^6.4.1"
   },

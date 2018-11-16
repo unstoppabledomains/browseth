@@ -1,6 +1,6 @@
 {
   "name": "@browseth/cli",
-  "version": "0.0.19",
+  "version": "2.1.0",
   "bin": {
     "browseth-cli": "./bin/browseth-cli.js"
   },
