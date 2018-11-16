@@ -1,7 +1,7 @@
-import * as React from 'react';
-import '../App';
-import * as Arrow from '../assets/arrow.png';
-import Browseth from 'browseth';
+import * as React from 'react'
+import '../App'
+import * as Arrow from '../assets/arrow.png'
+import Browseth from 'browseth'
 
 class EnableLedger extends React.Component {
   state = {
@@ -11,40 +11,38 @@ class EnableLedger extends React.Component {
     uploading: true,
     filename: '',
     privateKey: '',
-  };
+  }
 
   componentDidMount() {
-    this.refreshLedger();
+    this.refreshLedger()
   }
 
   refreshLedger = async () => {
     if (this.state.title !== 'Searching for Local Ledger Wallet') {
-      this.setState({title: 'Searching for Local Ledger Wallet'});
+      this.setState({ title: 'Searching for Local Ledger Wallet' })
     }
     try {
       this.props.browseth.wallet = new Browseth.Wallets.Offline(
         this.props.browseth.rpc,
         new Browseth.Signers.Ledger(),
-      );
-      await this.props.browseth.wallet.account(1);
+      )
+      await this.props.browseth.wallet.account(1)
+      this.setState({ title: 'Ledger Found!', isEnabled: true, err: '' })
     } catch (err) {
-      console.log(err);
+      console.log(err)
       if (err.toString().includes('HTTPS')) {
-        this.setState({title: 'Error!', err: 'No HTTPS connection!'});
+        this.setState({ title: 'Error!', err: 'No HTTPS connection!' })
       } else {
         this.setState({
           title: 'Error!',
           err: `Couldn't find local Ledger Wallet. Please ensure you are in the Ethereum app with Browser support enabled!`,
-        });
+        })
       }
     }
     this.setState({
       isLoading: false,
-      isEnabled: true,
-      title: 'Ledger Found!',
-      err: '',
-    });
-  };
+    })
+  }
 
   doubleCheck = () => {
     this.setState(
@@ -55,18 +53,18 @@ class EnableLedger extends React.Component {
       },
       async () => {
         try {
-          await this.props.browseth.wallet.account(0);
+          await this.props.browseth.wallet.account(0)
         } catch (err) {
           this.setState({
             title: 'Error!',
             err: `Ledger lost! Double check that it's plugged in and in the Ethereum app`,
-          });
-          return;
+          })
+          return
         }
-        this.props.auth();
+        this.props.auth()
       },
-    );
-  };
+    )
+  }
 
   render() {
     return (
@@ -78,8 +76,8 @@ class EnableLedger extends React.Component {
               className="back-arrow"
               src={Arrow}
               onClick={() => {
-                this.props.unflip();
-                this.setState({isEnabled: false});
+                this.props.unflip()
+                this.setState({ isEnabled: false })
               }}
               alt="backArrow"
             />
@@ -119,8 +117,8 @@ class EnableLedger extends React.Component {
           </div>
         </div>
       </div>
-    );
+    )
   }
 }
 
-export default EnableLedger;
+export default EnableLedger
