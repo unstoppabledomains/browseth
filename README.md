@@ -1,6 +1,7 @@
 # Browseth
 
-A library for interacting with ethereum, well suited for the browser.
+Browseth is a complete Ethereum development solution for web and server
+applications. Most popular solutions don't carry the full spectrum of features needed in every Ethereum application. Browseth supports external wallets, passive request batching, ABIv2 codec, and many other features needed to build robust web applications along with templates to help you get up and running quickly.
 
 ##### [Browseth documentation](https://browseth.readthedocs.io/en/public/index.html)
 
