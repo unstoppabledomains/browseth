@@ -17,7 +17,7 @@
   "dependencies": {
     "@browseth/utils": "^2.1.0",
     "babel-runtime": "^6.26.0",
-    "elliptic": "^6.4.1"
+    "elliptic": "^6.5.3"
   },
   "publishConfig": {
     "access": "public"
