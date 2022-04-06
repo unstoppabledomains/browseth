@@ -12,14 +12,18 @@
     "build": "rollup -c workspace/rollup.config.js",
     "start": "rollup -c workspace/rollup.node-config.js -w",
     "pretest": "yarn build-node",
-    "test": "node test"
+    "test": "node test",
+    "prepare": "yarn run snyk-protect",
+    "snyk-protect": "snyk-protect"
   },
   "dependencies": {
     "@browseth/utils": "^2.1.0",
     "babel-runtime": "^6.26.0",
-    "big.js": "^5.1.2"
+    "big.js": "^5.1.2",
+    "@snyk/protect": "latest"
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "snyk": true
 }
