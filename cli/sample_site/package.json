@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "browseth": "^0.0.51",
-    "prismjs": "^1.15.0",
+    "prismjs": "^1.27.0",
     "react": "^16.4.0",
     "react-dom": "^16.4.0",
     "react-scripts": "1.1.4",
